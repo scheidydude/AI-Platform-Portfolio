@@ -1,0 +1,56 @@
+# LLM Gateway configuration
+# Copy to gateway.yaml and fill in real values.
+# WARNING: gateway.yaml is gitignored — never commit real API keys.
+
+gateway:
+  admin_key: "admin-change-me"
+  metrics_backend: "stdout"    # stdout | datadog | prometheus
+
+teams:
+  # Team: cloud-engineering
+  # Hard quota, can use both backends, 5M tokens/month
+  cloud-engineering:
+    api_key: "ce-change-me"
+    monthly_token_budget: 5_000_000
+    models_allowed:
+      - primary
+      - local
+    rate_limit_rpm: 60
+    enforcement_mode: hard           # hard | soft | downgrade
+    downgrade_threshold_pct: 80
+    downgrade_to: local
+    routing_strategy: static
+    default_backend: primary
+
+  # Team: compliance
+  # Hard quota, primary only, 2M tokens/month
+  compliance:
+    api_key: "co-change-me"
+    monthly_token_budget: 2_000_000
+    models_allowed:
+      - primary
+    rate_limit_rpm: 20
+    enforcement_mode: hard
+    routing_strategy: static
+    default_backend: primary
+
+backends:
+  # OpenAI-compatible backend — works with OpenAI, Anthropic (via compat endpoint),
+  # or any OpenAI-compatible server.
+  primary:
+    type: openai_compat
+    base_url: "https://api.openai.com"
+    api_key: "sk-change-me"          # or set OPENAI_API_KEY and reference here
+    model_id: "gpt-4o-mini"          # sent upstream; override what the client sends
+    cost_per_1k_prompt: 0.00015
+    cost_per_1k_completion: 0.00060
+
+  # Local llama.cpp server — free, no API key required
+  # Start with: llama-server -m model.gguf --port 8080
+  local:
+    type: openai_compat
+    base_url: "http://localhost:8080"
+    api_key: ""
+    model_id: ""                     # empty = pass through client's requested model
+    cost_per_1k_prompt: 0.0
+    cost_per_1k_completion: 0.0
