@@ -47,13 +47,17 @@ def log_request(
     model: str,
     backend: str,
     routing_strategy: str,
+    enforcement_action: str,
     prompt_tokens: int,
     completion_tokens: int,
     estimated_tokens: int,
     latency_ms: int,
     status: str,
-    quota_remaining: int,
+    quota_used: int,
+    quota_budget: int,
 ) -> None:
+    quota_remaining = max(0, quota_budget - quota_used)
+    quota_pct = round(quota_used / quota_budget * 100, 1) if quota_budget else 0.0
     logger.info({
         "event": "request",
         "request_id": request_id,
@@ -61,6 +65,7 @@ def log_request(
         "model": model,
         "backend": backend,
         "routing_strategy": routing_strategy,
+        "enforcement_action": enforcement_action,
         "prompt_tokens": prompt_tokens,
         "completion_tokens": completion_tokens,
         "total_tokens": prompt_tokens + completion_tokens,
@@ -68,4 +73,5 @@ def log_request(
         "latency_ms": latency_ms,
         "status": status,
         "quota_remaining": quota_remaining,
+        "quota_pct_used": quota_pct,
     })

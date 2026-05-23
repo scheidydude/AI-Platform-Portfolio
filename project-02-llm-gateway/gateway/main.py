@@ -7,6 +7,7 @@ from fastapi import FastAPI
 from .backends import create_backend
 from .config import load_config
 from .observability import logger
+from .ratelimit import RateLimiter
 from .routes import admin, chat, models
 from .state.sqlite import SqliteQuotaStore
 
@@ -28,6 +29,7 @@ async def lifespan(app: FastAPI):
     app.state.config = config
     app.state.store = store
     app.state.backends = initialized_backends
+    app.state.rate_limiter = RateLimiter()
 
     logger.info({"event": "startup", "backends": list(initialized_backends), "teams": list(config.teams)})
     yield

@@ -28,7 +28,7 @@ Request lifecycle: auth → quota check → token estimate → route → stream 
 ---
 
 ### Phase 2 — Quota Enforcement (Days 4–5)
-**Status:** `not_started`
+**Status:** `complete`
 
 YAML team config: api_key, monthly_token_budget, models_allowed, rate_limit_rpm
 
