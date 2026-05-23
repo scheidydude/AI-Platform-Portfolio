@@ -16,7 +16,7 @@
 | 2 | Retrieval (hybrid + re-rank) | 3–5 | complete | - |
 | 3 | Eval Set (manual ground truth) | 6–7 | complete | - |
 | 4 | LLM-as-Judge Automation | 8–10 | complete | - |
-| 5 | ADR Writeup + Final Docs | 11 | not_started | - |
+| 5 | ADR Writeup + Final Docs | 11 | complete | - |
 
 ---
 

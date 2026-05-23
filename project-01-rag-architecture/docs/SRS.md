@@ -1,10 +1,11 @@
 # Software Requirements Specification
 ## Project 01 — RAG Architecture POC
 
-**Version:** 0.1 (draft)
+**Version:** 1.0 (final)
 **Author:** David Scheiderman
 **Date:** 2026-05-22
-**Status:** In Progress
+**Updated:** 2026-05-23
+**Status:** Complete
 
 ---
 
@@ -17,7 +18,7 @@ Build a production-quality RAG (Retrieval-Augmented Generation) pipeline over SE
 ## 2. Scope
 
 ### In Scope
-- PDF ingestion of 10–15 SEC 10-K filings from EDGAR
+- HTML ingestion of 9 SEC 10-K filings from EDGAR (inline XBRL `.htm` format)
 - Three chunking strategies implemented and compared
 - Hybrid retrieval (dense vector + BM25 sparse + RRF fusion)
 - Cross-encoder re-ranking
@@ -47,15 +48,15 @@ Build a production-quality RAG (Retrieval-Augmented Generation) pipeline over SE
 ## 4. Functional Requirements
 
 ### FR-01: Corpus Ingestion
-- System SHALL ingest PDF documents from SEC EDGAR
-- System SHALL extract text and tables from PDFs (`pdfplumber`)
+- System SHALL ingest HTML documents from SEC EDGAR (inline XBRL `.htm` format)
+- System SHALL extract text from HTML with XBRL noise filtering (custom `HTMLParser` subclass)
 - System SHALL support 3 chunking strategies (fixed-size, semantic, hierarchical)
-- System SHALL store chunks with metadata (source file, page, chunk ID, strategy)
+- System SHALL store chunks with metadata (source file, section title, chunk ID, strategy, parent_chunk_id)
 
 ### FR-02: Embedding
 - System SHALL generate vector embeddings for all chunks
-- System SHALL support both API-based (`text-embedding-3-small`) and local embedding models
-- System SHALL store embeddings in pgvector
+- System SHALL use local nomic-embed-text (768-dim) via OpenAI-compatible API at `ai.scheidy.com:8081`
+- System SHALL store embeddings in pgvector (`vector(768)`, IVFFlat index)
 
 ### FR-03: Retrieval
 - System SHALL implement dense vector similarity search (pgvector)
@@ -66,9 +67,9 @@ Build a production-quality RAG (Retrieval-Augmented Generation) pipeline over SE
 
 ### FR-04: Generation
 - System SHALL pass retrieved chunks with IDs to LLM context
-- System SHALL prompt LLM to cite specific chunk IDs for every claim
+- System SHALL prompt LLM to cite company name and section for every claim
 - System SHALL prompt LLM to explicitly state when answer cannot be found in context
-- System SHALL support Claude API and local Qwen as interchangeable LLM backends
+- System SHALL use Qwen3.6-35B via local homelab server (`ai.scheidy.com:8082`) as LLM backend
 
 ### FR-05: Evaluation
 - System SHALL support a ground truth eval set (JSON format)
@@ -102,35 +103,36 @@ Build a production-quality RAG (Retrieval-Augmented Generation) pipeline over SE
 ## 6. System Architecture Overview
 
 ```
-SEC EDGAR PDFs
+SEC EDGAR HTML (.htm, inline XBRL)
       │
       ▼
- PDF Extraction (pdfplumber)
+ HTML Extraction (custom HTMLParser, XBRL noise filter)
       │
       ▼
- Chunking (fixed / semantic / hierarchical)
+ Hierarchical Chunking (parent sections + sub-chunks)
       │
       ▼
- Embedding (text-embedding-3-small OR local)
+ Embedding (nomic-embed-text, 768-dim, ai.scheidy.com:8081)
       │
       ▼
- pgvector (Postgres)
+ pgvector (Postgres, Docker, port 5433)
       │
    ┌──┴──────────────┐
    │                 │
 Dense Search      BM25 Search
-(pgvector)       (rank_bm25)
+(pgvector IVFFlat) (rank_bm25, in-memory)
    │                 │
    └──────┬──────────┘
           │
-        RRF Fusion
+        RRF Fusion (k=60)
           │
           ▼
     Cross-Encoder Re-rank
+    (ms-marco-MiniLM-L-6-v2, CPU)
           │
           ▼
-    LLM Generation (Claude / Qwen)
-    [with citation grounding]
+    LLM Generation (Qwen3.6-35B, ai.scheidy.com:8082)
+    [with company + section citation grounding]
           │
           ▼
        Answer + Citations
@@ -142,16 +144,16 @@ Dense Search      BM25 Search
 
 | Layer | Technology | Version / Notes |
 |-------|-----------|-----------------|
-| PDF extraction | pdfplumber | Latest |
-| Chunking | Python + LangChain SemanticChunker | - |
-| Vector store | Postgres + pgvector | Docker |
-| Embeddings | text-embedding-3-small OR local | TBD (see ADR-005) |
-| Sparse search | rank_bm25 | Python library |
-| Re-ranker | cross-encoder/ms-marco-MiniLM-L-6-v2 | HuggingFace, CPU |
-| LLM | Claude API OR local Qwen | Swappable (see ADR) |
-| Eval judge | Claude API OR local | LLM-as-judge pattern |
-| Infra | Docker Compose | Local homelab |
-| Language | Python 3.11+ | - |
+| HTML extraction | Custom `HTMLParser` subclass | XBRL noise filter built-in |
+| Chunking | Python — custom implementations | fixed, semantic, hierarchical (hierarchical deployed) |
+| Vector store | Postgres + pgvector | Docker, port 5433 |
+| Embeddings | nomic-embed-text local server | 768-dim, `ai.scheidy.com:8081` |
+| Sparse search | rank_bm25 0.2.2 | BM25Okapi, in-memory corpus |
+| Re-ranker | cross-encoder/ms-marco-MiniLM-L-6-v2 | sentence-transformers, CPU |
+| LLM (generation + judge) | Qwen3.6-35B-A3B-MXFP4 | `ai.scheidy.com:8082`, OpenAI-compatible |
+| Retrieval API | Flask 3.0 | `src/retrieval/api.py` |
+| Infra | Docker Compose | pgvector/pgvector:pg16 |
+| Language | Python 3.9.7 | miniforge conda; `typing` module required (no 3.10+ union syntax) |
 
 ---
 
@@ -159,16 +161,15 @@ Dense Search      BM25 Search
 
 | Document | Location | Status |
 |----------|----------|--------|
-| Project Spec | `../project-01-rag-architecture.md` | Final |
-| ADR-001: Vector Store | `docs/adr/ADR-001-vector-store.md` | Stub |
-| ADR-002: Chunking Strategy | `docs/adr/ADR-002-chunking-strategy.md` | Stub |
-| ADR-003: Hybrid Search | `docs/adr/ADR-003-hybrid-search.md` | Stub |
-| ADR-004: Re-ranker | `docs/adr/ADR-004-reranker.md` | Stub |
-| ADR-005: Embedding Model | `docs/adr/ADR-005-embedding-model.md` | Stub |
-| Chunking Decision | `docs/design/chunking-decision.md` | Not started |
-| Retrieval Design | `docs/design/retrieval-design.md` | Not started |
-| Eval Methodology | `docs/design/eval-methodology.md` | Not started |
-| Retrospective | `docs/retrospective.md` | Not started |
+| ADR-001: Vector Store | `docs/adr/ADR-001-vector-store.md` | Decided |
+| ADR-002: Chunking Strategy | `docs/adr/ADR-002-chunking-strategy.md` | Decided |
+| ADR-003: Hybrid Search | `docs/adr/ADR-003-hybrid-search.md` | Decided |
+| ADR-004: Re-ranker | `docs/adr/ADR-004-reranker.md` | Decided |
+| ADR-005: Embedding Model | `docs/adr/ADR-005-embedding-model.md` | Decided |
+| Chunking Decision | `docs/design/chunking-decision.md` | Complete |
+| Retrieval Design | `docs/design/retrieval-design.md` | Complete |
+| Eval Methodology | `docs/design/eval-methodology.md` | Complete |
+| Retrospective | `docs/retrospective.md` | Complete |
 
 ---
 

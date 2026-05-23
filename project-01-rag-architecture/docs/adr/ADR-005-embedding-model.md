@@ -60,9 +60,11 @@ This is explicitly documented as a tradeoff worth capturing per the project spec
 
 ## Eval Impact
 
-*(If both are tested — retrieval recall comparison)*
+**Measured:** Phases 3–4. Only `nomic-embed-text` was tested — switching models requires full re-ingestion (3,332 chunks × new embedding dimensions), which was out of scope for this POC phase.
 
-| Model | Retrieval Recall@5 | Ingestion Time | Notes |
-|-------|-------------------|---------------|-------|
-| text-embedding-3-small | TBD | TBD | API |
-| Local (TBD model) | TBD | TBD | CPU inference |
+| Model | R@5 (hybrid pipeline) | Avg Faithfulness | Notes |
+|-------|----------------------|-----------------|-------|
+| text-embedding-3-small (OpenAI) | not tested | not tested | Would require ANTHROPIC/OpenAI key + re-ingestion |
+| **nomic-embed-text local (768-dim)** | **1.000** | **5.000** | Deployed; 3,332 chunks embedded |
+
+**Verdict:** nomic-embed-text delivered strong retrieval quality — R@5=1.000 with hybrid pipeline, avg faithfulness 5.000/5. Comparison against text-embedding-3-small was not performed. Given the excellent results, re-ingestion to test an alternative model is low priority. Decision confirmed for this corpus.

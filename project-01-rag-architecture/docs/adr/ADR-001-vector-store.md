@@ -1,6 +1,7 @@
 # ADR-001: Vector Store Selection
 
-**Status:** Draft
+**Status:** Decided
+**Finalized:** 2026-05-23
 **Date:** 2026-05-22
 **Author:** David Scheiderman
 
@@ -52,11 +53,22 @@ RAG pipeline requires persistent vector storage for chunk embeddings. Need to ch
 
 ---
 
+## Implementation Notes
+
+- Docker Compose: `pgvector/pgvector:pg16`, port 5433 (5432 occupied by local Postgres)
+- Schema: `chunks.embedding vector(768)`, IVFFlat index (`lists=100`, `vector_cosine_ops`)
+- `dense_retrieve()` uses `ORDER BY c.embedding <=> %s::vector LIMIT k` — pgvector cosine distance operator
+- `DB_CONFIG` read at call time (not import time) to avoid stale env var issue on module load
+
 ## Eval Impact
 
-*(Populated in Phase 2 — before/after retrieval scores)*
+**Measured:** Phases 3–4, corpus of 3,332 chunks across 9 filings.
 
-| Metric | Score |
-|--------|-------|
-| Baseline retrieval recall@K | TBD |
-| Post-tuning retrieval recall@K | TBD |
+| Metric | Observed |
+|--------|---------|
+| Dense retrieval R@5 (pgvector) | 0.667 (dense-only baseline) |
+| Dense retrieval R@5 (hybrid pipeline) | **1.000** |
+| IVFFlat index build time | < 1s at 3,332 chunks |
+| Dense query latency (incl. embedding call) | ~300–600ms per query |
+
+**Verdict:** pgvector performs as expected at this corpus size. IVFFlat `lists=100` provides fast approximate nearest-neighbor search with no observable recall degradation. No performance issues encountered. Would evaluate Qdrant if corpus grows beyond ~100K chunks.

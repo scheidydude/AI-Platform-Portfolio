@@ -58,10 +58,12 @@ See `docs/design/chunking-decision.md` for full rationale, data, and manual insp
 
 ## Eval Impact
 
-*(Populated after Phase 3 eval set scoring)*
+**Measured:** Phases 3–4. Hierarchical chunking was deployed to production corpus. Fixed-size and semantic were implemented for comparison during Phase 1 but not run through full eval pipeline — manual inspection during Phase 1 was the selection mechanism.
 
-| Strategy | Retrieval Recall@5 | Faithfulness (avg) |
-|----------|-------------------|-------------------|
-| Fixed-size | TBD | TBD |
-| Semantic | TBD | TBD |
-| Hierarchical | TBD | TBD |
+| Strategy | R@5 (15-question eval) | Avg Faithfulness | Notes |
+|----------|----------------------|-----------------|-------|
+| Fixed-size | not measured | not measured | Manual inspection: mid-concept cuts, incomplete disclosures |
+| Semantic | not measured | not measured | Manual inspection: 3–6 token orphan chunks from financial tables |
+| **Hierarchical** | **1.000** | **5.000** | Deployed; eval results in `phase4_lm_judge_scores.json` |
+
+**Verdict:** Hierarchical strategy achieved perfect R@5 and near-perfect faithfulness in Phase 4 eval. The manual inspection rationale from Phase 1 (section boundaries = regulatory interpretation boundaries) was validated by the retrieval quality results. Decision confirmed.

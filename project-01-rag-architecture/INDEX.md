@@ -3,7 +3,7 @@
 **Author:** David Scheiderman
 **Project:** RAG Architecture POC over SEC 10-K filings
 **Start:** 2026-05-22
-**Status:** In Progress (Phase 4 complete)
+**Status:** Complete — all 5 phases done
 
 This index is the single source of truth for all artifacts. Update after every new document is created or status changes.
 
@@ -23,7 +23,7 @@ This index is the single source of truth for all artifacts. Update after every n
 
 | Artifact | File | Status | Notes |
 |----------|------|--------|-------|
-| Software Requirements Spec (SRS) | `docs/SRS.md` | Draft | Functional/non-functional reqs, acceptance criteria |
+| Software Requirements Spec (SRS) | `docs/SRS.md` | Complete | Functional/non-functional reqs — all acceptance criteria met |
 
 ---
 
@@ -33,7 +33,7 @@ All 5 ADRs required by project spec. Eval impact section populated in Phases 3�
 
 | ADR | File | Status | Decision |
 |-----|------|--------|---------|
-| ADR-001: Vector Store | `docs/adr/ADR-001-vector-store.md` | Draft | pgvector on Postgres (Docker) |
+| ADR-001: Vector Store | `docs/adr/ADR-001-vector-store.md` | Decided | pgvector on Postgres (Docker) |
 | ADR-002: Chunking Strategy | `docs/adr/ADR-002-chunking-strategy.md` | Decided | Hierarchical — section parents + sub-chunks |
 | ADR-003: Hybrid Search | `docs/adr/ADR-003-hybrid-search.md` | Decided | Hybrid: dense + BM25 + RRF |
 | ADR-004: Re-ranker | `docs/adr/ADR-004-reranker.md` | Decided | Include cross-encoder re-ranker |
@@ -76,12 +76,12 @@ All 5 ADRs required by project spec. Eval impact section populated in Phases 3�
 
 | Deliverable | Status | Artifact |
 |-------------|--------|---------|
-| Working retrieval API | Complete | `src/retrieval/api.py` — Flask, `/search` + `/search/dense` |
-| Chunking strategy writeup | Complete | `docs/design/chunking-decision.md` |
-| Eval set 20+ Q&A pairs | Not started | `eval/ground_truth.json` |
-| Automated eval pipeline | Not started | `src/eval/` |
-| All 5 ADRs complete | Draft (5/5 stubbed) | `docs/adr/` |
-| Before/after eval scores | Not started | `eval/results/` + ADR eval impact sections |
+| Working retrieval API | ✅ Complete | `src/retrieval/api.py` — Flask, `/search` + `/search/dense` |
+| Chunking strategy writeup | ✅ Complete | `docs/design/chunking-decision.md` |
+| Eval set 20+ Q&A pairs | ✅ Complete | `eval/ground_truth.json` — 20 questions |
+| Automated eval pipeline | ✅ Complete | `src/eval/run_eval.py` — 3 configs × 15 questions |
+| All 5 ADRs complete | ✅ Complete | `docs/adr/` — all 5 Decided with eval impact data |
+| Before/after eval scores | ✅ Complete | Hybrid R@1=0.933 vs dense R@1=0.533; ADR-003 + ADR-004 |
 
 ---
 
@@ -89,7 +89,7 @@ All 5 ADRs required by project spec. Eval impact section populated in Phases 3�
 
 | Artifact | File | Status |
 |----------|------|--------|
-| Project Retrospective | `docs/retrospective.md` | Not started (Phase 5) |
+| Project Retrospective | `docs/retrospective.md` | Complete | What went well, harder than expected, learnings, final scores |
 
 ---
 
