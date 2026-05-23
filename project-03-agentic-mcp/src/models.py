@@ -36,6 +36,7 @@ class AgentConstraints(BaseModel):
     max_iterations: int = 20
     max_wall_time_seconds: int = 120
     on_exceed: Literal["fail", "return_partial", "escalate"] = "return_partial"
+    stall_window: int = 3
 
 
 class ToolResult(BaseModel):

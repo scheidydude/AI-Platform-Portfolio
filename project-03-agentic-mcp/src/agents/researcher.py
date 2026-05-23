@@ -71,6 +71,8 @@ class ResearcherAgent:
             seen_calls: set[str] = set()
             final_text = ""
             partial = False
+            calls_without_progress = 0
+            stall_warnings_sent = 0
 
             while iterations < self.constraints.max_iterations:
                 elapsed = time.monotonic() - start
@@ -120,6 +122,7 @@ class ResearcherAgent:
                 messages.append(choice.message.model_dump(exclude_unset=False))
 
                 # Process each tool call
+                stall_fired = False
                 for tc in choice.message.tool_calls:
                     if tool_calls_used >= effective_max_calls:
                         logger.warning(
@@ -180,7 +183,39 @@ class ResearcherAgent:
                         "content": str(content),
                     })
 
-                # If budget hit, force a plain-text summary — no more tools
+                    if result.success and len(str(result.data or "")) > 50:
+                        calls_without_progress = 0
+                    else:
+                        calls_without_progress += 1
+
+                    if calls_without_progress >= self.constraints.stall_window and not stall_fired:
+                        stall_fired = True
+                        stall_warnings_sent += 1
+                        calls_without_progress = 0
+                        if stall_warnings_sent >= 2:
+                            logger.warning(
+                                "Second stall detected for task %s — forcing partial return",
+                                task.task_id,
+                            )
+                            partial = True
+
+                if stall_fired and not partial:
+                    logger.warning(
+                        "Stall detected for task %s (warning %d/%d)",
+                        task.task_id,
+                        stall_warnings_sent,
+                        2,
+                    )
+                    messages.append({
+                        "role": "user",
+                        "content": (
+                            f"[Stall detected] Your last {self.constraints.stall_window} tool calls "
+                            "returned no useful data. Either conclude with what you have found so far, "
+                            "or try a substantially different approach."
+                        ),
+                    })
+
+                # If budget hit or second stall, force a plain-text summary — no more tools
                 if partial:
                     messages.append({
                         "role": "user",

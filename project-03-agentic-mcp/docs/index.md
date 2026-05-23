@@ -37,7 +37,7 @@
 | System Design | `draft` | [docs/design/system-design.md](design/system-design.md) | End-to-end architecture, agent roles, data flow |
 | Handoff Schemas | `not_started` | docs/design/handoff-schemas.md | Typed schemas for agent-to-agent communication |
 | Tool Error Handling | `not_started` | docs/design/tool-error-handling.md | Error taxonomy and handling strategies |
-| Loop Prevention | `not_started` | docs/design/loop-prevention.md | Loop detection and escape condition design |
+| Loop Prevention | `complete` | [docs/design/loop-prevention.md](design/loop-prevention.md) | Loop detection and escape condition design |
 
 ---
 

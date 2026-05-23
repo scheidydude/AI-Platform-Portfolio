@@ -11,7 +11,7 @@
 | # | Phase | Status | Days | Notes |
 |---|-------|--------|------|-------|
 | 1 | Architecture design | `complete` | 1–2 | All ADRs accepted 2026-05-23 |
-| 2 | MCP wiring | `in_progress` | 3–4 | SearXNG MCP server + Researcher agent |
+| 2 | MCP wiring | `complete` | 3–4 | SearXNG MCP server + Researcher agent |
 | 3 | Loop prevention | `not_started` | 5–6 | Escape conditions, retry tracking |
 | 4 | Orchestration | `not_started` | 7–8 | Sequential first, then streaming eval |
 | 5 | Failure mode docs | `not_started` | 9–10 | Deliberate breaks + lessons learned |
@@ -20,22 +20,22 @@
 
 ## Phase 1 — Architecture Design
 
-**Status:** `not_started`  
+**Status:** `complete`  
 **Goal:** Answer all agent definition + handoff schema questions before writing code
 
 ### Decisions needed
-- [ ] Language/framework (Python assumed — confirm)
-- [ ] MCP client library (pick one: `mcp` SDK, `anthropic-sdk` tool use, other)
-- [ ] Web search MCP: Brave Search vs Tavily
-- [ ] State persistence: disk (JSON) vs SQLite
-- [ ] Async vs sync orchestration
+- [x] Language/framework (Python assumed — confirm)
+- [x] MCP client library (pick one: `mcp` SDK, `anthropic-sdk` tool use, other)
+- [x] Web search MCP: Brave Search vs Tavily
+- [x] State persistence: disk (JSON) vs SQLite
+- [x] Async vs sync orchestration
 
 ### Schemas to define
-- [ ] `ResearchTask` (Planner output)
-- [ ] `ResearchFinding` (Researcher output)
-- [ ] `AgentConstraints` (escape conditions)
-- [ ] `PipelineState` (orchestration state)
-- [ ] `ToolResult` (error wrapper)
+- [x] `ResearchTask` (Planner output)
+- [x] `ResearchFinding` (Researcher output)
+- [x] `AgentConstraints` (escape conditions)
+- [x] `PipelineState` (orchestration state)
+- [x] `ToolResult` (error wrapper)
 
 ### Deliverable
 Architecture doc or annotated schema file — answers all 5 questions, all schemas defined.
@@ -44,16 +44,16 @@ Architecture doc or annotated schema file — answers all 5 questions, all schem
 
 ## Phase 2 — MCP Wiring
 
-**Status:** `not_started`  
+**Status:** `complete`  
 **Goal:** Researcher agent working with one MCP tool (web search first, then GitHub)
 
 ### Tasks
-- [ ] Set up MCP server(s)
-- [ ] Wire `web_search` tool to Researcher agent
-- [ ] Wire `fetch_page` tool
-- [ ] Wire GitHub: `search_repositories`, `get_file_contents`, `search_code`
-- [ ] Implement `ToolResult` wrapper (structured error, never raw exception)
-- [ ] Handle all 5 failure classes (429, 404, timeout, bad output, unavailable)
+- [x] Set up MCP server(s)
+- [x] Wire `web_search` tool to Researcher agent
+- [x] Wire `fetch_page` tool
+- [x] Wire GitHub: `search_repositories`, `get_file_contents`, `search_code`
+- [x] Implement `ToolResult` wrapper (structured error, never raw exception)
+- [x] Handle all 5 failure classes (429, 404, timeout, bad output, unavailable)
 
 ### Failure class table
 | Class | Strategy |
