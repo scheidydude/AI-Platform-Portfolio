@@ -100,11 +100,30 @@ Stall detection is **not** budget exhaustion. Differences:
 - [x] On stall threshold: inject warning, reset counter, increment `stall_warnings_sent`
 - [x] On second stall: set `partial = True`, break
 - [x] Skip counter update for duplicate-detected calls (they `continue` before this point — no change needed)
+- [x] `PipelineState.transition()` with `_VALID_TRANSITIONS` — circular delegation prevention
 
 ---
 
+## Circular Delegation Prevention
+
+**Implemented in `src/models.py` via `PipelineState.transition()`.**
+
+A module-level `_VALID_TRANSITIONS` dict defines the only legal status moves:
+
+```
+planning → researching | failed
+researching → synthesizing | failed
+synthesizing → complete | failed
+complete → (terminal)
+failed → (terminal)
+```
+
+`PipelineState.transition(new_status)` raises `ValueError` on any back-edge attempt
+and returns a new `PipelineState` with the updated status and `updated_at` timestamp
+(immutable update via `model_copy`). The Orchestrator (Phase 4) must use `transition()`
+for all status changes — direct field mutation bypasses this check.
+
 ## What This Does Not Cover
 
-- **Circular delegation** (Planner → Researcher → Planner loop): deferred to Phase 4. `PipelineState` enforces forward-only status transitions at schema level; runtime enforcement is an Orchestrator concern.
 - **Content deduplication across calls**: not implemented. The 50-char threshold is a sufficient proxy for this PoC.
 - **Adaptive stall window**: fixed at `stall_window`. No per-task override. Could be added to `ResearchTask` later if needed.

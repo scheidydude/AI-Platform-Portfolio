@@ -12,7 +12,7 @@
 |---|-------|--------|------|-------|
 | 1 | Architecture design | `complete` | 1–2 | All ADRs accepted 2026-05-23 |
 | 2 | MCP wiring | `complete` | 3–4 | SearXNG MCP server + Researcher agent |
-| 3 | Loop prevention | `not_started` | 5–6 | Escape conditions, retry tracking |
+| 3 | Loop prevention | `complete` | 5–6 | Escape conditions, retry tracking |
 | 4 | Orchestration | `not_started` | 7–8 | Sequential first, then streaming eval |
 | 5 | Failure mode docs | `not_started` | 9–10 | Deliberate breaks + lessons learned |
 
@@ -68,13 +68,13 @@ Architecture doc or annotated schema file — answers all 5 questions, all schem
 
 ## Phase 3 — Loop Prevention
 
-**Status:** `not_started`  
+**Status:** `complete`  
 **Goal:** All 3 loop types handled with explicit escape conditions
 
 ### Loop types
-- [ ] Infinite retry: track `(tool_name, args_hash)` per task, escalate on dup
-- [ ] Progress stall: progress check every N calls, escape if no new info
-- [ ] Circular delegation: enforce forward-only flow (no back-edges)
+- [x] Infinite retry: track `(tool_name, args_hash)` per task, escalate on dup
+- [x] Progress stall: progress check every N calls, escape if no new info
+- [x] Circular delegation: enforce forward-only flow (no back-edges)
 
 ### Escape conditions
 Every agent gets `AgentConstraints(max_tool_calls, max_iterations, max_wall_time_seconds, on_exceed)`  

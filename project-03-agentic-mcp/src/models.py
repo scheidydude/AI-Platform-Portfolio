@@ -49,6 +49,15 @@ class ToolResult(BaseModel):
     retries_attempted: int = 0
 
 
+_VALID_TRANSITIONS: dict[str, set[str]] = {
+    "planning":    {"researching", "failed"},
+    "researching": {"synthesizing", "failed"},
+    "synthesizing": {"complete", "failed"},
+    "complete":    set(),
+    "failed":      set(),
+}
+
+
 class PipelineState(BaseModel):
     pipeline_id: str
     status: Literal[
@@ -59,3 +68,15 @@ class PipelineState(BaseModel):
     started_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
     error: str | None = None
+
+    def transition(
+        self,
+        new_status: Literal["planning", "researching", "synthesizing", "complete", "failed"],
+    ) -> "PipelineState":
+        allowed = _VALID_TRANSITIONS.get(self.status, set())
+        if new_status not in allowed:
+            raise ValueError(
+                f"Invalid pipeline transition: {self.status!r} → {new_status!r}. "
+                f"Allowed: {sorted(allowed) or 'none (terminal state)'}"
+            )
+        return self.model_copy(update={"status": new_status, "updated_at": datetime.utcnow()})
