@@ -11,6 +11,7 @@ from ..config import GatewayConfig, TeamConfig
 from ..middleware.auth import require_team
 from ..models import ChatCompletionRequest, ChatCompletionResponse, ChatChoice, Message, UsageInfo
 from ..observability import current_month, generate_request_id, log_request, logger
+from .. import metrics as gw_metrics
 from ..quota import EnforcementAction, check_quota
 from ..ratelimit import RateLimiter
 from ..state.base import QuotaStore
@@ -90,10 +91,16 @@ async def chat_completions(
     if backend_name is None or backend_name not in backends:
         raise HTTPException(status_code=502, detail="No backend configured for team")
     backend = backends[backend_name]
+    backend_cfg = config.backends[backend_name]
 
     enforcement_action = decision.action.value
 
     async def _account(prompt_tokens: int, completion_tokens: int, status: str) -> None:
+        cost_usd = (
+            prompt_tokens * backend_cfg.cost_per_1k_prompt / 1000
+            + completion_tokens * backend_cfg.cost_per_1k_completion / 1000
+        )
+        latency_ms = int((time.monotonic() - start_time) * 1000)
         total = prompt_tokens + completion_tokens
         new_used = await store.increment(team_name, month, total)
         await store.log_request(
@@ -104,8 +111,9 @@ async def chat_completions(
             prompt_tokens=prompt_tokens,
             completion_tokens=completion_tokens,
             estimated_tokens=estimated,
-            latency_ms=int((time.monotonic() - start_time) * 1000),
+            latency_ms=latency_ms,
             status=status,
+            cost_usd=cost_usd,
         )
         log_request(
             request_id=request_id,
@@ -117,8 +125,22 @@ async def chat_completions(
             prompt_tokens=prompt_tokens,
             completion_tokens=completion_tokens,
             estimated_tokens=estimated,
-            latency_ms=int((time.monotonic() - start_time) * 1000),
+            latency_ms=latency_ms,
             status=status,
+            cost_usd=cost_usd,
+            quota_used=new_used,
+            quota_budget=team_cfg.monthly_token_budget,
+        )
+        gw_metrics.record(
+            team=team_name,
+            model=body.model,
+            backend=backend_name,
+            status=status,
+            enforcement_action=enforcement_action,
+            prompt_tokens=prompt_tokens,
+            completion_tokens=completion_tokens,
+            latency_seconds=latency_ms / 1000,
+            cost_usd=cost_usd,
             quota_used=new_used,
             quota_budget=team_cfg.monthly_token_budget,
         )

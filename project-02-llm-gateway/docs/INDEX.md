@@ -26,6 +26,8 @@ Career documentation artifact. All decisions, designs, and tradeoffs recorded he
 | [ADR-003](adr/ADR-003-token-counting.md) | Token Counting: tiktoken + reconcile | Accepted | 2026-05-23 |
 | [ADR-004](adr/ADR-004-team-config.md) | Team Config: YAML | Accepted | 2026-05-23 |
 | [ADR-005](adr/ADR-005-rate-limiting.md) | Rate Limiting: In-Memory Sliding Window | Accepted | 2026-05-23 |
+| [ADR-006](adr/ADR-006-metrics.md) | Metrics Backend: Prometheus | Accepted | 2026-05-23 |
+| [ADR-007](adr/ADR-007-dashboard.md) | Cost Dashboard: Embedded HTML + Vanilla JS | Accepted | 2026-05-23 |
 
 ---
 

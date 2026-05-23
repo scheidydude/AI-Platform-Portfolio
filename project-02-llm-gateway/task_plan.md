@@ -42,7 +42,7 @@ Quota reset: monthly calendar boundary, carry-over option (2x cap), manual overr
 ---
 
 ### Phase 3 — Observability (Days 6–7)
-**Status:** `not_started`
+**Status:** `complete`
 
 Metrics: request.count, tokens.prompt, tokens.completion, latency.ms, quota.pct_used, quota.remaining, errors.count
 Tags: team, model, status

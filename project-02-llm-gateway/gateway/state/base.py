@@ -29,7 +29,18 @@ class QuotaStore(ABC):
         estimated_tokens: int,
         latency_ms: int,
         status: str,
+        cost_usd: float,
     ) -> None: ...
 
     @abstractmethod
     async def get_all_usage(self, month: str) -> list[dict]: ...
+
+    @abstractmethod
+    async def get_all_usage_with_cost(self, month: str) -> dict[str, dict]:
+        """Return {team_name: {tokens_used, cost_usd}} for teams active this month."""
+        ...
+
+    @abstractmethod
+    async def get_daily_usage(self, month: str) -> list[dict]:
+        """Return [{date, tokens, requests, cost_usd}] aggregated by day."""
+        ...

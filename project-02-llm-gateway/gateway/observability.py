@@ -53,6 +53,7 @@ def log_request(
     estimated_tokens: int,
     latency_ms: int,
     status: str,
+    cost_usd: float,
     quota_used: int,
     quota_budget: int,
 ) -> None:
@@ -72,6 +73,7 @@ def log_request(
         "estimated_tokens": estimated_tokens,
         "latency_ms": latency_ms,
         "status": status,
+        "cost_usd": round(cost_usd, 6),
         "quota_remaining": quota_remaining,
         "quota_pct_used": quota_pct,
     })

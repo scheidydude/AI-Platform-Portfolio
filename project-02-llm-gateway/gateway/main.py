@@ -6,9 +6,10 @@ from fastapi import FastAPI
 
 from .backends import create_backend
 from .config import load_config
+from .metrics import prometheus_output
 from .observability import logger
 from .ratelimit import RateLimiter
-from .routes import admin, chat, models
+from .routes import admin, chat, dashboard, models
 from .state.sqlite import SqliteQuotaStore
 
 
@@ -44,8 +45,16 @@ app = FastAPI(title="LLM Gateway", version="0.1.0", lifespan=lifespan)
 app.include_router(chat.router)
 app.include_router(models.router)
 app.include_router(admin.router)
+app.include_router(dashboard.router)
 
 
 @app.get("/healthz")
 async def health() -> dict:
     return {"ok": True}
+
+
+@app.get("/metrics", include_in_schema=False)
+async def metrics():
+    from fastapi.responses import Response
+    data, content_type = prometheus_output()
+    return Response(content=data, media_type=content_type)

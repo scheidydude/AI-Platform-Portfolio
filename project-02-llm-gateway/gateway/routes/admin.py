@@ -19,17 +19,18 @@ async def get_usage(
 ) -> dict:
     month = current_month()
     config = request.app.state.config
-    usage = await store.get_all_usage(month)
-    # Annotate with budget info
+    usage_map = await store.get_all_usage_with_cost(month)
     rows = []
-    for row in usage:
-        team_cfg = config.teams.get(row["team"])
-        budget = team_cfg.monthly_token_budget if team_cfg else 0
+    for team_name, team_cfg in config.teams.items():
+        row = usage_map.get(team_name, {"tokens_used": 0, "cost_usd": 0.0})
+        budget = team_cfg.monthly_token_budget
         rows.append({
-            **row,
+            "team": team_name,
             "month": month,
+            "tokens_used": row["tokens_used"],
             "budget": budget,
             "pct_used": round(row["tokens_used"] / budget * 100, 1) if budget else None,
+            "cost_usd": round(row["cost_usd"], 6),
         })
     return {"month": month, "teams": rows}
 
@@ -42,20 +43,35 @@ async def get_quota(
 ) -> dict:
     month = current_month()
     config = request.app.state.config
+    usage_map = await store.get_all_usage_with_cost(month)
     result = []
     for team_name, team_cfg in config.teams.items():
-        used = await store.get_usage(team_name, month)
-        remaining = max(0, team_cfg.monthly_token_budget - used)
+        row = usage_map.get(team_name, {"tokens_used": 0, "cost_usd": 0.0})
+        used = row["tokens_used"]
+        budget = team_cfg.monthly_token_budget
+        remaining = max(0, budget - used)
         result.append({
             "team": team_name,
             "month": month,
             "tokens_used": used,
-            "tokens_budget": team_cfg.monthly_token_budget,
+            "tokens_budget": budget,
             "tokens_remaining": remaining,
-            "pct_used": round(used / team_cfg.monthly_token_budget * 100, 1),
+            "pct_used": round(used / budget * 100, 1) if budget else 0.0,
             "enforcement_mode": team_cfg.enforcement_mode,
+            "cost_usd": round(row["cost_usd"], 6),
         })
     return {"month": month, "teams": result}
+
+
+@router.get("/daily")
+async def get_daily(
+    request: Request,
+    _: None = Depends(require_admin),
+    store: QuotaStore = Depends(_get_store),
+) -> dict:
+    month = current_month()
+    daily = await store.get_daily_usage(month)
+    return {"month": month, "daily": daily}
 
 
 @router.post("/reset")
@@ -67,10 +83,8 @@ async def reset_quota(
     body = await request.json()
     team_name = body.get("team")
     month = body.get("month", current_month())
-
     config = request.app.state.config
     if team_name not in config.teams:
         raise HTTPException(status_code=404, detail=f"Team '{team_name}' not found")
-
     await store.reset(team_name, month)
     return {"ok": True, "team": team_name, "month": month}
