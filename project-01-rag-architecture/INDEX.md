@@ -3,7 +3,7 @@
 **Author:** David Scheiderman
 **Project:** RAG Architecture POC over SEC 10-K filings
 **Start:** 2026-05-22
-**Status:** In Progress (Phase 2 complete)
+**Status:** In Progress (Phase 3 complete)
 
 This index is the single source of truth for all artifacts. Update after every new document is created or status changes.
 
@@ -47,7 +47,7 @@ All 5 ADRs required by project spec. Eval impact section populated in Phases 3â€
 |----------|------|--------|-------|
 | Chunking Strategy Decision | `docs/design/chunking-decision.md` | Complete | Hierarchical chosen â€” full rationale + data |
 | Retrieval Architecture Design | `docs/design/retrieval-design.md` | Complete | Dense + BM25 + RRF + cross-encoder |
-| Eval Methodology | `docs/design/eval-methodology.md` | Not started | Phase 3 deliverable |
+| Eval Methodology | `docs/design/eval-methodology.md` | Complete | 20-question set, recall@K method, Phase 3 scores |
 
 ---
 
@@ -55,9 +55,9 @@ All 5 ADRs required by project spec. Eval impact section populated in Phases 3â€
 
 | Artifact | File | Status | Notes |
 |----------|------|--------|-------|
-| Ground Truth Q&A Set | `eval/ground_truth.json` | Not started | Phase 3 â€” 20+ Q&A pairs |
-| Eval Results (Phase 3 manual) | `eval/results/` | Not started | Phase 3 scores |
-| Eval Results (Phase 4 automated) | `eval/results/` | Not started | LLM-as-judge scores per config |
+| Ground Truth Q&A Set | `eval/ground_truth.json` | Complete | 20 Q&A pairs (10 single, 5 multi, 5 OOS) with GT chunk IDs |
+| Eval Results (Phase 3 manual) | `eval/results/phase3_retrieval_scores.json` | Complete | R@1=0.933, R@3=1.0, R@5=1.0; OOS 5/5 |
+| Eval Results (Phase 4 automated) | `eval/results/phase4_lm_judge_scores.json` | Not started | LLM-as-judge scores per config |
 
 ---
 

@@ -11,7 +11,8 @@
       "Bash(pip3 show *)",
       "Bash(python *)",
       "Bash(curl -s http://localhost:8080/health)",
-      "Bash(git add *)"
+      "Bash(git add *)",
+      "Bash(git commit *)"
     ]
   }
 }

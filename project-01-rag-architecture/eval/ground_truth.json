@@ -1,0 +1,265 @@
+{
+  "version": "1.0",
+  "created": "2026-05-23",
+  "corpus": "9 SEC 10-K filings (AAPL, MSFT, JPM, GS, BAC, C, WFC, MS, BLK), 3332 embedded chunks",
+  "retrieval_config": "hybrid: dense k=20 + BM25 k=20 + RRF k=60, cross-encoder top_n=5",
+  "questions": [
+    {
+      "id": "Q001",
+      "type": "single_source",
+      "question": "What supply chain and manufacturing risks does Apple identify in its risk factors?",
+      "expected_companies": [
+        "Apple_Inc"
+      ],
+      "ground_truth_chunk_ids": [
+        "APPLE_IN_2025_HIER_0013",
+        "APPLE_IN_2025_HIER_0018"
+      ],
+      "notes": "Original question (revenue segments) had all-negative cross-encoder scores \u2014 Apple reports one operating segment, no segment breakdown in narrative chunks. Revised to supply chain risk, which is well-represented in Apple Item 1A."
+    },
+    {
+      "id": "Q002",
+      "type": "single_source",
+      "question": "What cybersecurity risks does Microsoft disclose in its 10-K?",
+      "expected_companies": [
+        "Microsoft_Corp"
+      ],
+      "ground_truth_chunk_ids": [
+        "MICROSOF_2025_HIER_0055",
+        "MICROSOF_2025_HIER_0053"
+      ],
+      "notes": "Microsoft has a dedicated Item 1C Cybersecurity section. Both chunks are directly on-topic."
+    },
+    {
+      "id": "Q003",
+      "type": "single_source",
+      "question": "What liquidity risks does JPMorgan Chase identify in its risk factors?",
+      "expected_companies": [
+        "JPMorgan_Chase"
+      ],
+      "ground_truth_chunk_ids": [
+        "JPMORGAN_2026_HIER_0021",
+        "JPMORGAN_2026_HIER_0184"
+      ],
+      "notes": "0021 is Item 1A explicit liquidity risk bullet. 0184 is Firmwide Risk Management section."
+    },
+    {
+      "id": "Q004",
+      "type": "single_source",
+      "question": "How does Goldman Sachs describe its market risk exposure?",
+      "expected_companies": [
+        "Goldman_Sachs"
+      ],
+      "ground_truth_chunk_ids": [
+        "GOLDMAN__2026_HIER_0258",
+        "GOLDMAN__2026_HIER_0270"
+      ],
+      "notes": "Goldman's Market Risk section appears under Item 4 (Mine Safety Disclosures label is a section parser artifact \u2014 content is MD&A market risk discussion)."
+    },
+    {
+      "id": "Q005",
+      "type": "single_source",
+      "question": "What credit risk management practices does Bank of America describe?",
+      "expected_companies": [
+        "Bank_of_America"
+      ],
+      "ground_truth_chunk_ids": [
+        "BANK_OF__2026_HIER_0185",
+        "BANK_OF__2026_HIER_0084",
+        "BANK_OF__2026_HIER_0137"
+      ],
+      "notes": "0185 is consumer credit tables section; 0084 is the credit risk management overview; 0137 is risk control framework."
+    },
+    {
+      "id": "Q006",
+      "type": "single_source",
+      "question": "How does BlackRock describe its investment management platform and assets under management?",
+      "expected_companies": [
+        "BlackRock"
+      ],
+      "ground_truth_chunk_ids": [
+        "BLACKROC_2024_HIER_0001",
+        "BLACKROC_2024_HIER_0124"
+      ],
+      "notes": "0001 is the Overview section intro. 0124 explicitly describes AUM-based fee revenue model."
+    },
+    {
+      "id": "Q007",
+      "type": "single_source",
+      "question": "What regulatory capital requirements does JPMorgan Chase face?",
+      "expected_companies": [
+        "JPMorgan_Chase"
+      ],
+      "ground_truth_chunk_ids": [
+        "JPMORGAN_2026_HIER_0579",
+        "JPMORGAN_2026_HIER_0043"
+      ],
+      "notes": "0579 describes Basel III components. 0043 is the capital risk factor from Item 1A."
+    },
+    {
+      "id": "Q008",
+      "type": "single_source",
+      "question": "What competition does Apple face in its product and services markets?",
+      "expected_companies": [
+        "Apple_Inc"
+      ],
+      "ground_truth_chunk_ids": [
+        "APPLE_IN_2025_HIER_0015",
+        "APPLE_IN_2025_HIER_0003"
+      ],
+      "notes": "0015 is the competition risk factor. 0003 is the Business section competition discussion."
+    },
+    {
+      "id": "Q009",
+      "type": "single_source",
+      "question": "How does Goldman Sachs manage liquidity risk?",
+      "expected_companies": [
+        "Goldman_Sachs"
+      ],
+      "ground_truth_chunk_ids": [
+        "GOLDMAN__2026_HIER_0245",
+        "GOLDMAN__2026_HIER_0244"
+      ],
+      "notes": "0245 describes the Global Core Liquid Assets (GCLA) framework. 0244 states the three liquidity risk management principles explicitly."
+    },
+    {
+      "id": "Q010",
+      "type": "single_source",
+      "question": "What operational risks does Bank of America identify?",
+      "expected_companies": [
+        "Bank_of_America"
+      ],
+      "ground_truth_chunk_ids": [
+        "BANK_OF__2026_HIER_0047",
+        "BANK_OF__2026_HIER_0064"
+      ],
+      "notes": "0047 covers cybersecurity and information system risks. 0064 covers compliance and legal/regulatory operational risks."
+    },
+    {
+      "id": "Q011",
+      "type": "multi_source",
+      "question": "How do large banks describe their credit risk management frameworks?",
+      "expected_companies": [
+        "JPMorgan_Chase",
+        "Bank_of_America",
+        "Goldman_Sachs",
+        "Morgan_Stanley"
+      ],
+      "ground_truth_chunk_ids": [
+        "MORGAN_S_2026_HIER_0033",
+        "JPMORGAN_2026_HIER_0194",
+        "BANK_OF__2026_HIER_0185"
+      ],
+      "notes": "Q11 expects any large bank; Morgan Stanley, JPMorgan, BofA all qualify. Rank-1 result (MORGAN_S_0015) is a cross-reference stub, not credit risk content \u2014 excluded from GT."
+    },
+    {
+      "id": "Q012",
+      "type": "multi_source",
+      "question": "What technology and cybersecurity risks do both financial and technology companies face?",
+      "expected_companies": [
+        "Bank_of_America",
+        "JPMorgan_Chase",
+        "BlackRock",
+        "Goldman_Sachs",
+        "Microsoft_Corp",
+        "Apple_Inc"
+      ],
+      "ground_truth_chunk_ids": [
+        "BANK_OF__2026_HIER_0047",
+        "JPMORGAN_2026_HIER_0302",
+        "BLACKROC_2024_HIER_0112"
+      ],
+      "notes": "Cross-sector question. Ground truth requires at least one financial AND one non-pure-financial institution for full credit."
+    },
+    {
+      "id": "Q013",
+      "type": "multi_source",
+      "question": "How do financial companies describe their stress testing processes?",
+      "expected_companies": [
+        "Goldman_Sachs",
+        "JPMorgan_Chase",
+        "Bank_of_America"
+      ],
+      "ground_truth_chunk_ids": [
+        "GOLDMAN__2026_HIER_0212",
+        "JPMORGAN_2026_HIER_0193",
+        "BANK_OF__2026_HIER_0137"
+      ],
+      "notes": "0212 describes GS capital planning and stress testing. 0193 is JPMorgan CCAR section. 0137 is BofA risk control framework."
+    },
+    {
+      "id": "Q014",
+      "type": "multi_source",
+      "question": "What regulatory and compliance risks are common across major financial institutions?",
+      "expected_companies": [
+        "Citigroup",
+        "Bank_of_America",
+        "Goldman_Sachs",
+        "Morgan_Stanley"
+      ],
+      "ground_truth_chunk_ids": [
+        "CITIGROU_2026_HIER_0123",
+        "BANK_OF__2026_HIER_0053",
+        "GOLDMAN__2026_HIER_0109"
+      ],
+      "notes": "Citigroup 0123 has a dedicated Compliance Risks section (section title visible despite DOCUMENT label)."
+    },
+    {
+      "id": "Q015",
+      "type": "multi_source",
+      "question": "How do companies describe climate-related or ESG risks in their filings?",
+      "expected_companies": [
+        "BlackRock",
+        "Morgan_Stanley",
+        "Citigroup",
+        "Goldman_Sachs"
+      ],
+      "ground_truth_chunk_ids": [
+        "BLACKROC_2024_HIER_0035",
+        "BLACKROC_2024_HIER_0089",
+        "MORGAN_S_2026_HIER_0182"
+      ],
+      "notes": "BlackRock leads heavily (ESG is central to their business). Morgan Stanley and Citigroup also have dedicated climate risk sections."
+    },
+    {
+      "id": "Q016",
+      "type": "out_of_scope",
+      "question": "What is Charles Schwab's approach to retail brokerage risk management?",
+      "expected_companies": [],
+      "ground_truth_chunk_ids": [],
+      "notes": "Charles Schwab not in corpus (EDGAR CIK lookup returned no 10-K). All results should have negative cross-encoder scores."
+    },
+    {
+      "id": "Q017",
+      "type": "out_of_scope",
+      "question": "What are the current interest rates set by the Federal Reserve?",
+      "expected_companies": [],
+      "ground_truth_chunk_ids": [],
+      "notes": "Real-time data question. 10-K filings describe exposure to Fed rate changes, not the rates themselves."
+    },
+    {
+      "id": "Q018",
+      "type": "out_of_scope",
+      "question": "What is Coinbase's cryptocurrency custody and risk framework?",
+      "expected_companies": [],
+      "ground_truth_chunk_ids": [],
+      "notes": "Coinbase not in corpus. Crypto custody is not a topic covered by the 9 ingested filings."
+    },
+    {
+      "id": "Q019",
+      "type": "out_of_scope",
+      "question": "How many patents did Apple file in fiscal year 2024?",
+      "expected_companies": [],
+      "ground_truth_chunk_ids": [],
+      "notes": "Patent counts not reported in Apple's 10-K. Apple mentions intellectual property broadly (APPLE_IN_2025_HIER_0005) but not filing counts."
+    },
+    {
+      "id": "Q020",
+      "type": "out_of_scope",
+      "question": "What is the employee Net Promoter Score at Microsoft?",
+      "expected_companies": [],
+      "ground_truth_chunk_ids": [],
+      "notes": "NPS is an internal HR metric not disclosed in SEC filings."
+    }
+  ]
+}

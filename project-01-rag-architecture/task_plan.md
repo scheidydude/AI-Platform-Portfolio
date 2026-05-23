@@ -14,7 +14,7 @@
 | 0 | Scaffolding & Setup | 0 | complete | - |
 | 1 | Corpus & Ingestion | 1–2 | complete | - |
 | 2 | Retrieval (hybrid + re-rank) | 3–5 | complete | - |
-| 3 | Eval Set (manual ground truth) | 6–7 | not_started | - |
+| 3 | Eval Set (manual ground truth) | 6–7 | complete | - |
 | 4 | LLM-as-Judge Automation | 8–10 | not_started | - |
 | 5 | ADR Writeup + Final Docs | 11 | not_started | - |
 

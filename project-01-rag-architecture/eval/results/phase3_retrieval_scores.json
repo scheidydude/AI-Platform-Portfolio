@@ -1,0 +1,780 @@
+{
+  "phase": 3,
+  "date": "2026-05-23",
+  "method": "manual \u2014 retrieval run, ground truth determined by human review of chunk content",
+  "retrieval_config": "hybrid: dense k=20 + BM25 k=20 + RRF k=60, cross-encoder ms-marco-MiniLM-L-6-v2 top_n=5",
+  "summary": {
+    "single_source_recall_at_1": 1.0,
+    "single_source_recall_at_3": 1.0,
+    "single_source_recall_at_5": 1.0,
+    "multi_source_recall_at_1": 0.8,
+    "multi_source_recall_at_3": 1.0,
+    "multi_source_recall_at_5": 1.0,
+    "all_in_scope_recall_at_1": 0.933,
+    "all_in_scope_recall_at_3": 1.0,
+    "all_in_scope_recall_at_5": 1.0,
+    "out_of_scope_detection_rate": "5/5"
+  },
+  "per_question": {
+    "Q001": {
+      "retrieved_top5": [
+        {
+          "chunk_id": "APPLE_IN_2025_HIER_0013",
+          "company": "Apple_Inc",
+          "section_title": "Item 1A.\u00a0\u00a0\u00a0\u00a0Risk Factors",
+          "score": 2.3158
+        },
+        {
+          "chunk_id": "APPLE_IN_2025_HIER_0016",
+          "company": "Apple_Inc",
+          "section_title": "Item 1A.\u00a0\u00a0\u00a0\u00a0Risk Factors",
+          "score": 2.0665
+        },
+        {
+          "chunk_id": "APPLE_IN_2025_HIER_0018",
+          "company": "Apple_Inc",
+          "section_title": "Item 1A.\u00a0\u00a0\u00a0\u00a0Risk Factors",
+          "score": 0.2448
+        },
+        {
+          "chunk_id": "APPLE_IN_2025_HIER_0010",
+          "company": "Apple_Inc",
+          "section_title": "Item 1A.\u00a0\u00a0\u00a0\u00a0Risk Factors",
+          "score": -0.5045
+        },
+        {
+          "chunk_id": "APPLE_IN_2025_HIER_0009",
+          "company": "Apple_Inc",
+          "section_title": "Item 1A.\u00a0\u00a0\u00a0\u00a0Risk Factors",
+          "score": -1.3021
+        }
+      ],
+      "recall_at_1": 1,
+      "recall_at_3": 1,
+      "recall_at_5": 1,
+      "out_of_scope_correct": null
+    },
+    "Q002": {
+      "retrieved_top5": [
+        {
+          "chunk_id": "MICROSOF_2025_HIER_0055",
+          "company": "Microsoft_Corp",
+          "section_title": "ITEM 1C. CYBERSECURITY",
+          "score": 5.4682
+        },
+        {
+          "chunk_id": "MORGAN_S_2026_HIER_0039",
+          "company": "Morgan_Stanley",
+          "section_title": "DOCUMENT",
+          "score": 2.9299
+        },
+        {
+          "chunk_id": "MICROSOF_2025_HIER_0053",
+          "company": "Microsoft_Corp",
+          "section_title": "ITEM 1C. CYBERSECURITY",
+          "score": 1.2987
+        },
+        {
+          "chunk_id": "APPLE_IN_2025_HIER_0041",
+          "company": "Apple_Inc",
+          "section_title": "Item 1C.\u00a0\u00a0\u00a0\u00a0Cybersecurity",
+          "score": 1.1754
+        },
+        {
+          "chunk_id": "GOLDMAN__2026_HIER_0292",
+          "company": "Goldman_Sachs",
+          "section_title": "Item 4.  Mine Safety Disclosures",
+          "score": -0.0981
+        }
+      ],
+      "recall_at_1": 1,
+      "recall_at_3": 1,
+      "recall_at_5": 1,
+      "out_of_scope_correct": null
+    },
+    "Q003": {
+      "retrieved_top5": [
+        {
+          "chunk_id": "JPMORGAN_2026_HIER_0021",
+          "company": "JPMorgan_Chase",
+          "section_title": "Item 1A. Risk Factors.",
+          "score": 6.4265
+        },
+        {
+          "chunk_id": "JPMORGAN_2026_HIER_0184",
+          "company": "JPMorgan_Chase",
+          "section_title": "Item 15. Exhibits, Financial Statement Schedules.",
+          "score": 5.6451
+        },
+        {
+          "chunk_id": "JPMORGAN_2026_HIER_0185",
+          "company": "JPMorgan_Chase",
+          "section_title": "Item 15. Exhibits, Financial Statement Schedules.",
+          "score": 5.1576
+        },
+        {
+          "chunk_id": "JPMORGAN_2026_HIER_0056",
+          "company": "JPMorgan_Chase",
+          "section_title": "Item 1A. Risk Factors.",
+          "score": 4.2109
+        },
+        {
+          "chunk_id": "JPMORGAN_2026_HIER_0232",
+          "company": "JPMorgan_Chase",
+          "section_title": "Item 15. Exhibits, Financial Statement Schedules.",
+          "score": 4.0194
+        }
+      ],
+      "recall_at_1": 1,
+      "recall_at_3": 1,
+      "recall_at_5": 1,
+      "out_of_scope_correct": null
+    },
+    "Q004": {
+      "retrieved_top5": [
+        {
+          "chunk_id": "GOLDMAN__2026_HIER_0258",
+          "company": "Goldman_Sachs",
+          "section_title": "Item 4.  Mine Safety Disclosures",
+          "score": 6.324
+        },
+        {
+          "chunk_id": "GOLDMAN__2026_HIER_0270",
+          "company": "Goldman_Sachs",
+          "section_title": "Item 4.  Mine Safety Disclosures",
+          "score": 5.4094
+        },
+        {
+          "chunk_id": "GOLDMAN__2026_HIER_0289",
+          "company": "Goldman_Sachs",
+          "section_title": "Item 4.  Mine Safety Disclosures",
+          "score": 5.3473
+        },
+        {
+          "chunk_id": "GOLDMAN__2026_HIER_0103",
+          "company": "Goldman_Sachs",
+          "section_title": "Item 1A.  Risk Factors",
+          "score": 5.1013
+        },
+        {
+          "chunk_id": "GOLDMAN__2026_HIER_0076",
+          "company": "Goldman_Sachs",
+          "section_title": "Item 1A.  Risk Factors",
+          "score": 4.0245
+        }
+      ],
+      "recall_at_1": 1,
+      "recall_at_3": 1,
+      "recall_at_5": 1,
+      "out_of_scope_correct": null
+    },
+    "Q005": {
+      "retrieved_top5": [
+        {
+          "chunk_id": "BANK_OF__2026_HIER_0185",
+          "company": "Bank_of_America",
+          "section_title": "Item 7. Bank of America Corporation and Subsidiaries",
+          "score": 4.7483
+        },
+        {
+          "chunk_id": "BANK_OF__2026_HIER_0084",
+          "company": "Bank_of_America",
+          "section_title": "Item 7. Bank of America Corporation and Subsidiaries",
+          "score": 2.6145
+        },
+        {
+          "chunk_id": "BANK_OF__2026_HIER_0131",
+          "company": "Bank_of_America",
+          "section_title": "Item 7. Bank of America Corporation and Subsidiaries",
+          "score": 2.1409
+        },
+        {
+          "chunk_id": "BANK_OF__2026_HIER_0008",
+          "company": "Bank_of_America",
+          "section_title": "Item 1.  Business",
+          "score": 1.7929
+        },
+        {
+          "chunk_id": "BANK_OF__2026_HIER_0137",
+          "company": "Bank_of_America",
+          "section_title": "Item 7. Bank of America Corporation and Subsidiaries",
+          "score": 1.4394
+        }
+      ],
+      "recall_at_1": 1,
+      "recall_at_3": 1,
+      "recall_at_5": 1,
+      "out_of_scope_correct": null
+    },
+    "Q006": {
+      "retrieved_top5": [
+        {
+          "chunk_id": "BLACKROC_2024_HIER_0001",
+          "company": "BlackRock",
+          "section_title": "Item 1. Business",
+          "score": 6.7796
+        },
+        {
+          "chunk_id": "BLACKROC_2024_HIER_0230",
+          "company": "BlackRock",
+          "section_title": "Item 16. Form 10-K Summary",
+          "score": 6.1885
+        },
+        {
+          "chunk_id": "BLACKROC_2024_HIER_0125",
+          "company": "BlackRock",
+          "section_title": "Item 4. Mine Safety Disclosures",
+          "score": 4.9761
+        },
+        {
+          "chunk_id": "BLACKROC_2024_HIER_0124",
+          "company": "BlackRock",
+          "section_title": "Item 4. Mine Safety Disclosures",
+          "score": 4.6295
+        },
+        {
+          "chunk_id": "BLACKROC_2024_HIER_0055",
+          "company": "BlackRock",
+          "section_title": "Item 1A. Risk Factors",
+          "score": 4.5442
+        }
+      ],
+      "recall_at_1": 1,
+      "recall_at_3": 1,
+      "recall_at_5": 1,
+      "out_of_scope_correct": null
+    },
+    "Q007": {
+      "retrieved_top5": [
+        {
+          "chunk_id": "JPMORGAN_2026_HIER_0579",
+          "company": "JPMorgan_Chase",
+          "section_title": "Item 15. Exhibits, Financial Statement Schedules.",
+          "score": 6.88
+        },
+        {
+          "chunk_id": "JPMORGAN_2026_HIER_0043",
+          "company": "JPMorgan_Chase",
+          "section_title": "Item 1A. Risk Factors.",
+          "score": 6.1282
+        },
+        {
+          "chunk_id": "JPMORGAN_2026_HIER_0200",
+          "company": "JPMorgan_Chase",
+          "section_title": "Item 15. Exhibits, Financial Statement Schedules.",
+          "score": 5.2736
+        },
+        {
+          "chunk_id": "JPMORGAN_2026_HIER_0201",
+          "company": "JPMorgan_Chase",
+          "section_title": "Item 15. Exhibits, Financial Statement Schedules.",
+          "score": 5.2649
+        },
+        {
+          "chunk_id": "JPMORGAN_2026_HIER_0212",
+          "company": "JPMorgan_Chase",
+          "section_title": "Item 15. Exhibits, Financial Statement Schedules.",
+          "score": 5.166
+        }
+      ],
+      "recall_at_1": 1,
+      "recall_at_3": 1,
+      "recall_at_5": 1,
+      "out_of_scope_correct": null
+    },
+    "Q008": {
+      "retrieved_top5": [
+        {
+          "chunk_id": "APPLE_IN_2025_HIER_0015",
+          "company": "Apple_Inc",
+          "section_title": "Item 1A.\u00a0\u00a0\u00a0\u00a0Risk Factors",
+          "score": 7.9202
+        },
+        {
+          "chunk_id": "APPLE_IN_2025_HIER_0003",
+          "company": "Apple_Inc",
+          "section_title": "Item 1.\u00a0\u00a0\u00a0\u00a0Business",
+          "score": 7.6086
+        },
+        {
+          "chunk_id": "APPLE_IN_2025_HIER_0002",
+          "company": "Apple_Inc",
+          "section_title": "Item 1.\u00a0\u00a0\u00a0\u00a0Business",
+          "score": 3.6239
+        },
+        {
+          "chunk_id": "APPLE_IN_2025_HIER_0014",
+          "company": "Apple_Inc",
+          "section_title": "Item 1A.\u00a0\u00a0\u00a0\u00a0Risk Factors",
+          "score": 2.0626
+        },
+        {
+          "chunk_id": "MICROSOF_2025_HIER_0022",
+          "company": "Microsoft_Corp",
+          "section_title": "ITEM 1A. RISK FACTORS",
+          "score": 1.8424
+        }
+      ],
+      "recall_at_1": 1,
+      "recall_at_3": 1,
+      "recall_at_5": 1,
+      "out_of_scope_correct": null
+    },
+    "Q009": {
+      "retrieved_top5": [
+        {
+          "chunk_id": "GOLDMAN__2026_HIER_0245",
+          "company": "Goldman_Sachs",
+          "section_title": "Item 4.  Mine Safety Disclosures",
+          "score": 5.5681
+        },
+        {
+          "chunk_id": "GOLDMAN__2026_HIER_0235",
+          "company": "Goldman_Sachs",
+          "section_title": "Item 4.  Mine Safety Disclosures",
+          "score": 5.0227
+        },
+        {
+          "chunk_id": "GOLDMAN__2026_HIER_0243",
+          "company": "Goldman_Sachs",
+          "section_title": "Item 4.  Mine Safety Disclosures",
+          "score": 4.8009
+        },
+        {
+          "chunk_id": "GOLDMAN__2026_HIER_0096",
+          "company": "Goldman_Sachs",
+          "section_title": "Item 1A.  Risk Factors",
+          "score": 4.0713
+        },
+        {
+          "chunk_id": "GOLDMAN__2026_HIER_0244",
+          "company": "Goldman_Sachs",
+          "section_title": "Item 4.  Mine Safety Disclosures",
+          "score": 3.9418
+        }
+      ],
+      "recall_at_1": 1,
+      "recall_at_3": 1,
+      "recall_at_5": 1,
+      "out_of_scope_correct": null
+    },
+    "Q010": {
+      "retrieved_top5": [
+        {
+          "chunk_id": "BANK_OF__2026_HIER_0047",
+          "company": "Bank_of_America",
+          "section_title": "Item 1A. Risk Factors",
+          "score": 4.8712
+        },
+        {
+          "chunk_id": "BANK_OF__2026_HIER_0064",
+          "company": "Bank_of_America",
+          "section_title": "Item 1A. Risk Factors",
+          "score": 4.8535
+        },
+        {
+          "chunk_id": "MORGAN_S_2026_HIER_0173",
+          "company": "Morgan_Stanley",
+          "section_title": "DOCUMENT",
+          "score": 1.9746
+        },
+        {
+          "chunk_id": "JPMORGAN_2026_HIER_0300",
+          "company": "JPMorgan_Chase",
+          "section_title": "Item 15. Exhibits, Financial Statement Schedules.",
+          "score": 1.2536
+        },
+        {
+          "chunk_id": "GOLDMAN__2026_HIER_0291",
+          "company": "Goldman_Sachs",
+          "section_title": "Item 4.  Mine Safety Disclosures",
+          "score": 1.1693
+        }
+      ],
+      "recall_at_1": 1,
+      "recall_at_3": 1,
+      "recall_at_5": 1,
+      "out_of_scope_correct": null
+    },
+    "Q011": {
+      "retrieved_top5": [
+        {
+          "chunk_id": "MORGAN_S_2026_HIER_0015",
+          "company": "Morgan_Stanley",
+          "section_title": "DOCUMENT",
+          "score": 3.3807
+        },
+        {
+          "chunk_id": "MORGAN_S_2026_HIER_0033",
+          "company": "Morgan_Stanley",
+          "section_title": "DOCUMENT",
+          "score": 1.0022
+        },
+        {
+          "chunk_id": "MORGAN_S_2026_HIER_0035",
+          "company": "Morgan_Stanley",
+          "section_title": "DOCUMENT",
+          "score": 0.1103
+        },
+        {
+          "chunk_id": "GOLDMAN__2026_HIER_0042",
+          "company": "Goldman_Sachs",
+          "section_title": "Item 1.  Business",
+          "score": -0.0852
+        },
+        {
+          "chunk_id": "JPMORGAN_2026_HIER_0194",
+          "company": "JPMorgan_Chase",
+          "section_title": "Item 15. Exhibits, Financial Statement Schedules.",
+          "score": -1.0593
+        }
+      ],
+      "recall_at_1": 0,
+      "recall_at_3": 1,
+      "recall_at_5": 1,
+      "out_of_scope_correct": null
+    },
+    "Q012": {
+      "retrieved_top5": [
+        {
+          "chunk_id": "BANK_OF__2026_HIER_0047",
+          "company": "Bank_of_America",
+          "section_title": "Item 1A. Risk Factors",
+          "score": 4.4098
+        },
+        {
+          "chunk_id": "JPMORGAN_2026_HIER_0302",
+          "company": "JPMorgan_Chase",
+          "section_title": "Item 15. Exhibits, Financial Statement Schedules.",
+          "score": 2.736
+        },
+        {
+          "chunk_id": "JPMORGAN_2026_HIER_0047",
+          "company": "JPMorgan_Chase",
+          "section_title": "Item 1A. Risk Factors.",
+          "score": 2.4122
+        },
+        {
+          "chunk_id": "BLACKROC_2024_HIER_0112",
+          "company": "BlackRock",
+          "section_title": "Item 1C. Cybersecurity",
+          "score": 1.9969
+        },
+        {
+          "chunk_id": "GOLDMAN__2026_HIER_0296",
+          "company": "Goldman_Sachs",
+          "section_title": "Item 4.  Mine Safety Disclosures",
+          "score": 1.386
+        }
+      ],
+      "recall_at_1": 1,
+      "recall_at_3": 1,
+      "recall_at_5": 1,
+      "out_of_scope_correct": null
+    },
+    "Q013": {
+      "retrieved_top5": [
+        {
+          "chunk_id": "GOLDMAN__2026_HIER_0212",
+          "company": "Goldman_Sachs",
+          "section_title": "Item 4.  Mine Safety Disclosures",
+          "score": 4.2644
+        },
+        {
+          "chunk_id": "JPMORGAN_2026_HIER_0193",
+          "company": "JPMorgan_Chase",
+          "section_title": "Item 15. Exhibits, Financial Statement Schedules.",
+          "score": 3.2725
+        },
+        {
+          "chunk_id": "JPMORGAN_2026_HIER_0194",
+          "company": "JPMorgan_Chase",
+          "section_title": "Item 15. Exhibits, Financial Statement Schedules.",
+          "score": 2.4728
+        },
+        {
+          "chunk_id": "GOLDMAN__2026_HIER_0237",
+          "company": "Goldman_Sachs",
+          "section_title": "Item 4.  Mine Safety Disclosures",
+          "score": 1.527
+        },
+        {
+          "chunk_id": "BANK_OF__2026_HIER_0137",
+          "company": "Bank_of_America",
+          "section_title": "Item 7. Bank of America Corporation and Subsidiaries",
+          "score": 1.3853
+        }
+      ],
+      "recall_at_1": 1,
+      "recall_at_3": 1,
+      "recall_at_5": 1,
+      "out_of_scope_correct": null
+    },
+    "Q014": {
+      "retrieved_top5": [
+        {
+          "chunk_id": "CITIGROU_2026_HIER_0123",
+          "company": "Citigroup",
+          "section_title": "DOCUMENT",
+          "score": 6.1883
+        },
+        {
+          "chunk_id": "MORGAN_S_2026_HIER_0035",
+          "company": "Morgan_Stanley",
+          "section_title": "DOCUMENT",
+          "score": 3.4901
+        },
+        {
+          "chunk_id": "BANK_OF__2026_HIER_0053",
+          "company": "Bank_of_America",
+          "section_title": "Item 1A. Risk Factors",
+          "score": 2.7929
+        },
+        {
+          "chunk_id": "GOLDMAN__2026_HIER_0109",
+          "company": "Goldman_Sachs",
+          "section_title": "Item 1A.  Risk Factors",
+          "score": 1.9172
+        },
+        {
+          "chunk_id": "CITIGROU_2026_HIER_0126",
+          "company": "Citigroup",
+          "section_title": "DOCUMENT",
+          "score": 1.8315
+        }
+      ],
+      "recall_at_1": 1,
+      "recall_at_3": 1,
+      "recall_at_5": 1,
+      "out_of_scope_correct": null
+    },
+    "Q015": {
+      "retrieved_top5": [
+        {
+          "chunk_id": "BLACKROC_2024_HIER_0035",
+          "company": "BlackRock",
+          "section_title": "Item 1. Business",
+          "score": 3.6069
+        },
+        {
+          "chunk_id": "BLACKROC_2024_HIER_0089",
+          "company": "BlackRock",
+          "section_title": "Item 1A. Risk Factors",
+          "score": 3.598
+        },
+        {
+          "chunk_id": "MORGAN_S_2026_HIER_0182",
+          "company": "Morgan_Stanley",
+          "section_title": "DOCUMENT",
+          "score": 2.7833
+        },
+        {
+          "chunk_id": "CITIGROU_2026_HIER_0244",
+          "company": "Citigroup",
+          "section_title": "DOCUMENT",
+          "score": 2.048
+        },
+        {
+          "chunk_id": "BLACKROC_2024_HIER_0121",
+          "company": "BlackRock",
+          "section_title": "Item 4. Mine Safety Disclosures",
+          "score": 1.0583
+        }
+      ],
+      "recall_at_1": 1,
+      "recall_at_3": 1,
+      "recall_at_5": 1,
+      "out_of_scope_correct": null
+    },
+    "Q016": {
+      "retrieved_top5": [
+        {
+          "chunk_id": "BLACKROC_2024_HIER_0109",
+          "company": "BlackRock",
+          "section_title": "Item 1C. Cybersecurity",
+          "score": -3.7925
+        },
+        {
+          "chunk_id": "CITIGROU_2026_HIER_0657",
+          "company": "Citigroup",
+          "section_title": "DOCUMENT",
+          "score": -3.83
+        },
+        {
+          "chunk_id": "JPMORGAN_2026_HIER_0184",
+          "company": "JPMorgan_Chase",
+          "section_title": "Item 15. Exhibits, Financial Statement Schedules.",
+          "score": -4.2614
+        },
+        {
+          "chunk_id": "JPMORGAN_2026_HIER_0275",
+          "company": "JPMorgan_Chase",
+          "section_title": "Item 15. Exhibits, Financial Statement Schedules.",
+          "score": -4.7945
+        },
+        {
+          "chunk_id": "MORGAN_S_2026_HIER_0141",
+          "company": "Morgan_Stanley",
+          "section_title": "DOCUMENT",
+          "score": -4.8238
+        }
+      ],
+      "recall_at_1": 0,
+      "recall_at_3": 0,
+      "recall_at_5": 0,
+      "out_of_scope_correct": 1
+    },
+    "Q017": {
+      "retrieved_top5": [
+        {
+          "chunk_id": "BANK_OF__2026_HIER_0022",
+          "company": "Bank_of_America",
+          "section_title": "Item 1A. Risk Factors",
+          "score": -2.431
+        },
+        {
+          "chunk_id": "BANK_OF__2026_HIER_0028",
+          "company": "Bank_of_America",
+          "section_title": "Item 1A. Risk Factors",
+          "score": -2.8872
+        },
+        {
+          "chunk_id": "APPLE_IN_2025_HIER_0089",
+          "company": "Apple_Inc",
+          "section_title": "Item 8.\u00a0\u00a0\u00a0\u00a0Financial Statements and Supplementary Data",
+          "score": -3.271
+        },
+        {
+          "chunk_id": "JPMORGAN_2026_HIER_0640",
+          "company": "JPMorgan_Chase",
+          "section_title": "Item 15. Exhibits, Financial Statement Schedules.",
+          "score": -4.0669
+        },
+        {
+          "chunk_id": "JPMORGAN_2026_HIER_0005",
+          "company": "JPMorgan_Chase",
+          "section_title": "Item 1. Business.",
+          "score": -4.818
+        }
+      ],
+      "recall_at_1": 0,
+      "recall_at_3": 0,
+      "recall_at_5": 0,
+      "out_of_scope_correct": 1
+    },
+    "Q018": {
+      "retrieved_top5": [
+        {
+          "chunk_id": "JPMORGAN_2026_HIER_0297",
+          "company": "JPMorgan_Chase",
+          "section_title": "Item 15. Exhibits, Financial Statement Schedules.",
+          "score": -6.0346
+        },
+        {
+          "chunk_id": "JPMORGAN_2026_HIER_0185",
+          "company": "JPMorgan_Chase",
+          "section_title": "Item 15. Exhibits, Financial Statement Schedules.",
+          "score": -6.6763
+        },
+        {
+          "chunk_id": "JPMORGAN_2026_HIER_0059",
+          "company": "JPMorgan_Chase",
+          "section_title": "Item 1A. Risk Factors.",
+          "score": -7.0017
+        },
+        {
+          "chunk_id": "CITIGROU_2026_HIER_0242",
+          "company": "Citigroup",
+          "section_title": "DOCUMENT",
+          "score": -7.4932
+        },
+        {
+          "chunk_id": "CITIGROU_2026_HIER_0648",
+          "company": "Citigroup",
+          "section_title": "DOCUMENT",
+          "score": -7.723
+        }
+      ],
+      "recall_at_1": 0,
+      "recall_at_3": 0,
+      "recall_at_5": 0,
+      "out_of_scope_correct": 1
+    },
+    "Q019": {
+      "retrieved_top5": [
+        {
+          "chunk_id": "APPLE_IN_2025_HIER_0051",
+          "company": "Apple_Inc",
+          "section_title": "Item 4.\u00a0\u00a0\u00a0\u00a0Mine Safety Disclosures",
+          "score": -0.1776
+        },
+        {
+          "chunk_id": "APPLE_IN_2025_HIER_0050",
+          "company": "Apple_Inc",
+          "section_title": "Item 4.\u00a0\u00a0\u00a0\u00a0Mine Safety Disclosures",
+          "score": -0.9533
+        },
+        {
+          "chunk_id": "APPLE_IN_2025_HIER_0071",
+          "company": "Apple_Inc",
+          "section_title": "Item 8.\u00a0\u00a0\u00a0\u00a0Financial Statements and Supplementary Data",
+          "score": -1.1629
+        },
+        {
+          "chunk_id": "APPLE_IN_2025_HIER_0001",
+          "company": "Apple_Inc",
+          "section_title": "Item 1.\u00a0\u00a0\u00a0\u00a0Business",
+          "score": -2.2947
+        },
+        {
+          "chunk_id": "GOLDMAN__2026_HIER_0234",
+          "company": "Goldman_Sachs",
+          "section_title": "Item 4.  Mine Safety Disclosures",
+          "score": -3.5196
+        }
+      ],
+      "recall_at_1": 0,
+      "recall_at_3": 0,
+      "recall_at_5": 0,
+      "out_of_scope_correct": 1
+    },
+    "Q020": {
+      "retrieved_top5": [
+        {
+          "chunk_id": "MICROSOF_2025_HIER_0064",
+          "company": "Microsoft_Corp",
+          "section_title": "ITEM 4. MINE SAFETY DISCLOSURES",
+          "score": -6.1304
+        },
+        {
+          "chunk_id": "MICROSOF_2025_HIER_0170",
+          "company": "Microsoft_Corp",
+          "section_title": "ITEM 15. EXHIBIT AND FINANCIAL STATEMENT SCHEDULES",
+          "score": -6.8553
+        },
+        {
+          "chunk_id": "MICROSOF_2025_HIER_0169",
+          "company": "Microsoft_Corp",
+          "section_title": "ITEM 15. EXHIBIT AND FINANCIAL STATEMENT SCHEDULES",
+          "score": -7.3463
+        },
+        {
+          "chunk_id": "MICROSOF_2025_HIER_0001",
+          "company": "Microsoft_Corp",
+          "section_title": "ITEM 1. BUSINESS",
+          "score": -7.4186
+        },
+        {
+          "chunk_id": "MICROSOF_2025_HIER_0141",
+          "company": "Microsoft_Corp",
+          "section_title": "ITEM 8. FINANCIAL STATEMENTS AND SUPPLEMENTARY DATA",
+          "score": -7.9955
+        }
+      ],
+      "recall_at_1": 0,
+      "recall_at_3": 0,
+      "recall_at_5": 0,
+      "out_of_scope_correct": 1
+    }
+  }
+}
