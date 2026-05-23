@@ -1,0 +1,12 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+dist/
+build/
+
+# Runtime state — generated output, not source
+state/
+
+# Local tooling
+.claude/
