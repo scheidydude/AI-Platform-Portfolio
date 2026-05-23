@@ -11,7 +11,6 @@ import random
 from typing import Any
 
 import httpx
-from mcp import ClientSession
 
 from src.models import ToolResult
 
@@ -23,17 +22,40 @@ _BASE_BACKOFF = 1.0  # seconds
 
 
 async def call_tool_safe(
-    session: ClientSession,
+    session: Any,
     tool_name: str,
     arguments: dict[str, Any],
 ) -> ToolResult:
-    """Call an MCP tool, returning a ToolResult regardless of outcome."""
+    """Call an MCP tool, returning a ToolResult regardless of outcome.
+
+    `session` is anything with a .call_tool(name, args) coroutine —
+    either a ClientSession or a MultiServerClient.
+    """
     retries = 0
     last_error: Exception | None = None
 
     while retries <= _MAX_RETRIES:
         try:
             result = await session.call_tool(tool_name, arguments)
+
+            # MCP protocol-level errors come back as isError=True results
+            if getattr(result, "isError", False):
+                text = _extract_text(result)
+                error_class = _classify_mcp_error(text)
+                if error_class == "rate_limit" and retries < _MAX_RETRIES:
+                    retries += 1
+                    wait = _backoff(retries)
+                    logger.warning("Rate limited on %s, retry %d in %.1fs", tool_name, retries, wait)
+                    await asyncio.sleep(wait)
+                    last_error = Exception(text)
+                    continue
+                return ToolResult(
+                    success=False,
+                    error_class=error_class,
+                    error_message=text,
+                    retries_attempted=retries,
+                )
+
             text = _extract_text(result)
             return ToolResult(success=True, data=text)
 
@@ -157,6 +179,20 @@ def _error_summary(result: ToolResult) -> str:
 def _backoff(attempt: int) -> float:
     """Exponential backoff with jitter."""
     return _BASE_BACKOFF * (2 ** (attempt - 1)) + random.uniform(0, 0.5)
+
+
+def _classify_mcp_error(message: str) -> str:
+    """Classify a tool error message into one of the 5 error classes."""
+    low = message.lower()
+    if "429" in low or "rate limit" in low or "rate_limit" in low:
+        return "rate_limit"
+    if "404" in low or "not found" in low:
+        return "not_found"
+    if "timeout" in low or "timed out" in low:
+        return "timeout"
+    if "unavailable" in low or "unreachable" in low or "connect" in low:
+        return "unavailable"
+    return "bad_output"
 
 
 def _looks_like_bad_output(exc: Exception) -> bool:

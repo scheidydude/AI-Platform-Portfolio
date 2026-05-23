@@ -10,36 +10,41 @@ from __future__ import annotations
 import hashlib
 import json
 import logging
-import sys
+import re
 import time
-from contextlib import asynccontextmanager
 from datetime import datetime
 from pathlib import Path
 
-from mcp import ClientSession, StdioServerParameters
-from mcp.client.stdio import stdio_client
 from openai import AsyncOpenAI
 
 from src.models import AgentConstraints, ResearchFinding, ResearchTask, Source
+from src.tools.multi_server import MultiServerClient, ServerConfig
 from src.tools.wrapper import call_tool_safe, mcp_tools_to_openai
 
 logger = logging.getLogger(__name__)
 
 LLM_BASE_URL = "http://ai.scheidy.com:8082/v1"
 MODEL = "Qwen3.6-35B-A3B-MXFP4_MOE.gguf"
-SEARXNG_SERVER = Path(__file__).parent.parent / "mcp_servers" / "searxng_server.py"
+
+_SERVERS_DIR = Path(__file__).parent.parent / "mcp_servers"
+SEARXNG_SERVER = _SERVERS_DIR / "searxng_server.py"
+GITHUB_SERVER = _SERVERS_DIR / "github_server.py"
 
 SYSTEM_PROMPT = """/no_think
 You are a Researcher agent. Your job is to execute a specific research task using the tools available to you.
 
-Be methodical:
-1. Search for relevant information using web_search
-2. Fetch key pages with fetch_page when you need more detail
-3. Synthesize what you find into a clear, factual answer
-4. Cite your sources (include URLs)
+You have two categories of tools:
+- Web search tools (web_search, fetch_page): for general research, documentation, articles
+- GitHub tools (search_repositories, get_file_contents, search_code): for code, repos, implementations
 
-When you have enough information to answer the task's success criteria, stop using tools and write your final answer.
-If you cannot find what you need, say so clearly and explain what gaps remain."""
+Be methodical:
+1. Start with web_search or search_repositories depending on the task type
+2. Fetch specific pages or files with fetch_page / get_file_contents for detail
+3. Use search_code to find specific implementations when needed
+4. Synthesize what you find into a clear, factual answer with citations (URLs)
+
+When you have enough information to address all success criteria, stop using tools and write your final answer.
+If you cannot find what you need, say so and explain what gaps remain."""
 
 
 class ResearcherAgent:
@@ -52,9 +57,8 @@ class ResearcherAgent:
         start = time.monotonic()
         effective_max_calls = min(task.max_tool_calls, self.constraints.max_tool_calls)
 
-        async with self._mcp_session() as session:
-            mcp_tools_resp = await session.list_tools()
-            openai_tools = mcp_tools_to_openai(mcp_tools_resp.tools)
+        async with self._multi_server_client() as client:
+            openai_tools = mcp_tools_to_openai(await client.list_tools())
 
             messages: list[dict] = [
                 {"role": "system", "content": SYSTEM_PROMPT},
@@ -87,7 +91,29 @@ class ResearcherAgent:
                 finish_reason = choice.finish_reason
 
                 if finish_reason == "stop" or not choice.message.tool_calls:
-                    final_text = choice.message.content or ""
+                    raw = choice.message.content or ""
+                    final_text = _strip_tool_call_tags(raw)
+                    # Model emitted only XML tool calls with no actual text — force a summary
+                    if not final_text and raw:
+                        logger.warning(
+                            "Model emitted only XML tool calls on stop for task %s — requesting summary",
+                            task.task_id,
+                        )
+                        messages.append({"role": "assistant", "content": raw})
+                        messages.append({
+                            "role": "user",
+                            "content": (
+                                "Please write your final answer as plain text. "
+                                "No tool calls — just synthesize what you have already found."
+                            ),
+                        })
+                        summary = await self.client.chat.completions.create(
+                            model=MODEL,
+                            messages=messages,
+                            tools=[],
+                            max_tokens=2048,
+                        )
+                        final_text = _strip_tool_call_tags(summary.choices[0].message.content or "")
                     break
 
                 # Append assistant message with tool_calls
@@ -134,7 +160,7 @@ class ResearcherAgent:
                         continue
 
                     seen_calls.add(call_key)
-                    result = await call_tool_safe(session, tool_name, arguments)
+                    result = await call_tool_safe(client, tool_name, arguments)
                     tool_calls_used += 1
 
                     if result.success and result.data:
@@ -154,15 +180,24 @@ class ResearcherAgent:
                         "content": str(content),
                     })
 
-                # If budget hit, get wrap-up from model
+                # If budget hit, force a plain-text summary — no more tools
                 if partial:
+                    messages.append({
+                        "role": "user",
+                        "content": (
+                            "Tool call budget exhausted. "
+                            "Write your final answer now using only what you have already found. "
+                            "Do not attempt to call any tools or reference tool calls in your response."
+                        ),
+                    })
                     wrap_up = await self.client.chat.completions.create(
                         model=MODEL,
                         messages=messages,
                         tools=[],
                         max_tokens=2048,
                     )
-                    final_text = wrap_up.choices[0].message.content or ""
+                    raw = wrap_up.choices[0].message.content or ""
+                    final_text = _strip_tool_call_tags(raw)
                     break
             else:
                 partial = True
@@ -200,21 +235,24 @@ class ResearcherAgent:
             f"Tool call budget: {task.max_tool_calls} calls maximum."
         )
 
-    @asynccontextmanager
-    async def _mcp_session(self):
-        server_params = StdioServerParameters(
-            command=sys.executable,
-            args=[str(SEARXNG_SERVER)],
-        )
-        async with stdio_client(server_params) as (read, write):
-            async with ClientSession(read, write) as session:
-                await session.initialize()
-                yield session
+    def _multi_server_client(self) -> MultiServerClient:
+        return MultiServerClient([
+            ServerConfig(name="searxng", script=SEARXNG_SERVER),
+            ServerConfig(name="github", script=GITHUB_SERVER),
+        ])
 
 
 def _call_key(tool_name: str, args: dict) -> str:
     digest = hashlib.sha256(json.dumps(args, sort_keys=True).encode()).hexdigest()[:16]
     return f"{tool_name}:{digest}"
+
+
+_TOOL_CALL_TAG_RE = re.compile(r"<tool_call>.*?</tool_call>", re.DOTALL)
+
+
+def _strip_tool_call_tags(text: str) -> str:
+    """Remove any raw <tool_call>...</tool_call> blocks the model emitted in text."""
+    return _TOOL_CALL_TAG_RE.sub("", text).strip()
 
 
 def _extract_url(tool_name: str, args: dict) -> str | None:

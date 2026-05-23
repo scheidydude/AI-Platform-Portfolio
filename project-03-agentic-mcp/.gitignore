@@ -8,5 +8,8 @@ build/
 # Runtime state — generated output, not source
 state/
 
+# Secrets
+.env
+
 # Local tooling
 .claude/

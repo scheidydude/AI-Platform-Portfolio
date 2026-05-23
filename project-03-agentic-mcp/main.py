@@ -7,11 +7,14 @@ Usage:
 from __future__ import annotations
 
 import asyncio
-import json
 import logging
 import sys
 import uuid
 from pathlib import Path
+
+from dotenv import load_dotenv
+
+load_dotenv()  # loads .env before any imports that read os.environ
 
 from src.agents.researcher import ResearcherAgent
 from src.models import AgentConstraints, ResearchTask
@@ -27,25 +30,25 @@ STATE_DIR.mkdir(exist_ok=True)
 
 async def main(query: str | None = None) -> None:
     question = query or (
-        "What is the Model Context Protocol (MCP) and how does it work? "
-        "Who created it and what are its primary use cases?"
+        "Find the top Python MCP server implementations on GitHub. "
+        "What are the most popular repos, and what patterns do they use?"
     )
 
     task = ResearchTask(
         task_id=str(uuid.uuid4())[:8],
         description=question,
         success_criteria=[
-            "Explain what MCP is in 2–3 sentences",
-            "Identify who created MCP",
-            "List at least 2 primary use cases",
+            "Identify at least 3 popular Python MCP server repositories on GitHub",
+            "Describe the common patterns used (e.g., tool registration, transport)",
+            "Note the star counts or adoption signals",
         ],
-        max_tool_calls=5,
+        max_tool_calls=6,
     )
 
     constraints = AgentConstraints(
-        max_tool_calls=5,
+        max_tool_calls=6,
         max_iterations=15,
-        max_wall_time_seconds=120,
+        max_wall_time_seconds=180,
         on_exceed="return_partial",
     )
 
