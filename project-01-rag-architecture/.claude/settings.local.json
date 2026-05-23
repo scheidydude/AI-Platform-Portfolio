@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(docker --version)",
+      "Bash(pip3 list *)",
+      "Bash(python3 *)",
+      "Bash(pip3 install *)",
+      "Bash(docker exec rag_postgres psql -U rag_user -d rag_db -c ' *)",
+      "Bash(docker exec *)",
+      "Bash(docker compose *)",
+      "Bash(pip3 show *)",
+      "Bash(python *)",
+      "Bash(curl -s http://localhost:8080/health)",
+      "Bash(git add *)"
+    ]
+  }
+}
