@@ -46,11 +46,15 @@ Research and discoveries as they accumulate.
 
 ## Bifrost / LiteLLM Research
 
-_To be filled during Phase 5 comparison work._
+Completed in Phase 5. Full analysis in [DESIGN-002](docs/design/DESIGN-002-vendor-comparison.md).
 
-| Feature | Notes |
-|---------|-------|
-| Bifrost quota | |
-| LiteLLM quota | |
-| Bifrost routing | |
-| LiteLLM routing | |
+| Feature | Bifrost | LiteLLM |
+|---------|---------|---------|
+| Quota enforcement | Basic RPM/TPM rate limiting; no budget governance model | Full budget management — per-team/user/model; Redis-backed atomic ops; monthly/daily reset; carry-over; battle-tested streaming edge cases |
+| Routing strategies | Static, round-robin, fallback | Static, fallback, round-robin, lowest-latency (stateful p50/p99), lowest-cost, usage-based; `num_retries` + `timeout` per deployment |
+| Shadow routing | Not supported | Not supported (gap — only our build has this) |
+| Observability | Prometheus + structured logs; no callback ecosystem | Prometheus + 20+ callback integrations (Langfuse, Datadog, Helicone, S3, Sentry, custom webhook) |
+| Operational overhead | Single Go binary; ~20MB RAM; <200ms cold start; Redis optional | Python; Redis required in prod; Postgres for logging; 200-400MB RAM; Docker Compose recommended |
+| Enterprise auth | API key; limited enterprise options | Enterprise: SSO (Okta/Azure AD/Google), OIDC/SAML, RBAC, team management UI |
+| Audit logging | Structured logs to stdout; operator-configured shipping | Postgres persistence; S3 callback; Enterprise audit metadata |
+| Key insight | Right choice at >5000 RPS where Python interpreter overhead is measurable | Right choice for teams needing cost governance, SSO, or observability integrations without building them |

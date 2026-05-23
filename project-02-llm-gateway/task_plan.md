@@ -10,7 +10,7 @@
 ## Phases
 
 ### Phase 1 — Core Gateway (Days 1–3)
-**Status:** `in_progress`
+**Status:** `complete`
 
 Stack: FastAPI + tiktoken + Redis/SQLite + YAML config
 
@@ -73,7 +73,7 @@ Routing strategies:
 ---
 
 ### Phase 5 — Vendor Comparison Doc (Day 10)
-**Status:** `not_started`
+**Status:** `complete`
 
 Compare: your build vs. Bifrost vs. LiteLLM
 
@@ -83,12 +83,12 @@ Dimensions: quota enforcement, multi-backend routing, observability depth, opera
 
 ## Deliverables
 
-- [ ] Gateway with 2+ model backends wired
-- [ ] Per-team quota enforcement (all 3 modes)
-- [ ] Cost dashboard (spend, trends, quota status)
-- [ ] Structured logging + metrics emission
-- [ ] Demo: team hitting quota limit
-- [ ] Comparison doc: your build vs. Bifrost vs. LiteLLM
+- [x] Gateway with 2+ model backends wired
+- [x] Per-team quota enforcement (all 3 modes)
+- [x] Cost dashboard (spend, trends, quota status)
+- [x] Structured logging + metrics emission
+- [x] Demo: team hitting quota limit
+- [x] Comparison doc: your build vs. Bifrost vs. LiteLLM
 
 ---
 

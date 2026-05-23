@@ -3,9 +3,15 @@
 **Project:** Project 02 — LLM Gateway / Cost Governance  
 **Owner:** David Scheiderman  
 **Started:** 2026-05-23  
-**Status:** In Progress
+**Status:** Complete
 
 Career documentation artifact. All decisions, designs, and tradeoffs recorded here for portfolio rollup.
+
+---
+
+## Executive Summary
+
+Built a production-shaped LLM gateway in Python (FastAPI / SQLite / Prometheus) over 10 days, covering four routing strategies (static, cost-aware, fallback, shadow), three quota enforcement modes (hard block, soft cap, downgrade), per-team token accounting with tiktoken, structured NDJSON logging, a Prometheus metrics endpoint, and an embedded HTML cost dashboard. Backends are pluggable via an OpenAI-compatible adapter; Ollama serves as the free local backend alongside any OpenAI-compatible cloud provider. The project closes with a grounded vendor comparison (this build vs. LiteLLM vs. Bifrost) written from firsthand implementation experience — covering the non-obvious hard parts: streaming token accounting, SQLite quota races, shadow task GC, and the architectural coupling between downgrade enforcement and routing. Primary takeaway: LiteLLM solves the same problem plus five years of edge cases; the narrow cases where building wins are shadow routing, deeply custom quota logic, and non-standard auth integration.
 
 ---
 
@@ -36,7 +42,8 @@ Career documentation artifact. All decisions, designs, and tradeoffs recorded he
 
 | ID | Title | Status | Date |
 |----|-------|--------|------|
-| [DESIGN-001](design/DESIGN-001-architecture.md) | System Architecture Overview | Draft → validate against Phase 1 build | 2026-05-23 |
+| [DESIGN-001](design/DESIGN-001-architecture.md) | System Architecture Overview | Final | 2026-05-23 |
+| [DESIGN-002](design/DESIGN-002-vendor-comparison.md) | Build vs. Buy: LLM Gateway Vendor Comparison | Final | 2026-05-23 |
 
 ---
 
@@ -54,9 +61,9 @@ Career documentation artifact. All decisions, designs, and tradeoffs recorded he
 
 _Complete when project closes (Day 10)._
 
-- [ ] All ADRs reflect final decisions (none superseded without successor)
-- [ ] SRS marked Final with acceptance criteria verified
-- [ ] DESIGN-001 updated to match what was actually built
-- [ ] Phase 5 comparison doc added to Design section
-- [ ] All deliverables from `task_plan.md` checked off
-- [ ] One-paragraph executive summary added to top of this INDEX
+- [x] All ADRs reflect final decisions (none superseded without successor)
+- [x] SRS marked Final with acceptance criteria verified
+- [x] DESIGN-001 updated to match what was actually built
+- [x] Phase 5 comparison doc added to Design section
+- [x] All deliverables from `task_plan.md` checked off
+- [x] One-paragraph executive summary added to top of this INDEX

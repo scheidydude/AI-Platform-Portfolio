@@ -1,9 +1,9 @@
 # SRS-001 — LLM Gateway Software Requirements Specification
 
-**Version:** 0.1 (Draft)  
+**Version:** 1.0 (Final)  
 **Date:** 2026-05-23  
 **Author:** David Scheiderman  
-**Status:** Draft
+**Status:** Final
 
 ---
 
@@ -135,12 +135,12 @@ Out of scope:
 
 All items must be true to declare this SRS satisfied:
 
-- [ ] Gateway processes end-to-end request through at least 2 backends
-- [ ] Team hitting quota limit receives HTTP 429 (hard block) or downgrade routing
-- [ ] All requests produce valid JSON log line
-- [ ] `/admin/usage` returns accurate per-team token counts
-- [ ] Cost dashboard renders spend and quota status for configured teams
-- [ ] Vendor comparison doc covers all 7 dimensions with specific observations from having built this
+- [x] Gateway processes end-to-end request through at least 2 backends
+- [x] Team hitting quota limit receives HTTP 429 (hard block) or downgrade routing
+- [x] All requests produce valid JSON log line
+- [x] `/admin/usage` returns accurate per-team token counts
+- [x] Cost dashboard renders spend and quota status for configured teams
+- [x] Vendor comparison doc covers all 7 dimensions with specific observations from having built this
 
 ---
 
@@ -149,3 +149,4 @@ All items must be true to declare this SRS satisfied:
 | Version | Date | Author | Notes |
 |---------|------|--------|-------|
 | 0.1 | 2026-05-23 | D. Scheiderman | Initial draft from project spec |
+| 1.0 | 2026-05-23 | D. Scheiderman | Final — all acceptance criteria verified against Phase 1–4 build |
