@@ -58,10 +58,17 @@ The ms-marco-MiniLM-L-6-v2 model is a well-established cross-encoder trained on 
 
 ## Eval Impact
 
-*(Populated after Phase 4 LLM-as-judge scoring)*
+**Measured:** Phase 4, 2026-05-23 — 15 in-scope questions, Qwen3.6-35B judge, `eval/results/phase4_lm_judge_scores.json`
 
-| Config | Avg Faithfulness | Avg Completeness |
-|--------|-----------------|-----------------|
-| Without re-ranker | TBD | TBD |
-| With re-ranker | TBD | TBD |
-| Delta | TBD | TBD |
+| Config | R@1 | R@5 | Avg Faithfulness | Avg Completeness | Avg Mean Score |
+|--------|-----|-----|-----------------|-----------------|----------------|
+| Hybrid without re-ranker (RRF top-5) | 0.600 | 0.867 | 4.933 | 3.867 | 4.422 |
+| Hybrid with re-ranker (cross-encoder) | **0.933** | **1.000** | **5.000** | **4.200** | **4.600** |
+| Delta | **+0.333** | **+0.133** | +0.067 | +0.333 | +0.178 |
+
+**Key observations:**
+- R@1 improvement of +55.5% relative — the cross-encoder promotes the most relevant chunk to rank 1, not just into top-5
+- Completeness improves +0.333 — LLM answers are more thorough when the best chunk is at rank 1 (LLM attends more to earlier context)
+- Faithfulness near ceiling (4.933 → 5.000) in both configs — RRF already excludes most irrelevant chunks; re-ranker polishes ordering
+
+**Verdict:** Re-ranker delivers the spec-predicted quality improvement. The R@1 gain (+0.333) is the primary signal — correct chunk at position 1 directly improves answer completeness. Decision confirmed.

@@ -3,7 +3,7 @@
 **Author:** David Scheiderman
 **Project:** RAG Architecture POC over SEC 10-K filings
 **Start:** 2026-05-22
-**Status:** In Progress (Phase 3 complete)
+**Status:** In Progress (Phase 4 complete)
 
 This index is the single source of truth for all artifacts. Update after every new document is created or status changes.
 
@@ -57,7 +57,7 @@ All 5 ADRs required by project spec. Eval impact section populated in Phases 3â€
 |----------|------|--------|-------|
 | Ground Truth Q&A Set | `eval/ground_truth.json` | Complete | 20 Q&A pairs (10 single, 5 multi, 5 OOS) with GT chunk IDs |
 | Eval Results (Phase 3 manual) | `eval/results/phase3_retrieval_scores.json` | Complete | R@1=0.933, R@3=1.0, R@5=1.0; OOS 5/5 |
-| Eval Results (Phase 4 automated) | `eval/results/phase4_lm_judge_scores.json` | Not started | LLM-as-judge scores per config |
+| Eval Results (Phase 4 automated) | `eval/results/phase4_lm_judge_scores.json` | Complete | 3 configs Ã— 15 questions; hybrid mean=4.600, dense mean=4.445 |
 
 ---
 
@@ -67,8 +67,8 @@ All 5 ADRs required by project spec. Eval impact section populated in Phases 3â€
 |--------|------|--------|-------|
 | Ingestion pipeline | `src/ingestion/` | Complete | HTML â†’ chunks â†’ pgvector embeddings |
 | Retrieval module | `src/retrieval/` | Complete | Dense + BM25 + RRF + cross-encoder; Flask API |
-| Generation module | `src/generation/` | Not started | LLM call + citation grounding |
-| Eval pipeline | `src/eval/` | Not started | LLM-as-judge automation |
+| Generation module | `src/generation/` | Complete | Qwen3.6-35B via OpenAI-compatible API; citation grounding |
+| Eval pipeline | `src/eval/` | Complete | LLM-as-judge; run_eval.py; 3-config ablation |
 
 ---
 

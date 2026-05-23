@@ -1,0 +1,1079 @@
+{
+  "phase": 4,
+  "date": "2026-05-23",
+  "model": "Qwen3.6-35B-A3B-MXFP4_MOE.gguf",
+  "configs": {
+    "hybrid_reranked": "dense k=20 + BM25 k=20 + RRF k=60 + cross-encoder top5",
+    "hybrid_no_rerank": "dense k=20 + BM25 k=20 + RRF k=60 top5, no cross-encoder",
+    "dense_only": "pgvector cosine top-5, no BM25/RRF/re-ranker"
+  },
+  "per_question": {
+    "Q001": {
+      "question": "What supply chain and manufacturing risks does Apple identify in its risk factors?",
+      "type": "single_source",
+      "configs": {
+        "hybrid_reranked": {
+          "retrieved_chunk_ids": [
+            "APPLE_IN_2025_HIER_0013",
+            "APPLE_IN_2025_HIER_0016",
+            "APPLE_IN_2025_HIER_0018",
+            "APPLE_IN_2025_HIER_0010",
+            "APPLE_IN_2025_HIER_0009"
+          ],
+          "recall_at_1": 1,
+          "recall_at_5": 1,
+          "answer": "Apple Inc. identifies significant risks related to natural disasters, geopolitical events, and public health issues that can disrupt its supply chain and manufacturing operations. According to Item 1A (Risk Factors) in its 2025 Form 10-K, the Company\u2019s facilities and those of its suppliers are prone to earthquakes, extreme weather, fires, power shortages, and terrorist attacks, which can cause delays, inefficiencies, and interruptions in product delivery [Apple Inc., 2025 Form 10-K, Item 1A. Risk Factors]. Additionally, major public health issues like pandemics have previously adversely affected the Company by imposing travel restrictions and disrupting global supply chains, while political events and trade disputes can similarly impact suppliers and logistics providers [Apple Inc., 2025 Form 10-K, Item 1A. Risk Factors].\n\nThe Company also faces risks associated with its reliance on outsourcing partners and single-source component suppliers. Apple Inc. notes that it depends on manufacturing and logistical services provided by partners located outside the U.S., many of whom supply custom components from limited sources [Apple Inc., 2025 Form 10-K, Item 1A. Risk Factors]. This dependence creates vulnerabilities to capacity constraints during production ramp-ups, supplier failures, or industry consolidation, which can lead to supply shortages and price increases [Apple Inc., 2025 Form 10-K, Item 1A. Risk Factors]. Furthermore, the Company acknowledges that design and manufacturing defects in its products could materially adversely affect its business and reputation [Apple Inc., 2025 Form 10-K, Item 1A. Risk Factors].",
+          "scores": {
+            "faithfulness": 5,
+            "completeness": 4,
+            "citation_accuracy": 5,
+            "mean": 4.667,
+            "reasoning": "The answer accurately reflects the context with no hallucinations and correct citations, though it omits specific manufacturing risks like industrial accidents at supplier sites and quality defects in new product transitions."
+          },
+          "gen_time_s": 8.3,
+          "judge_time_s": 4.1
+        },
+        "hybrid_no_rerank": {
+          "retrieved_chunk_ids": [
+            "APPLE_IN_2025_HIER_0052",
+            "APPLE_IN_2025_HIER_0018",
+            "APPLE_IN_2025_HIER_0017",
+            "APPLE_IN_2025_HIER_0016",
+            "APPLE_IN_2025_HIER_0011"
+          ],
+          "recall_at_1": 0,
+          "recall_at_5": 1,
+          "answer": "Apple Inc. identifies significant risks related to its reliance on outsourcing partners for component sourcing, manufacturing, and logistics, particularly those located outside the United States (Apple Inc., Item 1A. Risk Factors). The Company depends on single-source partners in the U.S., Asia, and Europe for many components and relies primarily on Asian partners for final assembly, which diminishes its direct control over production quality, cost, and flexibility (Apple Inc., Item 1A. Risk Factors). Furthermore, Apple faces risks associated with new products utilizing custom components from only one source, where initial capacity constraints or supplier failures could lead to supply shortages and price increases that materially adversely affect the business (Apple Inc., Item 1A. Risk Factors).\n\nThe Company also highlights vulnerabilities stemming from industry-wide component shortages and commodity pricing fluctuations, noting past disruptions in the global semiconductor industry as an example of potential future risks (Apple Inc., Item 1A. Risk Factors). Additionally, Apple points to the risks inherent in managing frequent product introductions and transitions, which require successful integration of third-party technologies and effective inventory management to meet anticipated demand without quality issues or defects (Apple Inc., Item 1A. Risk Factors). These operational challenges are compounded by the significant time and resources required to change or add supply chain partners, exposing the Company to additional regulatory and operational uncertainties (Apple Inc., Item 1A. Risk Factors).",
+          "scores": {
+            "faithfulness": 5,
+            "completeness": 4,
+            "citation_accuracy": 5,
+            "mean": 4.667,
+            "reasoning": "The answer accurately reflects the context with correct citations and covers most key risks, though it omits specific details regarding tariffs and geopolitical tensions."
+          },
+          "gen_time_s": 7.7,
+          "judge_time_s": 4.3
+        },
+        "dense_only": {
+          "retrieved_chunk_ids": [
+            "APPLE_IN_2025_HIER_0016",
+            "APPLE_IN_2025_HIER_0010",
+            "APPLE_IN_2025_HIER_0018",
+            "APPLE_IN_2025_HIER_0052",
+            "APPLE_IN_2025_HIER_0030"
+          ],
+          "recall_at_1": 0,
+          "recall_at_5": 1,
+          "answer": "Apple Inc. identifies significant risks related to its reliance on outsourcing partners for component and product manufacturing, noting that many of these suppliers are located outside of the United States (Apple Inc., Item 1A. Risk Factors). The Company faces challenges in managing production ramp-up issues and ensuring the timely development and market acceptance of new products, which depend heavily on effective integration with third-party services and technologies (Apple Inc., Item 1A. Risk Factors). Additionally, quality issues or defects in these outsourced components can adversely affect product success and market acceptance (Apple Inc., Item 1A. Risk Factors).\n\nThe Company also highlights risks associated with custom components that are available from only a single source, which can lead to initial capacity constraints until supplier yields mature (Apple Inc., Item 1A. Risk Factors). Apple may struggle to extend supply agreements on similar terms or secure sufficient quantities from alternative sources if suppliers fail, consolidate, or shift focus away from customized parts (Apple Inc., Item 1A. Risk Factors). These factors expose the Company to significant risks of supply shortages and price increases that could materially adversely affect its business, results of operations, financial condition, and stock price (Apple Inc., Item 1A. Risk Factors).",
+          "scores": {
+            "faithfulness": 5,
+            "completeness": 3,
+            "citation_accuracy": 5,
+            "mean": 4.333,
+            "reasoning": "The answer is fully faithful and correctly cited but omits significant supply chain risks found in the context such as tariffs, raw material availability, and geopolitical disruptions."
+          },
+          "gen_time_s": 6.8,
+          "judge_time_s": 4.0
+        }
+      }
+    },
+    "Q002": {
+      "question": "What cybersecurity risks does Microsoft disclose in its 10-K?",
+      "type": "single_source",
+      "configs": {
+        "hybrid_reranked": {
+          "retrieved_chunk_ids": [
+            "MICROSOF_2025_HIER_0055",
+            "MORGAN_S_2026_HIER_0039",
+            "MICROSOF_2025_HIER_0053",
+            "APPLE_IN_2025_HIER_0041",
+            "GOLDMAN__2026_HIER_0292"
+          ],
+          "recall_at_1": 1,
+          "recall_at_5": 1,
+          "answer": "Microsoft discloses that while it does not believe any current cybersecurity threats have materially affected its financial condition, the threat environment is increasingly challenging and poses constant risks to its business strategy tied to the Secure Future Initiative (SFI) (Microsoft_Corp, ITEM 1C. CYBERSECURITY). The company acknowledges that it, along with the broader digital ecosystem, faces ongoing and escalating cybersecurity threats, necessitating continuous monitoring, infrastructure investment, and collaboration with various stakeholders to enhance defenses and resiliency (Microsoft_Corp, ITEM 1C. CYBERSECURITY).\n\nIn terms of risk management, Microsoft identifies its top corporate priority as protecting customer and employee computing environments from determined adversaries through the SFI, which is aligned with principles of being secure by design, secure by default, and maintaining secure operations (Microsoft_Corp, ITEM 1C. CYBERSECURITY). The company manages these risks via a governance framework that includes annual assessments against NIST standards, integrated planning for business continuity, and effectiveness evaluations through tabletop simulations, penetration tests, and red team exercises (Microsoft_Corp, ITEM 1C. CYBERSECURITY). Additionally, Microsoft conducts mandatory cybersecurity training for employees and engages in robust security assessments for acquired companies to mitigate potential vulnerabilities (Microsoft_Corp, ITEM 1C. CYBERSECURITY).",
+          "scores": {
+            "faithfulness": 5,
+            "completeness": 4,
+            "citation_accuracy": 5,
+            "mean": 4.667,
+            "reasoning": "The answer accurately reflects the retrieved Microsoft context with no unsupported claims and correct citations, though it omits specific governance details like Board oversight found in the source."
+          },
+          "gen_time_s": 7.3,
+          "judge_time_s": 4.3
+        },
+        "hybrid_no_rerank": {
+          "retrieved_chunk_ids": [
+            "MICROSOF_2025_HIER_0055",
+            "MICROSOF_2025_HIER_0056",
+            "MORGAN_S_2026_HIER_0039",
+            "APPLE_IN_2025_HIER_0041",
+            "JPMORGAN_2026_HIER_0302"
+          ],
+          "recall_at_1": 1,
+          "recall_at_5": 1,
+          "answer": "Microsoft discloses that it faces an increasingly challenging cybersecurity threat environment, with the entire digital ecosystem under constant and increasing threat (Microsoft_Corp, ITEM 1C. CYBERSECURITY). The company notes that its business strategy is tied to the SFI and emphasizes a commitment to continuously monitoring these threats, enhancing product security, investing in infrastructure, and collaborating with various stakeholders to advance cybersecurity defenses and resiliency (Microsoft_Corp, ITEM 1C. CYBERSECURITY).\n\nRegarding specific impacts, Microsoft states that as of the date of its Form 10-K, it does not believe any risks from cybersecurity threats have materially affected or are reasonably likely to materially affect its results of operations or financial condition (Microsoft_Corp, ITEM 1C. CYBERSECURITY). The company describes a governance structure where the Board of Directors oversees these risks through quarterly reviews and presentations by senior management, including the Chief Information Security Officer, addressing topics such as threats, incidents, top risks, and remediation efforts (Microsoft_Corp, ITEM 1C. CYBERSECURITY).",
+          "scores": {
+            "faithfulness": 5,
+            "completeness": 4,
+            "citation_accuracy": 5,
+            "mean": 4.667,
+            "reasoning": "The answer accurately reflects the retrieved Microsoft context regarding threat environment, governance, and material impact, though it omits specific risk categories found in the referenced Item 1A section which is not provided in the context."
+          },
+          "gen_time_s": 6.4,
+          "judge_time_s": 4.4
+        },
+        "dense_only": {
+          "retrieved_chunk_ids": [
+            "MICROSOF_2025_HIER_0055",
+            "MICROSOF_2025_HIER_0056",
+            "APPLE_IN_2025_HIER_0041",
+            "GOLDMAN__2026_HIER_0295",
+            "MORGAN_S_2026_HIER_0039"
+          ],
+          "recall_at_1": 1,
+          "recall_at_5": 1,
+          "answer": "Microsoft discloses that it is under constant and increasing threat from a challenging cybersecurity environment, noting that its business strategy is tied to the Security Framework Initiative (SFI) and requires continuous monitoring of threats and enhancement of product security (Microsoft_Corp, 2025 \u2014 ITEM 1C. CYBERSECURITY). The company states that while it does not believe any specific risks have materially affected or are likely to affect its results of operations or financial condition as of the filing date, it remains committed to investing in cybersecurity infrastructure and collaborating with peers, regulators, and governments to advance digital ecosystem defenses (Microsoft_Corp, 2025 \u2014 ITEM 1C. CYBERSECURITY).\n\nRegarding governance, Microsoft\u2019s Board of Directors oversees cybersecurity risk through quarterly reviews or more frequently as necessary, receiving presentations from senior management including the Chief Information Security Officer (CISO) regarding threats, incidents, and remediation efforts (Microsoft_Corp, 2025 \u2014 ITEM 1C. CYBERSECURITY). The CISO leads the company\u2019s cybersecurity strategy and operations, supported by a Cybersecurity Governance Council that approves enterprise security risk assessments and ensures alignment with NIST standards and regulatory compliance (Microsoft_Corp, 2025 \u2014 ITEM 1C. CYBERSECURITY).",
+          "scores": {
+            "faithfulness": 5,
+            "completeness": 4,
+            "citation_accuracy": 5,
+            "mean": 4.667,
+            "reasoning": "The answer accurately reflects the retrieved context regarding Microsoft's cybersecurity risks and governance structure with correct citations, though it omits specific risk types mentioned in the broader document (e.g., AI-enabled fraud) which were not present in the provided snippets."
+          },
+          "gen_time_s": 7.1,
+          "judge_time_s": 4.4
+        }
+      }
+    },
+    "Q003": {
+      "question": "What liquidity risks does JPMorgan Chase identify in its risk factors?",
+      "type": "single_source",
+      "configs": {
+        "hybrid_reranked": {
+          "retrieved_chunk_ids": [
+            "JPMORGAN_2026_HIER_0021",
+            "JPMORGAN_2026_HIER_0184",
+            "JPMORGAN_2026_HIER_0185",
+            "JPMORGAN_2026_HIER_0056",
+            "JPMORGAN_2026_HIER_0232"
+          ],
+          "recall_at_1": 1,
+          "recall_at_5": 1,
+          "answer": "JPMorgan Chase identifies several specific liquidity risks within Item 1A. Risk Factors of its 2026 Form 10-K filing. The company notes that its ability to operate could be impaired by constrained liquidity, highlighting the dependence of JPMorgan Chase & Co. on its subsidiaries for funding (JPMorgan_Chase, 2026 \u2014 Item 1A. Risk Factors). Additionally, the firm acknowledges the potential adverse effects that any downgrades of its credit ratings could have on both its liquidity and the cost of funding (JPMorgan_Chase, 2026 \u2014 Item 1A. Risk Factors).\n\nThe company further emphasizes that critical factors in maintaining high credit ratings include strong capital and liquidity ratios, diverse funding sources, and robust risk management controls (JPMorgan_Chase, 2026 \u2014 Item 15. Exhibits, Financial Statement Schedules). The filing states that changes in economic trends, regulatory developments, or profitability could lead to changes in the Firm\u2019s credit ratings, which would subsequently impact these liquidity positions (JPMorgan_Chase, 2026 \u2014 Item 15. Exhibits, Financial Statement Schedules).",
+          "scores": {
+            "faithfulness": 5,
+            "completeness": 4,
+            "citation_accuracy": 5,
+            "mean": 4.667,
+            "reasoning": "The answer accurately reflects the specific liquidity risks listed in Item 1A and correctly cites the supporting context, though it omits some minor details regarding operational dependencies found elsewhere."
+          },
+          "gen_time_s": 4.7,
+          "judge_time_s": 2.1
+        },
+        "hybrid_no_rerank": {
+          "retrieved_chunk_ids": [
+            "JPMORGAN_2026_HIER_0021",
+            "JPMORGAN_2026_HIER_0184",
+            "JPMORGAN_2026_HIER_0050",
+            "MORGAN_S_2026_HIER_0180",
+            "JPMORGAN_2026_HIER_0231"
+          ],
+          "recall_at_1": 1,
+          "recall_at_5": 1,
+          "answer": "JPMorgan Chase identifies several specific liquidity risks in Item 1A of its 2026 Form 10-K, including the possibility that its ability to operate could be impaired by constrained liquidity (JPMorgan Chase & Co., Item 1A). The company also highlights its dependence on its subsidiaries for funding and notes that any downgrades to JPMorgan Chase\u2019s credit ratings could have potential adverse effects on both its liquidity and the cost of funding (JPMorgan Chase & Co., Item 1A).\n\nFurthermore, in Item 15, JPMorgan Chase explains that reductions in credit ratings could adversely affect access to liquidity sources, increase the cost of funds, trigger additional collateral or funding requirements, and decrease the number of investors and counterparties willing to lend to the Firm (JPMorgan Chase & Co., Item 15). The company also states that its funding requirements for VIEs and other third-party commitments may be adversely affected by a decline in credit ratings (JPMorgan Chase & Co., Item 15).",
+          "scores": {
+            "faithfulness": 5,
+            "completeness": 4,
+            "citation_accuracy": 5,
+            "mean": 4.667,
+            "reasoning": "The answer accurately reflects the liquidity risks described in the context with correct citations, though it omits the specific mention of operational risk impairments to liquidity found in Item 1A."
+          },
+          "gen_time_s": 6.9,
+          "judge_time_s": 4.7
+        },
+        "dense_only": {
+          "retrieved_chunk_ids": [
+            "JPMORGAN_2026_HIER_0021",
+            "JPMORGAN_2026_HIER_0184",
+            "JPMORGAN_2026_HIER_0056",
+            "JPMORGAN_2026_HIER_0051",
+            "JPMORGAN_2026_HIER_0037"
+          ],
+          "recall_at_1": 1,
+          "recall_at_5": 1,
+          "answer": "JPMorgan Chase identifies several specific liquidity risks within Item 1A. Risk Factors of its 2026 Form 10-K. The firm notes that its ability to operate could be impaired by constrained liquidity, highlighting a direct vulnerability in maintaining operational continuity during periods of financial stress (JPMorgan Chase, Item 1A. Risk Factors). Additionally, the company acknowledges its dependence on its subsidiaries for funding, which creates a structural risk where issues within subsidiary entities could impact the parent company's overall liquidity position (JPMorgan Chase, Item 1A. Risk Factors).\n\nFurthermore, JPMorgan Chase warns of the potential adverse effects that any downgrades of its credit ratings could have on both its liquidity and the cost of funding (JPMorgan Chase, Item 1A. Risk Factors). These factors collectively illustrate how external market conditions, internal organizational structures, and creditworthiness metrics are interconnected in determining the firm's liquidity profile.",
+          "scores": {
+            "faithfulness": 5,
+            "completeness": 4,
+            "citation_accuracy": 5,
+            "mean": 4.667,
+            "reasoning": "The answer accurately reflects the specific liquidity risks listed in the context with correct attributions, though it omits other contextual mentions of liquidity such as market illiquidity affecting valuation."
+          },
+          "gen_time_s": 6.5,
+          "judge_time_s": 4.7
+        }
+      }
+    },
+    "Q004": {
+      "question": "How does Goldman Sachs describe its market risk exposure?",
+      "type": "single_source",
+      "configs": {
+        "hybrid_reranked": {
+          "retrieved_chunk_ids": [
+            "GOLDMAN__2026_HIER_0258",
+            "GOLDMAN__2026_HIER_0270",
+            "GOLDMAN__2026_HIER_0289",
+            "GOLDMAN__2026_HIER_0103",
+            "GOLDMAN__2026_HIER_0076"
+          ],
+          "recall_at_1": 1,
+          "recall_at_5": 1,
+          "answer": "Goldman Sachs defines market risk as the potential adverse impact on earnings resulting from changes in market conditions, primarily stemming from positions held for client market making and its own investing and financing activities (Goldman_Sachs, Item 4). The company categorizes this exposure into four main types: interest rate risk, which involves yield curve levels and credit spreads; equity price risk, relating to individual equities and indices; currency rate risk, involving spot and forward prices of currencies; and commodity price risk, covering assets such as crude oil, natural gas, and metals (Goldman_Sachs, Item 4).\n\nTo manage these exposures, Goldman Sachs employs a framework that includes monitoring compliance with established limits, diversifying exposures, controlling position sizes, and evaluating economic hedges (Goldman_Sachs, Item 4). The company acknowledges that its risk management models rely on assumptions about correlations among asset classes, which may prove ineffective during market stress when previously uncorrelated indicators become correlated or vice versa (Goldman_Sachs, Item 1A). Consequently, the firm notes that it has incurred and may continue to incur losses due to these limitations in historical data usage and model effectiveness (Goldman_Sachs, Item 1A).",
+          "scores": {
+            "faithfulness": 5,
+            "completeness": 4,
+            "citation_accuracy": 5,
+            "mean": 4.667,
+            "reasoning": "The answer accurately reflects the context's definition and categorization of market risk, its management framework, and model limitations with correct citations, though it omits specific quantitative exposure details found in the text."
+          },
+          "gen_time_s": 7.2,
+          "judge_time_s": 4.5
+        },
+        "hybrid_no_rerank": {
+          "retrieved_chunk_ids": [
+            "GOLDMAN__2026_HIER_0270",
+            "GOLDMAN__2026_HIER_0220",
+            "GOLDMAN__2026_HIER_0289",
+            "GOLDMAN__2026_HIER_0259",
+            "GOLDMAN__2026_HIER_0507"
+          ],
+          "recall_at_1": 1,
+          "recall_at_5": 1,
+          "answer": "Goldman Sachs defines market exposure as the potential for loss in value of its long and short positions resulting from changes in market prices (Goldman_Sachs, Item 4. Mine Safety Disclosures). To manage this risk, the firm employs systems that enable independent calculations of Value-at-Risk (VaR), Earnings-at-Risk (EaR), and other stress measures, while also capturing risk at individual position levels and attributing these measures to specific risk factors (Goldman_Sachs, Item 4. Mine Safety Disclosures). The firm actively monitors compliance with established market risk limits, diversifies exposures, controls position sizes, and evaluates mitigants such as economic hedges in related securities or derivatives (Goldman_Sachs, Item 4. Mine Safety Disclosures).\n\nThe primary risk measure Goldman Sachs uses is VaR, which represents the potential loss in value due to adverse market movements over a defined time horizon with a specified confidence level (Goldman_Sachs, Item 4. Mine Safety Disclosures). The firm typically employs a one-day time horizon with a 95% confidence level and utilizes a single VaR model that captures risks related to interest rates, equity prices, currency rates, and commodity prices (Goldman_Sachs, Item 4. Mine Safety Disclosures). Additionally, market Risk-Weighted Assets (RWAs) are calculated based on exposure measures including VaR under both Standardized and Advanced Capital Rules (Goldman_Sachs, Item 4. Mine Safety Disclosures).\n\nDespite using VaR as a primary metric, Goldman Sachs acknowledges its inherent limitations, noting that it does not estimate potential losses over longer time horizons where moves may be extreme, nor does it account for the relative liquidity of different risk positions (Goldman_Sachs, Item 4. Mine Safety Disclosures). Consequently, the firm uses a variety of other risk measures to estimate potential losses across small, moderate, and more extreme market moves over both short- and long-term time horizons (Goldman_Sachs, Item 4. Mine Safety Disclosures). These measures are monitored against established limits and reflect an extensive range of scenarios aggregated at product, business, and firmwide levels (Goldman_Sachs, Item 4. Mine Safety Disclosures).",
+          "scores": {
+            "faithfulness": 5,
+            "completeness": 4,
+            "citation_accuracy": 2,
+            "mean": 3.667,
+            "reasoning": "The answer is factually accurate and comprehensive regarding market risk but incorrectly attributes all information to 'Item 4. Mine Safety Disclosures' instead of the correct sections like Market Risk or Risk Measures."
+          },
+          "gen_time_s": 10.8,
+          "judge_time_s": 4.8
+        },
+        "dense_only": {
+          "retrieved_chunk_ids": [
+            "GOLDMAN__2026_HIER_0258",
+            "GOLDMAN__2026_HIER_0270",
+            "GOLDMAN__2026_HIER_0235",
+            "GOLDMAN__2026_HIER_0220",
+            "GOLDMAN__2026_HIER_0076"
+          ],
+          "recall_at_1": 1,
+          "recall_at_5": 1,
+          "answer": "Goldman Sachs defines market risk as the potential adverse impact on earnings resulting from changes in market conditions, primarily arising from positions held for client market making and its own investing and financing activities (Goldman_Sachs (2026) \u2014 Item 4. Mine Safety Disclosures). The company categorizes this exposure into four distinct types: interest rate risk, which involves exposures to yield curve levels, slopes, curvatures, volatilities, prepayment speeds, and credit spreads; equity price risk, stemming from changes in individual equities, baskets, indices, and their volatilities; currency rate risk, resulting from fluctuations in spot prices, forward prices, and currency volatilities; and commodity price risk, which covers exposures to commodities such as crude oil, natural gas, electricity, and precious metals (Goldman_Sachs (2026) \u2014 Item 4. Mine Safety Disclosures).\n\nTo manage these exposures, Goldman Sachs employs Value-at-Risk (VaR) as a key measure, defined as the potential loss in value of trading assets and liabilities due to adverse market movements over a specified time horizon and confidence level (Goldman_Sachs (2026) \u2014 Item 4. Mine Safety Disclosures). The firm\u2019s Market Risk department, acting as the second line of defense, independently assesses and monitors these risks while managers in revenue-producing units are accountable for managing positions within prescribed limits using tools such as diversification, position size controls, and economic hedges (Goldman_Sachs (2026) \u2014 Item 4. Mine Safety Disclosures). Additionally, the company conducts regular stress tests to calculate credit exposures under various shocks, including moderate and extreme market movements consistent with severe economic events (Goldman_Sachs (2026) \u2014 Item 4. Mine Safety Disclosures).",
+          "scores": {
+            "faithfulness": 4,
+            "completeness": 5,
+            "citation_accuracy": 2,
+            "mean": 3.667,
+            "reasoning": "The answer is comprehensive and faithful to the context regarding market risk definition and management, but it incorrectly attributes stress tests (which are described under Credit Risk in Context [2]) to Market Risk, leading to inaccurate citations."
+          },
+          "gen_time_s": 9.3,
+          "judge_time_s": 4.6
+        }
+      }
+    },
+    "Q005": {
+      "question": "What credit risk management practices does Bank of America describe?",
+      "type": "single_source",
+      "configs": {
+        "hybrid_reranked": {
+          "retrieved_chunk_ids": [
+            "BANK_OF__2026_HIER_0185",
+            "BANK_OF__2026_HIER_0084",
+            "BANK_OF__2026_HIER_0131",
+            "BANK_OF__2026_HIER_0008",
+            "BANK_OF__2026_HIER_0137"
+          ],
+          "recall_at_1": 1,
+          "recall_at_5": 1,
+          "answer": "Bank of America describes its commercial portfolio credit risk management as beginning with an assessment of the borrower\u2019s or counterparty's financial position, followed by assigning a risk rating that is subject to defined approval standards (Bank of America Corporation and Subsidiaries, Item 7). Subsequent to origination, these risk ratings are monitored on an ongoing basis and adjusted to reflect changes in the borrower's financial condition, cash flow, or outlook. The bank utilizes tools such as risk rating aggregations to measure portfolio concentrations and considers factors like collateral, country, industry, and single-name concentration limits when making credit decisions (Bank of America Corporation and Subsidiaries, Item 7).\n\nTo manage commercial credit risk concentrations, Bank of America evaluates exposures by industry, product, geography, customer relationship, loan size, and property type for real estate loans (Bank of America Corporation and Subsidiaries, Item 7). The bank also reviews non-U.S. portfolio exposures by region and country, utilizing techniques such as syndications, loan sales, and hedging to manage the size and risk profile of the commercial credit portfolio (Bank of America Corporation and Subsidiaries, Item 7). Additionally, the company attempts to work with clients experiencing financial difficulty to modify loans to terms that align better with their current ability to pay (Bank of America Corporation and Subsidiaries, Item 7).",
+          "scores": {
+            "faithfulness": 5,
+            "completeness": 4,
+            "citation_accuracy": 5,
+            "mean": 4.667,
+            "reasoning": "The answer accurately reflects the specific credit risk management practices detailed in the context with correct citations, though it omits broader corporate-level definitions and stress testing mentioned elsewhere."
+          },
+          "gen_time_s": 7.7,
+          "judge_time_s": 4.5
+        },
+        "hybrid_no_rerank": {
+          "retrieved_chunk_ids": [
+            "BANK_OF__2026_HIER_0137",
+            "BANK_OF__2026_HIER_0008",
+            "BANK_OF__2026_HIER_0155",
+            "BANK_OF__2026_HIER_0185",
+            "BANK_OF__2026_HIER_0167"
+          ],
+          "recall_at_1": 1,
+          "recall_at_5": 1,
+          "answer": "Bank of America describes its commercial portfolio credit risk management as beginning with an assessment of the borrower\u2019s or counterparty's financial position, followed by assigning a risk rating that is subject to defined approval standards (Bank of America Corporation, Item 7). Subsequent to origination, these risk ratings are monitored on an ongoing basis and adjusted if necessary to reflect changes in the client's financial condition or outlook. In making credit decisions, the company considers factors such as risk rating, collateral, country, industry, and single-name concentration limits while balancing them against the total borrower relationship (Bank of America Corporation, Item 7).\n\nTo manage concentrations, Bank of America evaluates and monitors commercial credit exposure by industry, product, geography, customer relationship, loan size, and property type for real estate loans (Bank of America Corporation, Item 7). The company utilizes tools such as risk rating aggregations to measure portfolio concentrations and employs syndications, loan sales, hedging, and other techniques to manage the size and risk profile of its commercial credit portfolio (Bank of America Corporation, Item 7). Additionally, the firm attempts to work with clients experiencing financial difficulty to modify loans to terms that align better with their current ability to pay as part of ongoing risk mitigation initiatives (Bank of America Corporation, Item 7).",
+          "scores": {
+            "faithfulness": 5,
+            "completeness": 4,
+            "citation_accuracy": 5,
+            "mean": 4.667,
+            "reasoning": "The answer accurately reflects the specific credit risk management practices for the commercial portfolio found in the context, though it omits other general risk governance and liquidity aspects mentioned elsewhere."
+          },
+          "gen_time_s": 7.4,
+          "judge_time_s": 4.6
+        },
+        "dense_only": {
+          "retrieved_chunk_ids": [
+            "BANK_OF__2026_HIER_0137",
+            "BANK_OF__2026_HIER_0185",
+            "BANK_OF__2026_HIER_0131",
+            "JPMORGAN_2026_HIER_0233",
+            "JPMORGAN_2026_HIER_0235"
+          ],
+          "recall_at_1": 1,
+          "recall_at_5": 1,
+          "answer": "Bank of America describes a comprehensive approach to commercial portfolio credit risk management that begins with assessing the borrower's financial position and assigning risk ratings, which are monitored on an ongoing basis (Bank_of_America (2026) \u2014 Item 7). The bank utilizes tools such as risk rating aggregations to measure concentrations within portfolios, while also considering collateral, country, industry, and single-name concentration limits when making credit decisions. Additionally, Bank of America attempts to work with clients experiencing financial difficulty by modifying loan terms to better align with their current ability to pay (Bank_of_America (2026) \u2014 Item 7).\n\nTo manage commercial credit risk concentrations, the bank evaluates exposures by industry, product, geography, customer relationship, and loan size, as well as geographic location and property type for commercial real estate loans (Bank_of_America (2026) \u2014 Item 7). The firm employs various risk mitigation techniques, including syndications of exposure to third parties, loan sales, and hedging, to manage the size and risk profile of its commercial credit portfolio. These practices are designed to ensure that concentrations of credit exposure remain aligned with the corporation's stated risk appetite (Bank_of_America (2026) \u2014 Item 7).",
+          "scores": {
+            "faithfulness": 5,
+            "completeness": 4,
+            "citation_accuracy": 5,
+            "mean": 4.667,
+            "reasoning": "The answer accurately reflects the specific commercial credit risk management practices described in the Bank of America context with correct citations, though it omits broader enterprise-wide risk culture and stress testing details mentioned in other retrieved sections."
+          },
+          "gen_time_s": 7.6,
+          "judge_time_s": 4.9
+        }
+      }
+    },
+    "Q006": {
+      "question": "How does BlackRock describe its investment management platform and assets under management?",
+      "type": "single_source",
+      "configs": {
+        "hybrid_reranked": {
+          "retrieved_chunk_ids": [
+            "BLACKROC_2024_HIER_0001",
+            "BLACKROC_2024_HIER_0230",
+            "BLACKROC_2024_HIER_0125",
+            "BLACKROC_2024_HIER_0124",
+            "BLACKROC_2024_HIER_0055"
+          ],
+          "recall_at_1": 1,
+          "recall_at_5": 1,
+          "answer": "BlackRock describes itself as a leading publicly traded investment management firm with $10.0 trillion of assets under management (AUM) at December 31, 2023 (BlackRock, Item 1). The company operates a highly diversified multi-product platform designed to meet client needs across all market environments by offering alpha-seeking active, index, and cash management investment strategies across various asset classes and geographies (BlackRock, Item 4). This platform enables BlackRock to provide tailored investment and asset allocation solutions through a variety of vehicles, including mutual funds, iShares\u00ae and BlackRock ETFs, separate accounts, and other pooled investment vehicles, while also offering technology services such as the Aladdin\u00ae risk management platform (BlackRock, Item 1; BlackRock, Item 16).\n\nThe company emphasizes its position as a $2.6 trillion active manager with global reach and integrated technology capabilities, aiming to deliver consistent long-term outcomes for clients (BlackRock, Item 4). Additionally, BlackRock manages significant portions of specific asset classes, including $5.3 trillion in equity assets globally and $2.8 trillion in fixed income assets, nearly two-thirds of which are held by institutions for strategic or liability-matching purposes (BlackRock, Item 4). The firm views ETFs as a core structural growth area and believes that embedding the ETF and Index business across the entire firm will accelerate growth in these investment strategies (BlackRock, Item 4).",
+          "scores": {
+            "faithfulness": 5,
+            "completeness": 5,
+            "citation_accuracy": 4,
+            "mean": 4.667,
+            "reasoning": "The answer is faithful and comprehensive, accurately reflecting the context's details on AUM, platform strategies, and asset class breakdowns; however, it incorrectly cites Item 16 for technology services which are described in Items 1 and 3, not Item 16."
+          },
+          "gen_time_s": 8.0,
+          "judge_time_s": 4.9
+        },
+        "hybrid_no_rerank": {
+          "retrieved_chunk_ids": [
+            "BLACKROC_2024_HIER_0124",
+            "BLACKROC_2024_HIER_0059",
+            "BLACKROC_2024_HIER_0057",
+            "BLACKROC_2024_HIER_0070",
+            "BLACKROC_2024_HIER_0183"
+          ],
+          "recall_at_1": 1,
+          "recall_at_5": 1,
+          "answer": "BlackRock describes its investment management revenue as primarily derived from fees based on a percentage of Assets Under Management (AUM), along with performance fees tied to fund returns [BlackRock, Item 4. Mine Safety Disclosures]. The firm manages $2.8 trillion in fixed income assets, noting that nearly two-thirds are held by institutions for strategic or liability-matching purposes [BlackRock, Item 4. Mine Safety Disclosures]. Additionally, BlackRock oversees $5.3 trillion in equity assets globally, though it acknowledges that beta divergence between markets could shift AUM toward lower-fee products and erode the correlation between AUM growth and base fees [BlackRock, Item 4. Mine Safety Disclosures].\n\nThe company highlights its Aladdin platform as a critical element of its competitive success, providing sophisticated risk analytics, portfolio management, trade execution, and investment operations tools on a single integrated system [BlackRock, Item 1A. Risk Factors]. BlackRock emphasizes that Aladdin\u2019s position relies on combining these diverse functions, but notes that the platform faces risks from increased competition, potential client shifts to standalone solutions, and challenges in protecting its intellectual property [BlackRock, Item 1A. Risk Factors]. Furthermore, the operation of Aladdin involves frequent updates and expansions into new markets, which BlackRock states may expose it to cyber-security, operational, and regulatory risks if not managed effectively [BlackRock, Item 1A. Risk Factors].",
+          "scores": {
+            "faithfulness": 5,
+            "completeness": 4,
+            "citation_accuracy": 5,
+            "mean": 4.667,
+            "reasoning": "The answer accurately reflects the retrieved context with correct citations and covers all key points regarding AUM figures, revenue structure, and the Aladdin platform, though it omits minor details like market price risk disclosures."
+          },
+          "gen_time_s": 7.8,
+          "judge_time_s": 4.4
+        },
+        "dense_only": {
+          "retrieved_chunk_ids": [
+            "BLACKROC_2024_HIER_0183",
+            "BLACKROC_2024_HIER_0055",
+            "BLACKROC_2024_HIER_0074",
+            "BLACKROC_2024_HIER_0060",
+            "BLACKROC_2024_HIER_0062"
+          ],
+          "recall_at_1": 0,
+          "recall_at_5": 0,
+          "answer": "BlackRock describes its investment advisory and administration fees as being primarily comprised of charges based on a percentage of the value of Assets Under Management (AUM), with some fees also expressed as a percentage of realized returns [BlackRock (2024) \u2014 Item 7A. Quantitative and Qualitative Disclosures about Market Risk]. The majority of these fees are calculated based on the average or period-end AUM of applicable investment funds or separate accounts [BlackRock (2024) \u2014 Item 7A. Quantitative and Qualitative Disclosures about Market Risk].\n\nThe company notes that its investment management revenue is subject to fluctuations caused by movements in equity, debt, currency, real asset, commodity, or alternative investment markets, as well as global fiscal, monetary, and trade policies [BlackRock (2024) \u2014 Item 1A. Risk Factors]. These market dynamics can lead to decreases in the value of AUM, client redemptions, client rebalancing into lower-fee products, impairments to intangible assets and goodwill, or a decrease in the value of seed or co-investment capital [BlackRock (2024) \u2014 Item 1A. Risk Factors].",
+          "scores": {
+            "faithfulness": 5,
+            "completeness": 4,
+            "citation_accuracy": 5,
+            "mean": 4.667,
+            "reasoning": "The answer accurately reflects the context regarding fee structures and AUM risks with correct citations, though it omits specific details about BlackRock's platform nature (e.g., seed capital programs) found in Item 7A."
+          },
+          "gen_time_s": 6.5,
+          "judge_time_s": 4.1
+        }
+      }
+    },
+    "Q007": {
+      "question": "What regulatory capital requirements does JPMorgan Chase face?",
+      "type": "single_source",
+      "configs": {
+        "hybrid_reranked": {
+          "retrieved_chunk_ids": [
+            "JPMORGAN_2026_HIER_0579",
+            "JPMORGAN_2026_HIER_0043",
+            "JPMORGAN_2026_HIER_0200",
+            "JPMORGAN_2026_HIER_0201",
+            "JPMORGAN_2026_HIER_0212"
+          ],
+          "recall_at_1": 1,
+          "recall_at_5": 1,
+          "answer": "JPMorgan Chase is subject to various risk-based and leverage-based regulatory capital requirements established by the Federal Reserve, OCC, and FDIC (JPMorgan_Chase, Item 15). Under Basel III rules, the Firm must maintain minimum ratios for Common Equity Tier 1 (CET1), Tier 1, and Total capital, as well as a Supplementary Leverage Ratio (SLR) (JPMorgan_Chase, Item 15). As of December 31, 2025, these requirements include specific thresholds such as an 11.5% CET1 ratio under the Standardized approach and a minimum SLR of 3.0%, plus an additional 2.0% leverage buffer for certain banking organizations (JPMorgan_Chase, Item 15).\n\nIn addition to capital ratios, JPMorgan Chase must comply with Total Loss-Absorbing Capacity (TLAC) rules requiring the maintenance of minimum levels of external TLAC and eligible long-term debt as a U.S. Global Systemically Important Bank (GSIB) top-tier holding company (JPMorgan_Chase, Item 15). The Firm is also required to maintain specific capital and leverage ratios to be considered \"well-capitalized\" under Prompt Corrective Action requirements issued by the FDIC (JPMorgan_Chase, Item 15). Failure to meet these regulatory standards could result in restrictions on capital distributions, such as dividends and share repurchases, as well as limitations on discretionary bonus payments for executive officers (JPMorgan_Chase, Item 1A; JPMorgan_Chase, Item 15).",
+          "scores": {
+            "faithfulness": 5,
+            "completeness": 5,
+            "citation_accuracy": 5,
+            "mean": 5.0,
+            "reasoning": "The answer accurately reflects all regulatory capital requirements mentioned in the context, including Basel III ratios, SLR, TLAC, and well-capitalized standards, with precise and correct citations to the provided text."
+          },
+          "gen_time_s": 9.1,
+          "judge_time_s": 5.0
+        },
+        "hybrid_no_rerank": {
+          "retrieved_chunk_ids": [
+            "JPMORGAN_2026_HIER_0200",
+            "JPMORGAN_2026_HIER_0212",
+            "JPMORGAN_2026_HIER_0652",
+            "JPMORGAN_2026_HIER_0580",
+            "JPMORGAN_2026_HIER_0042"
+          ],
+          "recall_at_1": 0,
+          "recall_at_5": 0,
+          "answer": "JPMorgan Chase & Co. is subject to several leverage-based capital regulatory requirements, including a minimum Supplementary Leverage Ratio (SLR) of 3.0% plus an additional 2.0% leverage buffer, as outlined in Item 15 under \"Leverage-based Capital Regulatory Requirements\" and Note 27. The firm must also maintain specific CET1, Tier 1, and Total capital ratio requirements under both Standardized and Advanced approaches for its Bank Holding Company (BHC) structure, while its principal IDI subsidiary, JPMorgan Chase Bank, N.A., faces separate minimum capital and leverage ratios to be considered \"well-capitalized\" under FDIC regulations.\n\nIn addition to Basel III ratios, the firm must comply with Total Loss-Absorbing Capacity (TLAC) rules requiring minimum levels of external TLAC and eligible long-term debt as a U.S. GSIB top-tier holding company, per Item 15 and \"Management\u2019s discussion and analysis.\" Failure to maintain these regulatory capital thresholds can result in significant restrictions on the firm's ability to distribute capital through dividends or share repurchases, limit discretionary bonus payments for executive officers, and potentially accelerate bankruptcy or resolution proceedings due to liquidity constraints.",
+          "scores": {
+            "faithfulness": 5,
+            "completeness": 4,
+            "citation_accuracy": 3,
+            "mean": 4.0,
+            "reasoning": "The answer is factually accurate and comprehensive regarding capital requirements but incorrectly attributes the TLAC rules to Item 15 instead of Management's Discussion and Analysis."
+          },
+          "gen_time_s": 7.6,
+          "judge_time_s": 4.8
+        },
+        "dense_only": {
+          "retrieved_chunk_ids": [
+            "JPMORGAN_2026_HIER_0212",
+            "JPMORGAN_2026_HIER_0200",
+            "MORGAN_S_2026_HIER_0118",
+            "JPMORGAN_2026_HIER_0220",
+            "BANK_OF__2026_HIER_0060"
+          ],
+          "recall_at_1": 0,
+          "recall_at_5": 0,
+          "answer": "JPMorgan Chase is subject to Federal Reserve rules requiring it to maintain minimum levels of external Total Loss-Absorbing Capacity (TLAC) and eligible long-term debt, as outlined in Item 15 under \"Management\u2019s discussion and analysis\" regarding Other capital requirements. The firm must also adhere to the Supplementary Leverage Ratio (SLR) requirements, which mandate a minimum SLR of 3.0% plus an additional 2.0% leverage buffer for banking organizations subject to the Advanced approach; these specific SLR requirements were updated in the eSLR final rule that JPMorgan Chase elected to early adopt effective January 1, 2026 (Item 15).\n\nFailure to maintain TLAC or SLR levels equal to or greater than these regulatory minimums results in limitations on the firm's ability to distribute capital through dividends and common share repurchases, as well as restrictions on discretionary bonus payments for certain executive officers. Additionally, JPMorgan Chase must maintain minimum capital and leverage ratios to be considered \"well-capitalized\" under regulations issued by the Federal Reserve and the Prompt Corrective Action requirements of the FDIC Improvement Act (Item 15).",
+          "scores": {
+            "faithfulness": 5,
+            "completeness": 4,
+            "citation_accuracy": 5,
+            "mean": 4.667,
+            "reasoning": "The answer accurately reflects the retrieved context regarding TLAC and SLR requirements for JPMorgan Chase with correct attributions, though it omits specific Basel III risk-based capital ratio details mentioned in the text."
+          },
+          "gen_time_s": 7.4,
+          "judge_time_s": 4.9
+        }
+      }
+    },
+    "Q008": {
+      "question": "What competition does Apple face in its product and services markets?",
+      "type": "single_source",
+      "configs": {
+        "hybrid_reranked": {
+          "retrieved_chunk_ids": [
+            "APPLE_IN_2025_HIER_0015",
+            "APPLE_IN_2025_HIER_0003",
+            "APPLE_IN_2025_HIER_0002",
+            "APPLE_IN_2025_HIER_0014",
+            "MICROSOF_2025_HIER_0022"
+          ],
+          "recall_at_1": 1,
+          "recall_at_5": 1,
+          "answer": "Apple Inc. faces substantial competition from companies with significant technical, marketing, distribution, and other resources, as well as established hardware, software, and service offerings (Apple_Inc, Item 1A. Risk Factors). These competitors often have broad product lines, low-priced products, large installed bases of active devices, and large customer bases, which allows them to aggressively cut prices and lower product margins (Apple_Inc, Item 1A. Risk Factors; Apple_Inc, Item 1. Business). Additionally, some competitors possess the resources or cost structures to provide products and services at little or no profit, or even at a loss, intensifying the competitive landscape (Apple_Inc, Item 1A. Risk Factors; Apple_Inc, Item 1. Business).\n\nThe markets are characterized by aggressive price competition, downward pressure on gross margins, short product life cycles, and rapid adoption of technological advancements (Apple_Inc, Item 1. Business; Apple_Inc, Item 1A. Risk Factors). A significant portion of this competition involves rivals imitating Apple\u2019s product features, applications, and approaches to providing seamless components within their offerings to offer more competitive solutions (Apple_Inc, Item 1A. Risk Factors; Apple_Inc, Item 1. Business). Furthermore, many competitors seek to compete primarily through aggressive pricing and very low cost structures, while also imitating Apple\u2019s products and infringing on its intellectual property (Apple_Inc, Item 1. Business; Apple_Inc, Item 1A. Risk Factors).",
+          "scores": {
+            "faithfulness": 5,
+            "completeness": 4,
+            "citation_accuracy": 5,
+            "mean": 4.667,
+            "reasoning": "The answer accurately reflects the retrieved context with correct citations and covers all major competitive factors mentioned, though it omits specific details like market share statistics found in the source."
+          },
+          "gen_time_s": 8.3,
+          "judge_time_s": 4.4
+        },
+        "hybrid_no_rerank": {
+          "retrieved_chunk_ids": [
+            "APPLE_IN_2025_HIER_0003",
+            "APPLE_IN_2025_HIER_0015",
+            "MICROSOF_2025_HIER_0022",
+            "MORGAN_S_2026_HIER_0054",
+            "APPLE_IN_2025_HIER_0014"
+          ],
+          "recall_at_1": 1,
+          "recall_at_5": 1,
+          "answer": "Apple Inc. faces intense competition in highly competitive global markets characterized by aggressive price competition, downward pressure on gross margins, and rapid technological change (Apple_Inc, Item 1A. Risk Factors). The Company competes against companies with significant technical, marketing, and distribution resources, as well as established hardware, software, and service offerings with large customer bases (Apple_Inc, Item 1. Business). Additionally, Apple encounters substantial competition from competitors who imitate its product features and applications to offer more competitive solutions or work collaboratively to provide integrated offerings (Apple_Inc, Item 1A. Risk Factors).\n\nMany of Apple\u2019s competitors seek to compete primarily through aggressive pricing and very low cost structures, with some having the resources to provide products at little or no profit or even at a loss (Apple_Inc, Item 1. Business). These competitors often have broad product lines, low-priced options, and large installed bases of active devices (Apple_Inc, Item 1A. Risk Factors). Consequently, Apple holds only a minority market share in the global smartphone, personal computer, tablet, and wearables markets, where some segments have experienced little to no growth or contraction (Apple_Inc, Item 1. Business).",
+          "scores": {
+            "faithfulness": 5,
+            "completeness": 4,
+            "citation_accuracy": 5,
+            "mean": 4.667,
+            "reasoning": "The answer accurately reflects the retrieved context with correct citations and covers all major competitive factors mentioned for Apple, though it omits specific details like R&D investment requirements found in other sections."
+          },
+          "gen_time_s": 7.1,
+          "judge_time_s": 4.4
+        },
+        "dense_only": {
+          "retrieved_chunk_ids": [
+            "APPLE_IN_2025_HIER_0003",
+            "APPLE_IN_2025_HIER_0015",
+            "APPLE_IN_2025_HIER_0028",
+            "MICROSOF_2025_HIER_0023",
+            "APPLE_IN_2025_HIER_0014"
+          ],
+          "recall_at_1": 1,
+          "recall_at_5": 1,
+          "answer": "Apple Inc. faces highly competitive global markets characterized by aggressive price competition, downward pressure on gross margins, and rapid technological change (Apple_Inc, Item 1A. Risk Factors). The Company competes against companies with significant technical, marketing, and distribution resources, as well as established hardware, software, and service offerings with large customer bases (Apple_Inc, Item 1. Business). Additionally, Apple encounters substantial competition from competitors who imitate its product features and applications to offer more competitive solutions or work collaboratively to provide integrated offerings (Apple_Inc, Item 1A. Risk Factors).\n\nMany of Apple\u2019s competitors seek to compete primarily through aggressive pricing and very low cost structures, with some having the resources to provide products at little or no profit, or even at a loss (Apple_Inc, Item 1. Business). These competitors often possess broad product lines, low-priced options, and large installed bases of active devices (Apple_Inc, Item 1A. Risk Factors). Consequently, Apple holds only a minority market share in the global smartphone, personal computer, tablet, and wearables markets, where some segments have experienced little to no growth or contraction (Apple_Inc, Item 1. Business).",
+          "scores": {
+            "faithfulness": 5,
+            "completeness": 4,
+            "citation_accuracy": 5,
+            "mean": 4.667,
+            "reasoning": "The answer accurately reflects the context with correct citations and covers all major competitive factors mentioned."
+          },
+          "gen_time_s": 7.1,
+          "judge_time_s": 4.1
+        }
+      }
+    },
+    "Q009": {
+      "question": "How does Goldman Sachs manage liquidity risk?",
+      "type": "single_source",
+      "configs": {
+        "hybrid_reranked": {
+          "retrieved_chunk_ids": [
+            "GOLDMAN__2026_HIER_0245",
+            "GOLDMAN__2026_HIER_0235",
+            "GOLDMAN__2026_HIER_0243",
+            "GOLDMAN__2026_HIER_0096",
+            "GOLDMAN__2026_HIER_0244"
+          ],
+          "recall_at_1": 1,
+          "recall_at_5": 1,
+          "answer": "Goldman Sachs manages liquidity risk according to three core principles: holding sufficient excess liquidity in the form of a Global Cash Liquidity Account (GCLA) to cover outflows during a stressed period, maintaining appropriate Asset-Liability Management, and maintaining a viable Contingency Funding Plan [Goldman_Sachs (2026) \u2014 Item 4. Mine Safety Disclosures]. The GCLA consists of unencumbered, highly liquid securities and cash designed to meet potential cash and collateral needs in a crisis, allowing the firm to satisfy immediate obligations without relying on credit-sensitive markets or selling other assets [Goldman_Sachs (2026) \u2014 Item 4. Mine Safety Disclosures].\n\nIn terms of Asset-Liability Management, Goldman Sachs aims to ensure sufficient financing even during persistent market stress by managing the maturities and diversity of its funding across markets, products, and counterparties [Goldman_Sachs (2026) \u2014 Item 4. Mine Safety Disclosures]. The firm conservatively manages its funding book with a focus on long-term, diversified sources that exceed current requirements, while actively monitoring asset liquidity and holding periods to determine appropriate funding tenors [Goldman_Sachs (2026) \u2014 Item 4. Mine Safety Disclosures]. Additionally, the firm raises secured and unsecured financing with longer tenors relative to its assets' liquidity profiles to reduce the risk that liabilities mature before assets can be liquidated [Goldman_Sachs (2026) \u2014 Item 4. Mine Safety Disclosures].\n\nGovernance of these efforts is overseen by the Board, which reviews the enterprise risk management framework and receives regular briefings on firmwide risks including liquidity from the chief risk officer [Goldman_Sachs (2026) \u2014 Item 4. Mine Safety Disclosures]. Corporate Treasury is responsible for developing and executing the liquidity strategy, while Liquidity Risk, as part of the second line of defense, independently assesses and monitors these risks across global businesses [Goldman_Sachs (2026) \u2014 Item 4. Mine Safety Disclosures]. The Firmwide Asset Liability Committee provides strategic direction on financial resources, including capital, liquidity, and balance sheet management, reporting to the Management Committee [Goldman_Sachs (2026) \u2014 Item 4. Mine Safety Disclosures].",
+          "scores": {
+            "faithfulness": 5,
+            "completeness": 5,
+            "citation_accuracy": 4,
+            "mean": 4.667,
+            "reasoning": "The answer is highly faithful and complete, accurately reflecting the context's details on liquidity principles, asset-liability management, and governance structures; however, it receives a minor deduction for citation accuracy because all citations incorrectly point to 'Mine Safety Disclosures' instead of the specific Liquidity Risk Management sections."
+          },
+          "gen_time_s": 11.1,
+          "judge_time_s": 5.2
+        },
+        "hybrid_no_rerank": {
+          "retrieved_chunk_ids": [
+            "GOLDMAN__2026_HIER_0250",
+            "GOLDMAN__2026_HIER_0298",
+            "GOLDMAN__2026_HIER_0245",
+            "GOLDMAN__2026_HIER_0256",
+            "GOLDMAN__2026_HIER_0096"
+          ],
+          "recall_at_1": 0,
+          "recall_at_5": 1,
+          "answer": "Goldman Sachs manages liquidity risk through a comprehensive framework that includes resolution planning, strict limits, and robust asset-liability management practices. The firm has established Resolution Liquidity Adequacy and Positioning and Execution Need frameworks to estimate liquidity needs in stressed environments or following a bankruptcy filing, alongside a triggers and alerts system for the Board (Goldman_Sachs (2026) \u2014 Item 4. Mine Safety Disclosures). Additionally, Goldman Sachs uses liquidity risk limits monitored by Corporate Treasury and Liquidity Risk to manage exposure sizes relative to its risk tolerance, while maintaining a Global Cash and Liquid Assets (GCLA) consisting of highly liquid securities and cash to ensure timely settlement in all major markets (Goldman_Sachs (2026) \u2014 Item 4. Mine Safety Disclosures).\n\nThe firm\u2019s asset-liability management policies focus on ensuring sufficient financing even during persistent stress by actively managing the maturities, diversity, and tenor of its funding across markets, products, and counterparties (Goldman_Sachs (2026) \u2014 Item 4. Mine Safety Disclosures). Goldman Sachs conservatively manages its funding book to maintain long-term, diversified sources in excess of current requirements and raises secured and unsecured financing with long tenors relative to the liquidity profile of its assets to reduce refinancing risk (Goldman_Sachs (2026) \u2014 Item 4. Mine Safety Disclosures). Furthermore, the firm manages its GCLA to ensure it can meet potential collateral or termination payment requirements in the event of credit rating downgrades and mitigates operational risks by monitoring clearing agents and financial intermediaries for potential disruptions that could impair liquidity (Goldman_Sachs (2026) \u2014 Item 4. Mine Safety Disclosures; Goldman_Sachs (2026) \u2014 Item 1A. Risk Factors).",
+          "scores": {
+            "faithfulness": 5,
+            "completeness": 4,
+            "citation_accuracy": 2,
+            "mean": 3.667,
+            "reasoning": "The answer is factually accurate and comprehensive regarding liquidity risk management but suffers from severe citation errors by attributing all information to the 'Mine Safety Disclosures' section instead of the correct Risk Management sections."
+          },
+          "gen_time_s": 9.5,
+          "judge_time_s": 4.8
+        },
+        "dense_only": {
+          "retrieved_chunk_ids": [
+            "GOLDMAN__2026_HIER_0262",
+            "GOLDMAN__2026_HIER_0245",
+            "GOLDMAN__2026_HIER_0103",
+            "GOLDMAN__2026_HIER_0248",
+            "GOLDMAN__2026_HIER_0242"
+          ],
+          "recall_at_1": 0,
+          "recall_at_5": 1,
+          "answer": "Goldman Sachs manages liquidity risk by maintaining a Global Contingency Liquidity Arrangement (GCLA) across its Group Inc., Funding IHC, and major broker-dealer and bank subsidiaries to ensure sufficient operating liquidity for timely settlement in all markets, even during difficult funding environments [Goldman_Sachs (2026) \u2014 Item 4. Mine Safety Disclosures]. The company also employs asset-liability management policies designed to secure adequate financing during persistent stress by managing the maturities and diversity of its funding across markets, products, and counterparties while maintaining a diversified funding profile with appropriate tenors [Goldman_Sachs (2026) \u2014 Item 4. Mine Safety Disclosures].\n\nTo determine the size of its GCLA, Goldman Sachs utilizes internal liquidity risk models, including the Modeled Liquidity Outflow which quantifies risks over a 30-day stress scenario involving severely challenged market environments and firm-specific crises [Goldman_Sachs (2026) \u2014 Item 4. Mine Safety Disclosures]. The company also considers intraday liquidity needs through an Intraday Liquidity Model, long-term stress testing models, resolution liquidity models, and regulatory requirements to assess its condition and financial markets [Goldman_Sachs (2026) \u2014 Item 4. Mine Safety Disclosures]. Additionally, the contingency funding plan identifies key groups responsible for coordinating information, implementing liquidity maintenance activities, and managing communications during a crisis or period of market stress [Goldman_Sachs (2026) \u2014 Item 4. Mine Safety Disclosures].",
+          "scores": {
+            "faithfulness": 5,
+            "completeness": 4,
+            "citation_accuracy": 5,
+            "mean": 4.667,
+            "reasoning": "The answer accurately reflects the retrieved context with correct citations and covers all key liquidity risk management strategies mentioned, though it omits minor details like specific asset-liability management bullet points."
+          },
+          "gen_time_s": 8.6,
+          "judge_time_s": 4.8
+        }
+      }
+    },
+    "Q010": {
+      "question": "What operational risks does Bank of America identify?",
+      "type": "single_source",
+      "configs": {
+        "hybrid_reranked": {
+          "retrieved_chunk_ids": [
+            "BANK_OF__2026_HIER_0047",
+            "BANK_OF__2026_HIER_0064",
+            "MORGAN_S_2026_HIER_0173",
+            "JPMORGAN_2026_HIER_0300",
+            "GOLDMAN__2026_HIER_0291"
+          ],
+          "recall_at_1": 1,
+          "recall_at_5": 1,
+          "answer": "Bank of America identifies significant third-party technology, cybersecurity, and operational risks stemming from its reliance on a large number of clients and third parties to operate its business (Bank of America, Item 1A. Risk Factors). The company notes that these third parties have varying levels of security resources and may be more vulnerable to cyberattacks, creating risks related to critical software defects, vulnerabilities, and the potential failure of third parties to detect or report incidents effectively (Bank of America, Item 1A. Risk Factors). Additionally, due to the increasing consolidation and interdependence of financial entities, a cybersecurity threat affecting one entity could adversely impact Bank of America by increasing the risk of operational failure and loss (Bank of America, Item 1A. Risk Factors).\n\nThe company also highlights risks associated with regulatory compliance and conflicts of interest. Mishandling or mismanaging personal, confidential, or proprietary information by Bank of America, its third parties, or financial data aggregators could lead to adverse reputational, legal, and operational consequences (Bank of America, Item 1A. Risk Factors). Furthermore, the actual or perceived failure to properly identify and manage potential conflicts of interest could result in litigation, enforcement actions, and reputational harm, which may adversely affect the business's ability to attract and retain clients and employees (Bank of America, Item 1A. Risk Factors).",
+          "scores": {
+            "faithfulness": 5,
+            "completeness": 4,
+            "citation_accuracy": 5,
+            "mean": 4.667,
+            "reasoning": "The answer accurately reflects the specific operational risks identified by Bank of America in the provided context with correct citations, though it omits some minor details like competition risk found in the same section."
+          },
+          "gen_time_s": 7.5,
+          "judge_time_s": 4.3
+        },
+        "hybrid_no_rerank": {
+          "retrieved_chunk_ids": [
+            "BANK_OF__2026_HIER_0064",
+            "JPMORGAN_2026_HIER_0300",
+            "MORGAN_S_2026_HIER_0173",
+            "MORGAN_S_2026_HIER_0174",
+            "JPMORGAN_2026_HIER_0305"
+          ],
+          "recall_at_1": 1,
+          "recall_at_5": 1,
+          "answer": "Bank of America identifies several specific operational risks within its Item 1A. Risk Factors section, including the mishandling, misuse, or mismanagement of personal, confidential, or proprietary information belonging to clients, employees, or third parties (Bank of America, Item 1A. Risk Factors). The company also highlights the risk of reputational harm stemming from a failure to properly identify and manage potential conflicts of interest, noting that this management has become increasingly complex due to expanded business activities (Bank of America, Item 1A. Risk Factors).\n\nAdditionally, Bank of America acknowledges that its actual or perceived failure to address these issues could lead to operational risks resulting in regulatory restrictions, legal risks, litigation claims, enforcement actions, fines, and penalties (Bank of America, Item 1A. Risk Factors). The company further notes that it faces significant and increasing competition from local and global bank and nonbank financial institutions, which may impact its ability to effectively compete due to pressure to provide products on more attractive terms or disadvantages related to its size and regulatory requirements (Bank of America, Item 1A. Risk Factors).",
+          "scores": {
+            "faithfulness": 4,
+            "completeness": 3,
+            "citation_accuracy": 5,
+            "mean": 4.0,
+            "reasoning": "The answer is faithful and correctly cited but includes competition risk which is not an operational risk, and misses the specific subcategories of operational risks detailed in other retrieved contexts."
+          },
+          "gen_time_s": 6.7,
+          "judge_time_s": 4.3
+        },
+        "dense_only": {
+          "retrieved_chunk_ids": [
+            "BANK_OF__2026_HIER_0064",
+            "BANK_OF__2026_HIER_0132",
+            "JPMORGAN_2026_HIER_0185",
+            "MORGAN_S_2026_HIER_0173",
+            "BANK_OF__2026_HIER_0047"
+          ],
+          "recall_at_1": 1,
+          "recall_at_5": 1,
+          "answer": "Bank of America identifies operational risk as the potential for loss resulting from inadequate or failed internal processes, systems, people, or external events (Bank_of_America, Item 7). The company highlights significant third-party technology, cybersecurity, and operational risks arising from its reliance on numerous clients and vendors to operate its business. These third parties may have varying levels of security resources and expertise, making them vulnerable targets for threat actors who seek to exploit weaknesses in their systems (Bank_of_America, Item 1A).\n\nFurthermore, Bank of America notes that the increasing consolidation and interdependence of financial entities and technology systems amplify these risks. A cybersecurity threat or incident affecting one or more third parties, including cloud service providers, could adversely impact the company by increasing the risk of operational failure and loss (Bank_of_America, Item 1A). The firm also faces reputational harm if it fails to properly manage potential conflicts of interest or mishandle personal, confidential, or proprietary information, which could lead to regulatory, legal, and operational risks that adversely affect its financial condition and results of operations (Bank_of_America, Item 1A).",
+          "scores": {
+            "faithfulness": 5,
+            "completeness": 4,
+            "citation_accuracy": 5,
+            "mean": 4.667,
+            "reasoning": "The answer accurately reflects the retrieved context with correct citations and covers key operational risks like third-party reliance and cybersecurity, though it omits other specific risk factors mentioned in the text such as competition."
+          },
+          "gen_time_s": 6.8,
+          "judge_time_s": 4.4
+        }
+      }
+    },
+    "Q011": {
+      "question": "How do large banks describe their credit risk management frameworks?",
+      "type": "multi_source",
+      "configs": {
+        "hybrid_reranked": {
+          "retrieved_chunk_ids": [
+            "MORGAN_S_2026_HIER_0015",
+            "MORGAN_S_2026_HIER_0033",
+            "MORGAN_S_2026_HIER_0035",
+            "GOLDMAN__2026_HIER_0042",
+            "JPMORGAN_2026_HIER_0194"
+          ],
+          "recall_at_1": 0,
+          "recall_at_5": 1,
+          "answer": "Large banks describe their credit risk management frameworks by defining credit risk as the potential loss arising from a borrower, counterparty, or issuer failing to meet financial obligations. Morgan Stanley notes that it incurs significant credit risk exposure through its Institutional Securities business segment via activities such as extending client credit, entering into derivative contracts, and acting as a clearing broker (Morgan Stanley, Credit Risk). Additionally, Morgan Stanley manages credit risk in its Wealth Management segment by lending to individual investors through margin loans, HELOCs, and structured loans, which are often secured by collateral that may fluctuate in value (Morgan Stanley, Credit Risk).\n\nThe management of these risks involves rigorous monitoring and stress testing frameworks. JPMorgan Chase utilizes stress testing to assess the impact of alternative economic and business scenarios on earnings and capital, applying macroeconomic factors and global market shocks uniformly across its businesses to capture key vulnerabilities (JPMorgan Chase, Item 15. Exhibits, Financial Statement Schedules). Furthermore, Morgan Stanley highlights that while it regularly reviews credit exposures, default risk can still arise from unforeseeable events, particularly noting the systemic risk associated with defaults by large financial institutions or clearinghouses (Morgan Stanley, December 2025 Form 10-K).",
+          "scores": {
+            "faithfulness": 5,
+            "completeness": 4,
+            "citation_accuracy": 5,
+            "mean": 4.667,
+            "reasoning": "The answer accurately reflects the context with correct citations and covers key aspects of credit risk definition and management, though it omits specific regulatory frameworks mentioned in other documents."
+          },
+          "gen_time_s": 7.2,
+          "judge_time_s": 4.3
+        },
+        "hybrid_no_rerank": {
+          "retrieved_chunk_ids": [
+            "MORGAN_S_2026_HIER_0110",
+            "MICROSOF_2025_HIER_0035",
+            "MORGAN_S_2026_HIER_0111",
+            "JPMORGAN_2026_HIER_0005",
+            "CITIGROU_2026_HIER_0257"
+          ],
+          "recall_at_1": 0,
+          "recall_at_5": 0,
+          "answer": "The provided context does not contain descriptions of how large banks describe their credit risk management frameworks; it primarily focuses on liquidity resources, regulatory capital ratios, and funding strategies rather than specific credit risk methodologies. For instance, Morgan Stanley details its Liquidity Coverage Ratio (LCR) and Net Stable Funding Ratio (NSFR), noting that these metrics ensure sufficient Eligible High-Quality Liquid Assets to cover net cash outflows over a 30-day stress period and maintain stable funding over a one-year horizon (Morgan Stanley, Management\u2019s Discussion and Analysis). Similarly, JPMorgan Chase discusses its compliance with Federal Reserve capital and liquidity requirements consistent with the Basel III framework, but does not elaborate on credit risk management processes (JPMorgan Chase, Item 1. Business).\n\nWhile Citigroup provides data regarding its Allowance for Credit Losses (ACL) and specific loan metrics within its U.S. Personal Banking segment, it does not offer a narrative description of its overarching credit risk management framework in the provided text (Citigroup, DOCUMENT). Microsoft Corp is also mentioned but discusses security, privacy, and execution risks related to its products rather than banking credit risk frameworks (Microsoft Corp, Item 1A. Risk Factors). Therefore, based strictly on the provided context, there is insufficient information to describe how these entities articulate their credit risk management frameworks beyond general liquidity and capital compliance statements.",
+          "scores": {
+            "faithfulness": 5,
+            "completeness": 3,
+            "citation_accuracy": 5,
+            "mean": 4.333,
+            "reasoning": "The answer accurately reflects the absence of credit risk framework descriptions in the provided context while correctly citing the available liquidity and capital information."
+          },
+          "gen_time_s": 7.7,
+          "judge_time_s": 4.3
+        },
+        "dense_only": {
+          "retrieved_chunk_ids": [
+            "MORGAN_S_2026_HIER_0110",
+            "MORGAN_S_2026_HIER_0111",
+            "CITIGROU_2026_HIER_0257",
+            "GOLDMAN__2026_HIER_0444",
+            "MORGAN_S_2026_HIER_0395"
+          ],
+          "recall_at_1": 0,
+          "recall_at_5": 0,
+          "answer": "Based on the provided context, there is no information describing how large banks characterize or detail their general credit risk management frameworks. The documents focus primarily on liquidity resources, regulatory capital ratios (such as the Liquidity Coverage Ratio and Net Stable Funding Ratio), funding strategies, and specific accounting treatments for borrowings and allowances for credit losses.\n\nMorgan Stanley outlines its approach to managing liquidity risk rather than credit risk, stating that it pursues a strategy of diversification across secured and unsecured funding sources by product, investor, and region to reduce the risk of operational disruption [Morgan_Stanley (2026) \u2014 DOCUMENT]. The firm also manages its balance sheet globally through diverse sources including equity capital, borrowings, deposits, and securities lending, with Treasury allocating interest expense based on the tenor and interest rate profile of funded assets [Morgan_Stanley (2026) \u2014 DOCUMENT].\n\nGoldman Sachs provides details regarding its unsecured long-term borrowings, noting that these consist principally of senior borrowings with maturities extending through 2070 and are primarily fixed-rate obligations [Goldman_Sachs (2026) \u2014 Item 8. Financial Statements and Supplementary Data]. The context specifies interest rate ranges for U.S. dollar-denominated borrowings (1.43% to 6.75%) and non-U.S. dollar-denominated borrowings (0.25% to 7.25%), but does not describe a broader credit risk management framework [Goldman_Sachs (2026) \u2014 Item 8. Financial Statements and Supplementary Data].",
+          "scores": {
+            "faithfulness": 5,
+            "completeness": 3,
+            "citation_accuracy": 5,
+            "mean": 4.333,
+            "reasoning": "The answer accurately reflects the absence of credit risk framework descriptions in the provided context and correctly cites the available liquidity and borrowing information."
+          },
+          "gen_time_s": 9.1,
+          "judge_time_s": 4.8
+        }
+      }
+    },
+    "Q012": {
+      "question": "What technology and cybersecurity risks do both financial and technology companies face?",
+      "type": "multi_source",
+      "configs": {
+        "hybrid_reranked": {
+          "retrieved_chunk_ids": [
+            "BANK_OF__2026_HIER_0047",
+            "JPMORGAN_2026_HIER_0302",
+            "JPMORGAN_2026_HIER_0047",
+            "BLACKROC_2024_HIER_0112",
+            "GOLDMAN__2026_HIER_0296"
+          ],
+          "recall_at_1": 1,
+          "recall_at_5": 1,
+          "answer": "Both Bank of America and JPMorganChase highlight significant third-party technology, cybersecurity, and operational risks arising from their reliance on vendors, supply chains, and other external entities. Bank of America notes that third parties have varying levels of security resources and may be more vulnerable to cyberattacks, creating risks related to critical software defects and the failure to promptly report incidents (Item 1A). Similarly, JPMorganChase identifies vendors, clearing houses, and financial intermediaries as sources of risk, noting that system breakdowns, misconduct by third-party employees, or supply-chain compromises could have a material adverse effect on the firm (Item 15).\n\nBoth companies also emphasize the dangers posed by widespread interconnectivity within the financial ecosystem. Bank of America warns that due to consolidation and interdependence among financial entities, a cybersecurity threat affecting one entity could adversely impact them through operational failure or loss (Item 1A). JPMorganChase echoes this concern, stating that the disruption of an operational system involving one entity, such as a clearing bank or payments processor, could cause industry-wide disruptions that materially affect their ability to conduct business (Item 1A). Additionally, both firms acknowledge that threat actors are constantly evolving their techniques, making it difficult to anticipate and prevent all cyberattacks (Bank of America, Item 1A; JPMorganChase, Item 1A).",
+          "scores": {
+            "faithfulness": 5,
+            "completeness": 4,
+            "citation_accuracy": 3,
+            "mean": 4.0,
+            "reasoning": "The answer is faithful and addresses the core question well, but contains citation errors by attributing JPMorgan Chase's interconnectivity risks to Item 1A instead of Item 3."
+          },
+          "gen_time_s": 7.7,
+          "judge_time_s": 4.5
+        },
+        "hybrid_no_rerank": {
+          "retrieved_chunk_ids": [
+            "MICROSOF_2025_HIER_0022",
+            "GOLDMAN__2026_HIER_0058",
+            "BANK_OF__2026_HIER_0227",
+            "BANK_OF__2026_HIER_0047",
+            "JPMORGAN_2026_HIER_0302"
+          ],
+          "recall_at_1": 0,
+          "recall_at_5": 1,
+          "answer": "Both financial institutions like Bank of America and JPMorgan Chase, and technology firms like Microsoft, face significant third-party technology and cybersecurity risks arising from their reliance on external vendors, supply chains, and cloud service providers. Bank of America notes that these third parties have varying levels of security resources and may be more vulnerable to cyberattacks, creating a risk where threat actors exploit these weaknesses to impact the financial entity (Bank_of_America, 2026 \u2014 Item 1A. Risk Factors). Similarly, JPMorgan Chase identifies vendors, exchanges, and clearing houses as sources of cybersecurity risk, warning that third-party incidents such as system failures or supply-chain compromises could materially adversely affect the firm by delivering compromised software or resulting in lost information (JPMorgan_Chase, 2026 \u2014 Item 15. Exhibits, Financial Statement Schedules).\n\nAdditionally, these companies face risks related to the increasing consolidation and interdependence of financial entities and technology systems, where a breach affecting one entity could cascade and cause operational failure for others. Bank of America highlights that disparate information systems often need to be integrated on an accelerated basis following such incidents, amplifying the risk of loss (Bank_of_America, 2026 \u2014 Item 1A. Risk Factors). Microsoft faces comparable competitive and strategic risks in a rapidly evolving technology sector where barriers to entry are low and disruptive technologies frequently shift user needs, requiring continuous innovation to remain competitive against both diversified global companies and specialized firms (Microsoft_Corp, 2025 \u2014 ITEM 1A. RISK FACTORS).",
+          "scores": {
+            "faithfulness": 5,
+            "completeness": 4,
+            "citation_accuracy": 5,
+            "mean": 4.667,
+            "reasoning": "The answer accurately reflects the context regarding third-party risks and system interdependence for financial firms and competitive risks for Microsoft with correct citations, though it omits specific regulatory compliance risks mentioned in the Goldman Sachs text."
+          },
+          "gen_time_s": 8.3,
+          "judge_time_s": 4.5
+        },
+        "dense_only": {
+          "retrieved_chunk_ids": [
+            "BANK_OF__2026_HIER_0227",
+            "MICROSOF_2025_HIER_0022",
+            "BANK_OF__2026_HIER_0065",
+            "JPMORGAN_2026_HIER_0047",
+            "MORGAN_S_2026_HIER_0060"
+          ],
+          "recall_at_1": 0,
+          "recall_at_5": 0,
+          "answer": "Both financial institutions like Bank of America and JPMorgan Chase, as well as technology firms like Microsoft, identify cybersecurity as a critical operational risk involving ongoing threats to their systems, networks, and data. Bank of America describes cybersecurity as a \"key operational risk\" where its global workforce and operations centers are targeted by an increasing number of cyberattacks (Bank_of_America, Item 7). Similarly, JPMorgan Chase notes that it experiences numerous cyber attacks designed to introduce malware, obtain unauthorized access to confidential information, disrupt services, or extort money through ransomware (JPMorgan_Chase, Item 1A. Risk Factors).\n\nIn addition to direct cyber threats, these companies face risks related to the widespread interconnectivity of financial market infrastructures and the rapid evolution of disruptive technologies. JPMorgan Chase highlights that disruptions in one entity\u2019s operational system can cause industry-wide failures due to this interconnectivity (JPMorgan_Chase, Item 1A. Risk Factors). Meanwhile, Microsoft faces intense competition from firms with rapidly evolving technologies and shifting user needs, noting that barriers to entry are low and new products are frequently introduced (Microsoft_Corp, ITEM 1A. RISK FACTORS). Bank of America also acknowledges that emerging technologies and e-commerce have lowered barriers for non-traditional providers to compete in providing electronic financial solutions, which can lead to pricing pressure and reduced market share (Bank_of_America, Item 1A. Risk Factors).",
+          "scores": {
+            "faithfulness": 5,
+            "completeness": 4,
+            "citation_accuracy": 5,
+            "mean": 4.667,
+            "reasoning": "The answer accurately reflects the context with correct citations and addresses both cybersecurity and technology risks for financial and tech companies, though it could be more comprehensive by including third-party risk details."
+          },
+          "gen_time_s": 7.9,
+          "judge_time_s": 4.4
+        }
+      }
+    },
+    "Q013": {
+      "question": "How do financial companies describe their stress testing processes?",
+      "type": "multi_source",
+      "configs": {
+        "hybrid_reranked": {
+          "retrieved_chunk_ids": [
+            "GOLDMAN__2026_HIER_0212",
+            "JPMORGAN_2026_HIER_0193",
+            "JPMORGAN_2026_HIER_0194",
+            "GOLDMAN__2026_HIER_0237",
+            "BANK_OF__2026_HIER_0137"
+          ],
+          "recall_at_1": 1,
+          "recall_at_5": 1,
+          "answer": "Financial companies describe their stress testing processes as integral components of capital planning designed to assess vulnerabilities under severe economic and business scenarios. Goldman Sachs states that its process identifies and measures material risks, including market, credit, operational, and liquidity risks, by incorporating internally designed severely adverse scenarios alongside those required by the Federal Reserve Bank (FRB) [Goldman_Sachs (2026), Item 4]. Similarly, JPMorgan Chase notes that stress testing evaluates the potential impact of alternative economic scenarios on earnings and capital, using centrally defined macroeconomic factors, global market shocks, and idiosyncratic operational risk events to capture key vulnerabilities [JPMorgan_Chase (2026), Item 15].\n\nThe results of these tests are used to ensure adequate capitalization and inform regulatory compliance. Goldman Sachs integrates stress testing into its internal capital adequacy assessment to ensure it remains adequately capitalized after a severe stress event, while also submitting annual capital plans for FRB review under CCAR rules [Goldman_Sachs (2026), Item 4]. JPMorgan Chase uses supervisory stress test results to determine its Stress Capital Buffer requirement and integrates stress testing protocols with its Internal Capital Adequacy Assessment Process (ICAAP) to inform the Board of Directors regarding capital management [JPMorgan_Chase (2026), Item 15]. Bank of America conducts regular capital scenario management and stress forecasting to understand balance sheet, earnings, and capital sensitivities, serving as a key component of its overall risk management practices [Bank_of_America (2026), Item 7].",
+          "scores": {
+            "faithfulness": 5,
+            "completeness": 4,
+            "citation_accuracy": 5,
+            "mean": 4.667,
+            "reasoning": "The answer accurately reflects the context with correct citations and faithful claims, though it omits specific details from Goldman Sachs regarding firmwide stress testing components found in Item 4."
+          },
+          "gen_time_s": 8.5,
+          "judge_time_s": 4.5
+        },
+        "hybrid_no_rerank": {
+          "retrieved_chunk_ids": [
+            "JPMORGAN_2026_HIER_0219",
+            "BANK_OF__2026_HIER_0137",
+            "GOLDMAN__2026_HIER_0306",
+            "GOLDMAN__2026_HIER_0237",
+            "MORGAN_S_2026_HIER_0101"
+          ],
+          "recall_at_1": 0,
+          "recall_at_5": 1,
+          "answer": "Financial companies describe stress testing as a critical component of their risk management frameworks, used to quantify exposure to tail risks, highlight loss concentrations, and assess capital adequacy. Goldman Sachs states that firmwide stress tests are performed regularly to ensure a comprehensive analysis of vulnerabilities by combining financial and nonfinancial risks, including credit, market, liquidity, operational, compliance, strategic, systemic, and emerging risks into their scenarios (Goldman_Sachs, Item 4). Similarly, Bank of America conducts capital scenario management and stress forecasting on a regular basis as part of its Capital Planning, Financial Planning, and Strategic Planning processes to understand balance sheet, earnings, and capital sensitivities to severe economic and business conditions (Bank_of_America, Item 7).\n\nThese processes are also integral to regulatory compliance and liquidity management. JPMorgan Chase bases its estimated net cash outflows on standardized stress rates prescribed in the Liquidity Coverage Ratio (LCR) rule, which are applied to the balances of assets, sources of funds, and obligations to ensure they meet minimum requirements (JPMorgan_Chase, Item 15). Furthermore, Goldman Sachs utilizes stress tests as part of its capital planning process to assess capital adequacy, while Bank of America uses these forecasts to provide confidence to management, regulators, and investors regarding the potential impacts on financial resiliency (Goldman_Sachs, Item 4; Bank_of_America, Item 7).",
+          "scores": {
+            "faithfulness": 5,
+            "completeness": 4,
+            "citation_accuracy": 5,
+            "mean": 4.667,
+            "reasoning": "The answer accurately reflects the retrieved context with correct citations and covers the main descriptions of stress testing from multiple companies, though it omits minor details like ad hoc tests."
+          },
+          "gen_time_s": 8.3,
+          "judge_time_s": 4.9
+        },
+        "dense_only": {
+          "retrieved_chunk_ids": [
+            "JPMORGAN_2026_HIER_0219",
+            "GOLDMAN__2026_HIER_0306",
+            "MORGAN_S_2026_HIER_0101",
+            "JPMORGAN_2026_HIER_0606",
+            "GOLDMAN__2026_HIER_0191"
+          ],
+          "recall_at_1": 0,
+          "recall_at_5": 0,
+          "answer": "JPMorgan Chase describes its liquidity coverage ratio (LCR) framework as being based on standardized stress outflow and inflow rates prescribed by the LCR rule, which are applied to the balances of the firm\u2019s assets, sources of funds, and obligations [JPMorgan_Chase, Item 15. Exhibits, Financial Statement Schedules]. The firm calculates these metrics for both the consolidated firm and JPMorgan Chase Bank, N.A., ensuring that the LCR remains at a minimum of 100% [JPMorgan_Chase, Item 15. Exhibits, Financial Statement Schedules].\n\nGoldman Sachs outlines changes to its Assets Under Supervision (AUS) classification in the fourth quarter of 2025 to better reflect underlying investment strategies and advisory relationships [Goldman_Sachs, Item 4. Mine Safety Disclosures]. These adjustments include reclassifying certain AUS from fixed income to alternative investments and moving OCIO assets to be reported with advisory accounts, with prior period amounts conformed to the current presentation [Goldman_Sachs, Item 4. Mine Safety Disclosures].",
+          "scores": {
+            "faithfulness": 4,
+            "completeness": 3,
+            "citation_accuracy": 2,
+            "mean": 3.0,
+            "reasoning": "The answer is factually supported by the context but incorrectly cites Goldman Sachs' AUS changes to 'Mine Safety Disclosures' instead of 'Management\u2019s Discussion and Analysis', and fails to mention stress testing descriptions from other retrieved contexts like Morgan Stanley's impairment tests."
+          },
+          "gen_time_s": 7.3,
+          "judge_time_s": 5.3
+        }
+      }
+    },
+    "Q014": {
+      "question": "What regulatory and compliance risks are common across major financial institutions?",
+      "type": "multi_source",
+      "configs": {
+        "hybrid_reranked": {
+          "retrieved_chunk_ids": [
+            "CITIGROU_2026_HIER_0123",
+            "MORGAN_S_2026_HIER_0035",
+            "BANK_OF__2026_HIER_0053",
+            "GOLDMAN__2026_HIER_0109",
+            "CITIGROU_2026_HIER_0126"
+          ],
+          "recall_at_1": 1,
+          "recall_at_5": 1,
+          "answer": "Major financial institutions face significant regulatory scrutiny, evolving legislation, and complex compliance requirements that vary across jurisdictions. Citigroup notes that large banks must interpret extensive and frequently changing regulations that may overlap or conflict globally, leading to substantial costs and risks (Compliance Risks). Similarly, Bank of America highlights its exposure to comprehensive federal, state, and foreign laws, which can increase operational costs, restrict business scope, and require significant adjustments to governance and risk management processes (Item 1A. Risk Factors). Goldman Sachs adds that businesses are increasingly subject to specific laws regarding surveillance, encryption, and data on-shoring, while consumer-facing operations face heightened regulatory scrutiny compared to institutional clients (Item 1A. Risk Factors).\n\nOperational and conduct risks are also prevalent across the industry, often intertwined with legal and compliance failures. Morgan Stanley defines operational risk to include inadequate processes, human error, or cyberattacks that may manifest as legal and regulatory compliance issues (Operational Risk). Citigroup emphasizes regulator focus on \"conduct risk,\" which involves employee behavior that could harm clients or market integrity, noting that such scrutiny can lead to investigations and remediation requirements (Compliance Risks). Furthermore, Goldman Sachs points out that regulators are increasingly holding institutions liable for client misconduct or establishing new fiduciary obligations, which increases the potential for legal liabilities and reputational damage if breaches occur (Item 1A. Risk Factors).",
+          "scores": {
+            "faithfulness": 5,
+            "completeness": 4,
+            "citation_accuracy": 5,
+            "mean": 4.667,
+            "reasoning": "The answer accurately reflects the retrieved context with correct attributions and covers the main regulatory risks, though it omits specific details like sanctions or capital buffers found in the source text."
+          },
+          "gen_time_s": 7.9,
+          "judge_time_s": 4.6
+        },
+        "hybrid_no_rerank": {
+          "retrieved_chunk_ids": [
+            "BANK_OF__2026_HIER_0053",
+            "BANK_OF__2026_HIER_0056",
+            "MORGAN_S_2026_HIER_0035",
+            "BANK_OF__2026_HIER_0226",
+            "MORGAN_S_2026_HIER_0181"
+          ],
+          "recall_at_1": 1,
+          "recall_at_5": 1,
+          "answer": "Major financial institutions face significant regulatory, compliance, and legal (LRR) risks stemming from operating in a highly regulated industry subject to evolving federal, state, and foreign laws. Bank of America notes that these regulations can increase compliance costs, restrict business scope, require higher capital holdings, and necessitate changes to employment practices and risk management processes [Bank_of_America (2026) \u2014 Item 1A. Risk Factors]. Similarly, Morgan Stanley highlights that legal and regulatory compliance risk includes the potential for sanctions, material financial loss through fines or penalties, business limitations, and reputational damage resulting from failures to comply with applicable laws and self-regulatory standards [Morgan_Stanley (2026) \u2014 DOCUMENT].\n\nBoth institutions also emphasize risks associated with emerging technologies and third-party dependencies. Bank of America points out that LRRs related to AI, cybersecurity, and data management are rapidly evolving, potentially increasing compliance costs and regulatory scrutiny [Bank_of_America (2026) \u2014 Item 1A. Risk Factors]. Morgan Stanley includes operational risk in its compliance framework, noting exposure to failures or breaches of security systems by third parties, as well as risks related to anti-money laundering, terrorist financing, and anti-corruption rules [Morgan_Stanley (2026) \u2014 DOCUMENT; Bank_of_America (2026) \u2014 Item 1A. Risk Factors]. Additionally, both firms face the challenge of overlapping investigations by multiple regulators globally due to their complex operations and potential misconduct by employees or bad actors [Bank_of_America (2026) \u2014 Item 1A. Risk Factors; Morgan_Stanley (2026) \u2014 DOCUMENT].",
+          "scores": {
+            "faithfulness": 5,
+            "completeness": 4,
+            "citation_accuracy": 5,
+            "mean": 4.667,
+            "reasoning": "The answer accurately reflects the retrieved context with correct citations and covers key risks, though it omits some specific details like systemic risk found in the Morgan Stanley text."
+          },
+          "gen_time_s": 9.0,
+          "judge_time_s": 4.5
+        },
+        "dense_only": {
+          "retrieved_chunk_ids": [
+            "BANK_OF__2026_HIER_0053",
+            "CITIGROU_2026_HIER_0126",
+            "JPMORGAN_2026_HIER_0305",
+            "MORGAN_S_2026_HIER_0181",
+            "CITIGROU_2026_HIER_0240"
+          ],
+          "recall_at_1": 1,
+          "recall_at_5": 1,
+          "answer": "Major financial institutions face significant regulatory and compliance risks stemming from evolving laws, complex enforcement regimes, and heightened scrutiny of employee conduct. Bank of America notes that operating in a highly regulated industry increases compliance costs, restricts business scope, and requires adherence to numerous federal, state, and foreign regulations (Item 1A. Risk Factors). Similarly, Citigroup highlights that the complexity of U.S. regulatory regimes combined with global operations can lead to overlapping investigations and proceedings across multiple jurisdictions, while also facing increased focus on \"conduct risk\" related to employee behavior (DOCUMENT).\n\nCommon compliance risks include failures in anti-money laundering, market conduct, fiduciary duties, and data management, which expose firms to fines, penalties, and reputational harm. JPMorgan Chase defines compliance risk as the failure to comply with laws and regulations across various jurisdictions, including risks related to trading activities and fiduciary standards (Item 15. Exhibits, Financial Statement Schedules). Morgan Stanley identifies similar risks involving anti-corruption rules, AML requirements, and contractual enforceability, noting that non-compliance can result in material financial loss or limitations on business operations (DOCUMENT).\n\nInstitutional responses to these risks involve robust governance frameworks and independent oversight to manage compliance effectively. Citigroup employs an Independent Compliance Risk Management function to drive a culture of control and oversee an integrated framework for enterprise-wide compliance (DOCUMENT). JPMorgan Chase utilizes an independent Operational Risk and Compliance Organization that provides review, monitoring, and oversight of business operations to ensure adherence to applicable laws and regulations (Item 15. Exhibits, Financial Statement Schedules).",
+          "scores": {
+            "faithfulness": 5,
+            "completeness": 4,
+            "citation_accuracy": 5,
+            "mean": 4.667,
+            "reasoning": "The answer accurately reflects the retrieved context with correct attributions and covers the main regulatory risks and institutional responses comprehensively."
+          },
+          "gen_time_s": 8.5,
+          "judge_time_s": 4.3
+        }
+      }
+    },
+    "Q015": {
+      "question": "How do companies describe climate-related or ESG risks in their filings?",
+      "type": "multi_source",
+      "configs": {
+        "hybrid_reranked": {
+          "retrieved_chunk_ids": [
+            "BLACKROC_2024_HIER_0035",
+            "BLACKROC_2024_HIER_0089",
+            "MORGAN_S_2026_HIER_0182",
+            "CITIGROU_2026_HIER_0244",
+            "BLACKROC_2024_HIER_0121"
+          ],
+          "recall_at_1": 1,
+          "recall_at_5": 1,
+          "answer": "Companies describe climate-related and ESG risks as multifaceted issues involving regulatory, physical, and transition components that can amplify other financial risk categories. BlackRock notes in its Item 1A Risk Factors that these topics are subject to increased regulatory focus globally, with new disclosure standards from bodies like the ISSB and proposed SEC rules requiring substantial climate-related disclosures and enhanced ESG reporting by investment advisers (BlackRock, Item 1A. Risk Factors). Additionally, BlackRock lists \"increasing focus from stakeholders regarding ESG matters\" as a specific risk factor that could adversely affect its reputation (BlackRock, Item 4. Mine Safety Disclosures).\n\nMorgan Stanley and Citigroup characterize climate risk as an overarching driver of credit, operational, strategic, and reputational risks rather than isolated events. Morgan Stanley defines physical risks as harm from acute or chronic climate events and transition risks as changes in policy, technology, and market sentiment, noting that these can diminish borrower repayment capacity or expose the firm to litigation (Morgan Stanley, Climate Risk). Similarly, Citigroup describes climate risk arising from both physical impacts on facilities and transition risks related to high-carbon industries, stating it acts as a driver for credit and strategic risks if not properly managed within their Climate Risk Management Framework (Citigroup, Climate Risk).",
+          "scores": {
+            "faithfulness": 5,
+            "completeness": 4,
+            "citation_accuracy": 3,
+            "mean": 4.0,
+            "reasoning": "The answer is faithful and comprehensive but contains a significant citation error by attributing the 'increasing focus from stakeholders' risk factor to BlackRock's Item 4 Mine Safety Disclosures instead of Item 1A Risk Factors."
+          },
+          "gen_time_s": 7.1,
+          "judge_time_s": 4.4
+        },
+        "hybrid_no_rerank": {
+          "retrieved_chunk_ids": [
+            "MORGAN_S_2026_HIER_0182",
+            "BLACKROC_2024_HIER_0089",
+            "BLACKROC_2024_HIER_0063",
+            "BLACKROC_2024_HIER_0035",
+            "BANK_OF__2026_HIER_0038"
+          ],
+          "recall_at_1": 1,
+          "recall_at_5": 1,
+          "answer": "Companies describe climate-related risks as encompassing both physical impacts, such as acute events like floods and chronic shifts like rising sea levels, and transition risks stemming from policy, legal, technology, and market changes (Morgan Stanley, Climate Risk). These risks are viewed as interconnected with other risk categories; for instance, physical risks can increase credit risk by diminishing borrower repayment capacity or damaging collateral value, while transition risks may amplify liquidity risk and expose firms to reputational, compliance, or litigation issues due to increased regulatory scrutiny (Morgan Stanley, Climate Risk).\n\nRegarding ESG and sustainability, companies note that these areas are subject to heightened regulatory focus globally. For example, BlackRock highlights the release of standards by the International Sustainability Standards Board (\u201cISSB\u201d) and proposed SEC rules requiring substantial climate-related disclosures regarding governance, risk management, and greenhouse gas emissions (BlackRock, Item 1A. Risk Factors; BlackRock, Item 1. Business). Additionally, companies acknowledge that geopolitical unrest and natural disasters can adversely affect global markets and operations, potentially leading to declines in assets under management, revenue, and earnings (BlackRock, Item 1A. Risk Factors).",
+          "scores": {
+            "faithfulness": 5,
+            "completeness": 4,
+            "citation_accuracy": 5,
+            "mean": 4.667,
+            "reasoning": "The answer accurately reflects the context with correct citations and covers both physical/transition risks and regulatory ESG focus, though it omits specific details like Bank of America's risk factors."
+          },
+          "gen_time_s": 6.7,
+          "judge_time_s": 4.2
+        },
+        "dense_only": {
+          "retrieved_chunk_ids": [
+            "MORGAN_S_2026_HIER_0182",
+            "BLACKROC_2024_HIER_0063",
+            "BANK_OF__2026_HIER_0038",
+            "CITIGROU_2026_HIER_0426",
+            "CITIGROU_2026_HIER_0592"
+          ],
+          "recall_at_1": 1,
+          "recall_at_5": 1,
+          "answer": "Companies describe climate-related risks as comprising both physical risks, such as acute events like floods and chronic shifts like rising sea levels, and transition risks stemming from policy, legal, technology, and market changes (Morgan Stanley, Climate Risk). These risks are viewed as overarching factors that can amplify other risk categories; for instance, physical risks may increase credit risk by diminishing borrowers' repayment capacity or impacting collateral value, while transition risks could expose firms to reputational, compliance, and litigation risks due to increased regulatory scrutiny (Morgan Stanley, Climate Risk).\n\nIn their filings, companies also note that climate-related events can adversely affect business operations, products, clients, and financial metrics such as assets under management, revenue, and earnings (BlackRock, Item 1A. Risk Factors; Bank of America, Item 1A. Risk Factors). To manage these interconnected threats, firms have developed processes to embed climate risk considerations into their broader risk management practices and governance structures, often overseen by specific committees like a Climate Risk Committee or the Board Risk Committee (Morgan Stanley, Climate Risk).",
+          "scores": {
+            "faithfulness": 5,
+            "completeness": 4,
+            "citation_accuracy": 5,
+            "mean": 4.667,
+            "reasoning": "The answer accurately reflects the context regarding physical and transition risks, their impacts on financial metrics, and governance structures with correct citations, though it omits some minor details found in the broader context."
+          },
+          "gen_time_s": 6.9,
+          "judge_time_s": 4.7
+        }
+      }
+    }
+  },
+  "summary": {
+    "hybrid_reranked": {
+      "description": "dense k=20 + BM25 k=20 + RRF k=60 + cross-encoder top5",
+      "n_questions": 15,
+      "recall_at_1": 0.933,
+      "recall_at_5": 1.0,
+      "avg_faithfulness": 5.0,
+      "avg_completeness": 4.2,
+      "avg_citation_accuracy": 4.6,
+      "avg_mean_score": 4.6
+    },
+    "hybrid_no_rerank": {
+      "description": "dense k=20 + BM25 k=20 + RRF k=60 top5, no cross-encoder",
+      "n_questions": 15,
+      "recall_at_1": 0.6,
+      "recall_at_5": 0.867,
+      "avg_faithfulness": 4.933,
+      "avg_completeness": 3.867,
+      "avg_citation_accuracy": 4.467,
+      "avg_mean_score": 4.422
+    },
+    "dense_only": {
+      "description": "pgvector cosine top-5, no BM25/RRF/re-ranker",
+      "n_questions": 15,
+      "recall_at_1": 0.533,
+      "recall_at_5": 0.667,
+      "avg_faithfulness": 4.867,
+      "avg_completeness": 3.867,
+      "avg_citation_accuracy": 4.6,
+      "avg_mean_score": 4.445
+    }
+  }
+}

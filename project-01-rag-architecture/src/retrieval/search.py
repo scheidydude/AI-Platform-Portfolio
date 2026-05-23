@@ -260,3 +260,22 @@ def hybrid_search(
     sparse = bm25_index.retrieve(query, k=k_sparse)
     fused = rrf_fuse(dense, sparse, k=rrf_k, top_n=top_n_fused)
     return rerank(query, fused, top_n=top_n_rerank)
+
+
+def hybrid_no_rerank(
+    query: str,
+    bm25_index: BM25Index,
+    k_dense: int = 20,
+    k_sparse: int = 20,
+    rrf_k: int = 60,
+    top_n: int = 5,
+) -> List[ChunkResult]:
+    """Dense + BM25 + RRF, no cross-encoder. Ablation for ADR-004."""
+    dense = dense_retrieve(query, k=k_dense)
+    sparse = bm25_index.retrieve(query, k=k_sparse)
+    return rrf_fuse(dense, sparse, k=rrf_k, top_n=top_n)
+
+
+def dense_top_n(query: str, top_n: int = 5) -> List[ChunkResult]:
+    """Dense-only retrieval, no BM25 or re-ranker. Ablation for ADR-003."""
+    return dense_retrieve(query, k=top_n)

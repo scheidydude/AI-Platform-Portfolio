@@ -67,10 +67,17 @@ tradeoff accepted: added complexity of maintaining two retrieval paths. Justifie
 
 ## Eval Impact
 
-*(Populated after Phase 3 eval scoring)*
+**Measured:** Phase 4, 2026-05-23 — 15 in-scope questions, Qwen3.6-35B judge, `eval/results/phase4_lm_judge_scores.json`
 
-| Config | Retrieval Recall@5 |
-|--------|-------------------|
-| Pure dense | TBD |
-| Hybrid (dense + BM25 + RRF) | TBD |
-| Delta | TBD |
+| Config | R@1 | R@5 | Avg Faithfulness | Avg Completeness | Avg Mean Score |
+|--------|-----|-----|-----------------|-----------------|----------------|
+| Dense-only | 0.533 | 0.667 | 4.867 | 3.867 | 4.445 |
+| Hybrid (dense + BM25 + RRF + re-rank) | **0.933** | **1.000** | **5.000** | **4.200** | **4.600** |
+| Delta | **+0.400** | **+0.333** | +0.133 | +0.333 | +0.155 |
+
+**Largest gains from hybrid over dense-only:**
+- Q004 (Goldman Sachs market risk): mean +1.000 — dense missed the MD&A market risk section; BM25 "market risk exposure" exact match surfaced it
+- Q013 (stress testing multi-source): mean +1.667 — dense returned single-company chunks; BM25 term overlap on "stress testing" retrieved multi-company coverage
+- Q001, Q007, Q009: R@1 miss in dense recovered to hit in hybrid
+
+**Verdict:** Hybrid delivers +75% relative R@1 improvement and +50% R@5 improvement over dense-only. Decision confirmed.
