@@ -21,8 +21,10 @@ class TeamConfig(BaseModel):
     enforcement_mode: str = "hard"       # hard | soft | downgrade
     downgrade_threshold_pct: int = 80
     downgrade_to: str = ""
-    routing_strategy: str = "static"
+    routing_strategy: str = "static"    # static | cost_aware | fallback | shadow
     default_backend: str = ""
+    fallback_backend: str = ""           # used when routing_strategy = fallback
+    shadow_backend: str = ""             # used when routing_strategy = shadow
 
 
 class GatewaySettings(BaseModel):

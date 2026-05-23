@@ -28,6 +28,7 @@ Career documentation artifact. All decisions, designs, and tradeoffs recorded he
 | [ADR-005](adr/ADR-005-rate-limiting.md) | Rate Limiting: In-Memory Sliding Window | Accepted | 2026-05-23 |
 | [ADR-006](adr/ADR-006-metrics.md) | Metrics Backend: Prometheus | Accepted | 2026-05-23 |
 | [ADR-007](adr/ADR-007-dashboard.md) | Cost Dashboard: Embedded HTML + Vanilla JS | Accepted | 2026-05-23 |
+| [ADR-008](adr/ADR-008-routing-strategies.md) | Multi-Backend Routing: 4 Strategies + Ollama | Accepted | 2026-05-23 |
 
 ---
 

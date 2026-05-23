@@ -9,6 +9,7 @@ from .config import load_config
 from .metrics import prometheus_output
 from .observability import logger
 from .ratelimit import RateLimiter
+from .router import Router
 from .routes import admin, chat, dashboard, models
 from .state.sqlite import SqliteQuotaStore
 
@@ -31,6 +32,7 @@ async def lifespan(app: FastAPI):
     app.state.store = store
     app.state.backends = initialized_backends
     app.state.rate_limiter = RateLimiter()
+    app.state.router = Router()
 
     logger.info({"event": "startup", "backends": list(initialized_backends), "teams": list(config.teams)})
     yield

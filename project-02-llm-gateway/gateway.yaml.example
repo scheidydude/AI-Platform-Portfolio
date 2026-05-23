@@ -1,56 +1,97 @@
 # LLM Gateway configuration
 # Copy to gateway.yaml and fill in real values.
 # WARNING: gateway.yaml is gitignored — never commit real API keys.
+#
+# Quick start with Ollama (free, local):
+#   brew install ollama
+#   ollama serve
+#   ollama pull llama3.2
+#   Then set any team's default_backend or models_allowed to "ollama"
 
 gateway:
   admin_key: "admin-change-me"
-  metrics_backend: "stdout"    # stdout | datadog | prometheus
+  metrics_backend: "stdout"    # stdout | prometheus (prometheus always on at /metrics)
 
+# ---------------------------------------------------------------------------
+# Teams — each team gets an API key, budget, and routing policy
+# ---------------------------------------------------------------------------
 teams:
-  # Team: cloud-engineering
-  # Hard quota, can use both backends, 5M tokens/month
+
+  # Static routing: always use primary backend
   cloud-engineering:
     api_key: "ce-change-me"
     monthly_token_budget: 5_000_000
     models_allowed:
       - primary
-      - local
+      - ollama
     rate_limit_rpm: 60
     enforcement_mode: hard           # hard | soft | downgrade
-    downgrade_threshold_pct: 80
-    downgrade_to: local
     routing_strategy: static
     default_backend: primary
 
-  # Team: compliance
-  # Hard quota, primary only, 2M tokens/month
-  compliance:
-    api_key: "co-change-me"
+  # Fallback routing: try primary, fall back to local Ollama on error
+  platform:
+    api_key: "pt-change-me"
+    monthly_token_budget: 3_000_000
+    models_allowed:
+      - primary
+      - ollama
+    rate_limit_rpm: 40
+    enforcement_mode: soft
+    routing_strategy: fallback
+    default_backend: primary
+    fallback_backend: ollama         # Ollama used when primary is down or 5xx
+
+  # Shadow routing: send real request to primary, fire-and-forget copy to Ollama
+  # Generates comparison logs — feed into Phase 5 vendor analysis
+  ai-research:
+    api_key: "ar-change-me"
     monthly_token_budget: 2_000_000
     models_allowed:
       - primary
+      - ollama
+    rate_limit_rpm: 30
+    enforcement_mode: downgrade
+    downgrade_threshold_pct: 80
+    downgrade_to: ollama
+    routing_strategy: shadow
+    default_backend: primary
+    shadow_backend: ollama           # shadow logs appear as event=shadow_comparison
+
+  # Cost-aware routing: gateway picks cheapest eligible backend automatically
+  # Ollama (cost 0) always wins — good for batch/exploratory work
+  cost-sensitive:
+    api_key: "cs-change-me"
+    monthly_token_budget: 1_000_000
+    models_allowed:
+      - primary
+      - ollama
     rate_limit_rpm: 20
     enforcement_mode: hard
-    routing_strategy: static
-    default_backend: primary
+    routing_strategy: cost_aware     # picks ollama every time (cost = 0)
 
+# ---------------------------------------------------------------------------
+# Backends
+# ---------------------------------------------------------------------------
 backends:
-  # OpenAI-compatible backend — works with OpenAI, Anthropic (via compat endpoint),
-  # or any OpenAI-compatible server.
+
+  # OpenAI-compatible cloud backend
+  # Works with: OpenAI, Anthropic (via compat endpoint), Together AI, etc.
   primary:
     type: openai_compat
     base_url: "https://api.openai.com"
-    api_key: "sk-change-me"          # or set OPENAI_API_KEY and reference here
-    model_id: "gpt-4o-mini"          # sent upstream; override what the client sends
+    api_key: "sk-change-me"
+    model_id: "gpt-4o-mini"          # sent upstream; overrides client's model field
     cost_per_1k_prompt: 0.00015
     cost_per_1k_completion: 0.00060
 
-  # Local llama.cpp server — free, no API key required
-  # Start with: llama-server -m model.gguf --port 8080
-  local:
+  # Ollama — local inference, zero cost, OpenAI-compatible API
+  # Start: ollama serve && ollama pull llama3.2
+  # Swap model_id for whatever you've pulled: llama3.2, mistral, qwen2.5, phi4, etc.
+  ollama:
     type: openai_compat
-    base_url: "http://localhost:8080"
-    api_key: ""
-    model_id: ""                     # empty = pass through client's requested model
+    base_url: "http://localhost:11434"
+    api_key: ""                       # Ollama needs no auth key
+    model_id: "llama3.2"             # change to match your pulled model
     cost_per_1k_prompt: 0.0
     cost_per_1k_completion: 0.0
