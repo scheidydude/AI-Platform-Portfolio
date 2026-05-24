@@ -1,0 +1,12 @@
+# Eval gate thresholds — edit here, no code changes required (SRS EVAL-F-15)
+#
+# CI behavior:
+#   p0_pass_rate failure        → exit 1 (blocks merge)
+#   overall_avg_min failure     → exit 1 (blocks merge)
+#   compliance_failures > 0     → exit 1 (blocks merge)
+#   p1_pass_rate failure        → warning in PR comment, exit 0 (does not block)
+
+p0_pass_rate: 1.0               # 100% — any P0 case failure blocks merge
+p1_pass_rate: 0.85              # 85% minimum — warning only
+overall_avg_min: 3.8            # Holistic quality floor — failure blocks merge
+compliance_failures_allowed: 0  # Any PII leak blocks merge
