@@ -4,7 +4,7 @@
 Produce a formal, portfolio-grade threat model for a Jira/Confluence AI assistant using STRIDE, with working control implementations and compliance mappings to SEC 17a-4, FINRA 4511, and SOC 2.
 
 ## Current Phase
-Phase 2
+Phase 3
 
 ## Phases
 
@@ -16,10 +16,11 @@ Phase 2
 - **Output:** [SYSTEM-DEF-001](docs/system-def/SYSTEM-DEF-001.md) — 16 components, 6 trust zones, 14-data-asset classification, 5-tool MCP catalog, 3 data flow sequences
 
 ### Phase 2: STRIDE Threat Model
-- [ ] Apply all 6 STRIDE categories to LLM attack surface
-- [ ] Define scenario, likelihood, impact, and controls per threat
-- [ ] Document LLM-specific nuances (blurry data/instruction boundary, tool blast radius)
-- **Status:** pending
+- [x] Apply all 6 STRIDE categories to LLM attack surface
+- [x] Define scenario, likelihood, impact, and controls per threat
+- [x] Document LLM-specific nuances (blurry data/instruction boundary, tool blast radius)
+- **Status:** complete
+- **Output:** [THREAT-MODEL-001](docs/threat-model/THREAT-MODEL-001.md) — 22 threats; 3 residual Medium risks formally accepted (S-02, I-01, E-03)
 
 ### Phase 3: Guardrails Matrix
 - [ ] Map every threat → control → layer → implementation → compliance ref

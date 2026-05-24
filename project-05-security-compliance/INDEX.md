@@ -51,11 +51,16 @@
 |----------|-------------|--------|
 | [SYSTEM-DEF-001](docs/system-def/SYSTEM-DEF-001.md) | Component inventory, trust boundaries, data flows, MCP tool catalog, interface catalog | **Complete** |
 
-## Threat Model Deliverables (Phase 2–3)
+## Threat Model (Phase 2)
 
 | Document | Description | Status |
 |----------|-------------|--------|
-| [findings.md](findings.md) § STRIDE | Full 6-category threat inventory | Draft |
+| [THREAT-MODEL-001](docs/threat-model/THREAT-MODEL-001.md) | 22 threats across all 6 STRIDE categories; component mapping; residual risk acceptance | **Complete** |
+
+## Guardrails and Controls (Phase 3)
+
+| Document | Description | Status |
+|----------|-------------|--------|
 | Guardrails Matrix | Threat → control → layer → implementation → compliance mapping | Pending |
 | System Prompt Template | Hardened system prompt | Pending |
 
@@ -89,7 +94,7 @@
 - [x] All Phase 1 ADRs written and accepted (ADR-001 through ADR-005)
 - [x] SRS complete with acceptance criteria (FR-1 through FR-6)
 - [x] DESIGN-001 includes full system boundary diagram and attack path walkthroughs
-- [ ] STRIDE threat model covers all 6 categories
+- [x] STRIDE threat model covers all 6 categories (THREAT-MODEL-001: 22 threats, 15 High/Critical pre-control, 3 residual Medium)
 - [ ] Guardrails matrix: every threat mapped to control + compliance ref
 - [ ] Two working control implementations with passing tests
 - [ ] System prompt hardening template complete
