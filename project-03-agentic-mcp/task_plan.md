@@ -13,7 +13,7 @@
 | 1 | Architecture design | `complete` | 1–2 | All ADRs accepted 2026-05-23 |
 | 2 | MCP wiring | `complete` | 3–4 | SearXNG MCP server + Researcher agent |
 | 3 | Loop prevention | `complete` | 5–6 | Escape conditions, retry tracking |
-| 4 | Orchestration | `not_started` | 7–8 | Sequential first, then streaming eval |
+| 4 | Orchestration | `complete` | 7–8 | Sequential first, then streaming eval |
 | 5 | Failure mode docs | `not_started` | 9–10 | Deliberate breaks + lessons learned |
 
 ---
@@ -84,15 +84,15 @@ Default `on_exceed`: `"return_partial"` — partial answer with gaps > silent fa
 
 ## Phase 4 — Orchestration
 
-**Status:** `not_started`  
+**Status:** `complete`  
 **Goal:** Sequential pipeline working end-to-end; evaluate streaming
 
 ### Tasks
-- [ ] Sequential orchestrator: Planner → Researcher (tasks) → Synthesizer
-- [ ] `PipelineState` persisted to disk/SQLite after every transition
-- [ ] Resume from last completed task without re-running earlier work
-- [ ] Document what breaks in sequential
-- [ ] Evaluate: is streaming worth added complexity?
+- [x] Sequential orchestrator: Planner → Researcher (tasks) → Synthesizer
+- [x] `PipelineState` persisted to disk/SQLite after every transition
+- [x] Resume from last completed task without re-running earlier work
+- [x] Document what breaks in sequential
+- [x] Evaluate: is streaming worth added complexity?
 
 ---
 

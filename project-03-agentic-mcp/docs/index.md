@@ -38,6 +38,7 @@
 | Handoff Schemas | `not_started` | docs/design/handoff-schemas.md | Typed schemas for agent-to-agent communication |
 | Tool Error Handling | `not_started` | docs/design/tool-error-handling.md | Error taxonomy and handling strategies |
 | Loop Prevention | `complete` | [docs/design/loop-prevention.md](design/loop-prevention.md) | Loop detection and escape condition design |
+| Orchestration | `complete` | [docs/design/orchestration.md](design/orchestration.md) | Sequential pipeline, resume, streaming eval |
 
 ---
 
