@@ -35,6 +35,18 @@ Docs scaffold in place. Ready to begin Phase 1 implementation.
 
 **Next action:** Phase 3 — LLM-as-judge pipeline (`docs/design/judge-pipeline-design.md` → `eval/prompts/judge_v1.md` → `src/judge_pipeline.py`).
 
+### Phase 3 complete
+- [x] `docs/design/judge-pipeline-design.md` — rubric, per-case pass logic, run artifact schema, gate config, caching strategy
+- [x] `eval/prompts/judge_v1.md` — versioned judge system prompt; 4 dimensions (faithfulness, task_completion, tone, compliance), 14 flags
+- [x] `eval/gates.yaml` — gate thresholds; p0=100%, p1=85%, avg≥3.8, compliance=0 failures
+- [x] `src/sut.py` — simulated SUT (claude-haiku-4-5); structured JSON output; prompt caching
+- [x] `src/judge_pipeline.py` — judge (claude-sonnet-4-6); loads judge_v1.md; prompt caching
+- [x] `src/eval_runner.py` — orchestrator; dry-run mode; run artifact writer; gate checker; exit code for CI
+- [x] `requirements.txt` — anthropic>=0.40.0, pyyaml>=6.0
+- [x] Smoke tested: `python src/eval_runner.py --dry-run --limit 5` → all 5 PASS, gate PASS
+
+**Next action:** Phase 4 — CI integration (`docs/design/ci-integration-design.md` → `.github/workflows/eval.yml`).
+
 ---
 
 ## Test Results
@@ -51,6 +63,7 @@ Docs scaffold in place. Ready to begin Phase 1 implementation.
 |-------|---------|-----------|-------|
 | 1 — Use case definition | 2026-05-23 | 2026-05-23 | 19 behaviors, 11 P0, 8 P1 |
 | 2 — Eval dataset | 2026-05-23 | 2026-05-23 | 30 cases, all behaviors covered |
+| 3 — Judge pipeline | 2026-05-23 | 2026-05-23 | SUT + judge + runner; smoke tested |
 | 3 — Judge pipeline | — | — | |
 | 4 — CI integration | — | — | |
 | 5 — Production monitoring | — | — | |

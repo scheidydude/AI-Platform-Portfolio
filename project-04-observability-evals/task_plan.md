@@ -4,7 +4,7 @@
 Build a production-grade eval framework for a Jira/Confluence AI help desk system. Prove the system works via LLM-as-judge pipeline wired into CI.
 
 ## Current Phase
-**Phase 3** — LLM-as-judge pipeline
+**Phase 4** — CI integration (GitHub Actions)
 
 ## Phases
 
@@ -12,7 +12,7 @@ Build a production-grade eval framework for a Jira/Confluence AI help desk syste
 |---|-------|--------|------|
 | 1 | Use case definition + behavior inventory | `complete` | 1–2 |
 | 2 | Eval dataset (30+ input/output/expected triples) | `complete` | 3–5 |
-| 3 | LLM-as-judge pipeline | `not_started` | 6–8 |
+| 3 | LLM-as-judge pipeline | `complete` | 6–8 |
 | 4 | CI integration (GitHub Actions) | `not_started` | 9–10 |
 | 5 | Production monitoring design | `not_started` | 11–12 |
 
@@ -20,8 +20,8 @@ Build a production-grade eval framework for a Jira/Confluence AI help desk syste
 
 - [x] Behavior inventory (10+ behaviors, P0/P1 tagged)
 - [x] Eval dataset: 30+ curated input/output/expected triples (JSON)
-- [ ] Judge prompt with structured scoring rubric
-- [ ] Automated judge pipeline (runs locally)
+- [x] Judge prompt with structured scoring rubric
+- [x] Automated judge pipeline (runs locally)
 - [ ] CI workflow (GitHub Actions) — triggers on prompt/model change
 - [ ] Regression detection with configurable gates
 - [ ] Production monitoring design document
@@ -62,3 +62,10 @@ Update `docs/index.md` after every new artifact. Final rollup = complete index w
 | progress.md | Session log | Setup |
 | docs/design/eval-dataset-schema.md | Eval case schema — field definitions and enum values | 2 |
 | eval/dataset.json | 30-case eval dataset, all 19 behaviors covered | 2 |
+| docs/design/judge-pipeline-design.md | Judge pipeline architecture, rubric, gate config | 3 |
+| eval/prompts/judge_v1.md | Versioned judge system prompt | 3 |
+| eval/gates.yaml | Gate thresholds (YAML, no code change required) | 3 |
+| src/sut.py | Simulated SUT (Haiku 4.5, structured JSON output) | 3 |
+| src/judge_pipeline.py | LLM-as-judge scorer (Sonnet 4.6) | 3 |
+| src/eval_runner.py | Orchestrator — full eval loop, gate check, run artifact | 3 |
+| requirements.txt | Python dependencies | 3 |
