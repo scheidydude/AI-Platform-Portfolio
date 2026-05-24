@@ -4,22 +4,22 @@
 Build a production-grade eval framework for a Jira/Confluence AI help desk system. Prove the system works via LLM-as-judge pipeline wired into CI.
 
 ## Current Phase
-**Phase 1** — Use case definition
+**Phase 3** — LLM-as-judge pipeline
 
 ## Phases
 
 | # | Phase | Status | Days |
 |---|-------|--------|------|
 | 1 | Use case definition + behavior inventory | `complete` | 1–2 |
-| 2 | Eval dataset (30+ input/output/expected triples) | `not_started` | 3–5 |
+| 2 | Eval dataset (30+ input/output/expected triples) | `complete` | 3–5 |
 | 3 | LLM-as-judge pipeline | `not_started` | 6–8 |
 | 4 | CI integration (GitHub Actions) | `not_started` | 9–10 |
 | 5 | Production monitoring design | `not_started` | 11–12 |
 
 ## Deliverables Checklist
 
-- [ ] Behavior inventory (10+ behaviors, P0/P1 tagged)
-- [ ] Eval dataset: 30+ curated input/output/expected triples (JSON)
+- [x] Behavior inventory (10+ behaviors, P0/P1 tagged)
+- [x] Eval dataset: 30+ curated input/output/expected triples (JSON)
 - [ ] Judge prompt with structured scoring rubric
 - [ ] Automated judge pipeline (runs locally)
 - [ ] CI workflow (GitHub Actions) — triggers on prompt/model change
@@ -60,3 +60,5 @@ Update `docs/index.md` after every new artifact. Final rollup = complete index w
 | task_plan.md | This file | Setup |
 | findings.md | Research & discoveries | Setup |
 | progress.md | Session log | Setup |
+| docs/design/eval-dataset-schema.md | Eval case schema — field definitions and enum values | 2 |
+| eval/dataset.json | 30-case eval dataset, all 19 behaviors covered | 2 |

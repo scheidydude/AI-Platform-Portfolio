@@ -27,7 +27,13 @@ Docs scaffold in place. Ready to begin Phase 1 implementation.
 ### Phase 1 complete
 - [x] `docs/design/behavior-inventory.md` — 19 behaviors, 11 P0, 8 P1, traced to SRS
 
-**Next action:** Phase 2 — author `eval/dataset.json` (30 cases across 6 categories).
+### Phase 2 complete
+- [x] `docs/design/eval-dataset-schema.md` — canonical field schema, enums, distribution targets
+- [x] `eval/dataset.json` — 30 cases: 10 classification/faithfulness/extraction/style, 6 ambiguous, 4 out-of-scope, 4 compliance/PII, 4 multi-step, 2 adversarial
+- [x] All 19 behaviors exercised; all 11 P0 behaviors covered by at least one P0 case
+- [x] `docs/index.md` updated — eval dataset marked Final
+
+**Next action:** Phase 3 — LLM-as-judge pipeline (`docs/design/judge-pipeline-design.md` → `eval/prompts/judge_v1.md` → `src/judge_pipeline.py`).
 
 ---
 
@@ -43,8 +49,8 @@ Docs scaffold in place. Ready to begin Phase 1 implementation.
 
 | Phase | Started | Completed | Notes |
 |-------|---------|-----------|-------|
-| 1 — Use case definition | — | — | |
-| 2 — Eval dataset | — | — | |
+| 1 — Use case definition | 2026-05-23 | 2026-05-23 | 19 behaviors, 11 P0, 8 P1 |
+| 2 — Eval dataset | 2026-05-23 | 2026-05-23 | 30 cases, all behaviors covered |
 | 3 — Judge pipeline | — | — | |
 | 4 — CI integration | — | — | |
 | 5 — Production monitoring | — | — | |
