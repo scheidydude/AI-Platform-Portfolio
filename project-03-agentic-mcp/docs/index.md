@@ -56,8 +56,8 @@
 
 | Doc | Status | Path | Description |
 |-----|--------|------|-------------|
-| Failure Mode Experiments | `not_started` | docs/experiments.md | Results from deliberate failure injection |
-| Lessons Learned | `not_started` | docs/lessons-learned.md | Production mitigations — Orchid V3 bridge doc |
+| Experiment Scripts | `complete` | experiments/ | 5 runnable harnesses (exp1–exp5); exp4 Part A verified |
+| Lessons Learned | `complete` | [docs/lessons_learned.md](lessons_learned.md) | Production mitigations — Orchid V3 priority list |
 
 ---
 

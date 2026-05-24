@@ -14,7 +14,7 @@
 | 2 | MCP wiring | `complete` | 3–4 | SearXNG MCP server + Researcher agent |
 | 3 | Loop prevention | `complete` | 5–6 | Escape conditions, retry tracking |
 | 4 | Orchestration | `complete` | 7–8 | Sequential first, then streaming eval |
-| 5 | Failure mode docs | `not_started` | 9–10 | Deliberate breaks + lessons learned |
+| 5 | Failure mode docs | `complete` | 9–10 | Deliberate breaks + lessons learned |
 
 ---
 
@@ -98,15 +98,15 @@ Default `on_exceed`: `"return_partial"` — partial answer with gaps > silent fa
 
 ## Phase 5 — Failure Mode Documentation
 
-**Status:** `not_started`  
+**Status:** `complete`  
 **Goal:** Deliberate experiments → lessons learned doc for Orchid V3
 
 ### Experiments
-- [ ] Exhaust researcher tool budget mid-task — what does synthesizer do?
-- [ ] Inject garbage tool output (HTML instead of JSON) — hallucinate or handle?
-- [ ] Ambiguous planner input — clarify or bad assumption?
-- [ ] Kill pipeline mid-run — resume without data loss?
-- [ ] Task exceeding researcher context window — what breaks?
+- [x] Exhaust researcher tool budget mid-task — what does synthesizer do?
+- [x] Inject garbage tool output (HTML instead of JSON) — hallucinate or handle?
+- [x] Ambiguous planner input — clarify or bad assumption?
+- [x] Kill pipeline mid-run — resume without data loss? (Part A verified)
+- [x] Task exceeding researcher context window — what breaks?
 
 ### Deliverable
 `lessons_learned.md` — findings + production mitigation for each failure mode
