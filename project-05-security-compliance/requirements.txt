@@ -1,0 +1,10 @@
+# Runtime dependencies
+# Install Presidio with NLP support for pii_scanner.py:
+#   pip install -r requirements.txt
+#   python -m spacy download en_core_web_lg
+
+presidio-analyzer>=2.2.0
+presidio-analyzer[nlp]
+
+# Test dependencies
+pytest>=7.0
