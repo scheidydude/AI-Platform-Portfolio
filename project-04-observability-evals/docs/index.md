@@ -3,7 +3,7 @@
 **Project:** AI Observability & Evals  
 **Purpose:** Career portfolio artifact. All design decisions, requirements, and architecture choices are captured here.  
 **Status:** In progress  
-**Last updated:** 2026-05-23 (Phase 4 complete)
+**Last updated:** 2026-05-23 (Phase 5 complete — project done)
 
 ---
 
@@ -43,7 +43,7 @@ ADRs capture *why* a decision was made, not just what was decided. Each is immut
 | Eval Dataset Schema | Field definitions, enum values, and distribution targets for eval/dataset.json | Final | [docs/design/eval-dataset-schema.md](design/eval-dataset-schema.md) |
 | Judge Pipeline Design | LLM-as-judge pipeline — prompt, scoring, output schema | Final | [docs/design/judge-pipeline-design.md](design/judge-pipeline-design.md) |
 | CI Integration Design | GitHub Actions workflow, regression gates, PR reporting | Final | [docs/design/ci-integration-design.md](design/ci-integration-design.md) |
-| Production Monitoring Design | Sampling strategy, drift detection, Datadog dashboard | Not started | [docs/design/monitoring-design.md](design/monitoring-design.md) |
+| Production Monitoring Design | Sampling strategy, drift detection, Datadog dashboard | Final | [docs/design/monitoring-design.md](design/monitoring-design.md) |
 
 ---
 
@@ -76,6 +76,7 @@ ADRs capture *why* a decision was made, not just what was decided. Each is immut
 | Judge pipeline | LLM-as-judge scorer (Sonnet 4.6, per-case judgment) | Final | [src/judge_pipeline.py](../src/judge_pipeline.py) |
 | Eval runner | Orchestrator — SUT → judge → run artifact → gate check | Final | [src/eval_runner.py](../src/eval_runner.py) |
 | Report generator | Markdown PR comment generator with regression diff | Final | [src/generate_report.py](../src/generate_report.py) |
+| Metrics emitter | DogStatsD metrics emitter (stdout + UDP modes) | Final | [src/metrics_emitter.py](../src/metrics_emitter.py) |
 | Eval gates config | Regression thresholds (YAML, no code change required) | Final | [eval/gates.yaml](../eval/gates.yaml) |
 | CI workflow | GitHub Actions — triggers, baseline cache, PR comment, gate enforcement | Final | [.github/workflows/eval.yml](../.github/workflows/eval.yml) |
 
@@ -91,5 +92,5 @@ Use at project end to verify portfolio completeness.
 - [x] Eval dataset: 30+ cases, all categories covered
 - [x] Judge pipeline runs end-to-end locally
 - [x] CI workflow triggers and blocks on P0 failures
-- [ ] Production monitoring design documented
-- [ ] This index is complete and all links resolve
+- [x] Production monitoring design documented
+- [x] This index is complete and all links resolve

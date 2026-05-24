@@ -14,7 +14,7 @@ Build a production-grade eval framework for a Jira/Confluence AI help desk syste
 | 2 | Eval dataset (30+ input/output/expected triples) | `complete` | 3–5 |
 | 3 | LLM-as-judge pipeline | `complete` | 6–8 |
 | 4 | CI integration (GitHub Actions) | `complete` | 9–10 |
-| 5 | Production monitoring design | `not_started` | 11–12 |
+| 5 | Production monitoring design | `complete` | 11–12 |
 
 ## Deliverables Checklist
 
@@ -24,8 +24,8 @@ Build a production-grade eval framework for a Jira/Confluence AI help desk syste
 - [x] Automated judge pipeline (runs locally)
 - [x] CI workflow (GitHub Actions) — triggers on prompt/model change
 - [x] Regression detection with configurable gates
-- [ ] Production monitoring design document
-- [ ] Datadog dashboard design
+- [x] Production monitoring design document
+- [x] Datadog dashboard design
 
 ## Documentation-First Rule
 
@@ -72,3 +72,5 @@ Update `docs/index.md` after every new artifact. Final rollup = complete index w
 | docs/design/ci-integration-design.md | CI workflow design, baseline strategy, cost model, setup guide | 4 |
 | src/generate_report.py | Markdown PR comment generator with regression diff | 4 |
 | .github/workflows/eval.yml | GitHub Actions workflow — triggers, baseline cache, PR comment, gate enforcement | 4 |
+| docs/design/monitoring-design.md | Sampling strategy, 4 alerts, 8 dashboard panels, drift detection, DogStatsD integration | 5 |
+| src/metrics_emitter.py | DogStatsD metrics emitter — stdout (dev) + UDP (prod) modes | 5 |

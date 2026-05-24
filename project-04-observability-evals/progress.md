@@ -55,6 +55,13 @@ Docs scaffold in place. Ready to begin Phase 1 implementation.
 
 **Next action:** Phase 5 — Production monitoring design (`docs/design/monitoring-design.md`).
 
+### Phase 5 complete
+- [x] `docs/design/monitoring-design.md` — sampling strategy (5 tiers), 4 Datadog alerts (drift, compliance, P0 rate, judge error), 8 dashboard panels with full metric/threshold specs, drift detection logic (7d vs 30d rolling avg, 0.3-point threshold), deployment checklist
+- [x] `src/metrics_emitter.py` — DogStatsD emitter; stdout (default) or UDP (via DOGSTATSD_HOST env var); emits all 9 metric types with full tag set; smoke tested
+
+### Project complete
+All 5 phases delivered. All checklist items in `docs/index.md` marked complete.
+
 ---
 
 ## Test Results
@@ -73,6 +80,7 @@ Docs scaffold in place. Ready to begin Phase 1 implementation.
 | 2 — Eval dataset | 2026-05-23 | 2026-05-23 | 30 cases, all behaviors covered |
 | 3 — Judge pipeline | 2026-05-23 | 2026-05-23 | SUT + judge + runner; smoke tested |
 | 4 — CI integration | 2026-05-23 | 2026-05-23 | workflow + report generator; smoke tested |
+| 5 — Production monitoring | 2026-05-23 | 2026-05-23 | design doc + metrics emitter; smoke tested |
 | 3 — Judge pipeline | — | — | |
 | 4 — CI integration | — | — | |
 | 5 — Production monitoring | — | — | |
