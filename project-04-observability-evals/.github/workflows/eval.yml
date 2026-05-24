@@ -1,0 +1,142 @@
+name: Eval Suite
+
+on:
+  pull_request:
+    paths:
+      - 'eval/prompts/**'
+      - 'eval/gates.yaml'
+      - 'eval/dataset.json'
+      - 'src/**'
+  push:
+    branches: [main]
+    paths:
+      - 'eval/prompts/**'
+      - 'eval/gates.yaml'
+      - 'eval/dataset.json'
+      - 'src/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  eval:
+    name: Eval Suite
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      # Restore the last successful main-branch baseline for regression comparison.
+      # continue-on-error: true — first run has no baseline; that is expected.
+      - name: Restore baseline
+        id: restore-baseline
+        uses: actions/cache/restore@v4
+        with:
+          path: eval/baseline.json
+          key: eval-baseline-main-${{ github.sha }}
+          restore-keys: |
+            eval-baseline-main-
+        continue-on-error: true
+
+      # Run the full eval suite. continue-on-error lets downstream steps
+      # (report, comment, artifact upload) run even when gates fail.
+      - name: Run eval suite
+        id: eval
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: python src/eval_runner.py
+        continue-on-error: true
+
+      - name: Find run artifact path
+        id: find-run
+        run: |
+          RUN_FILE=$(ls eval/runs/*.json 2>/dev/null | grep -v '\.gitkeep' | sort | tail -1)
+          echo "path=${RUN_FILE}" >> "$GITHUB_OUTPUT"
+
+      - name: Generate report
+        run: |
+          ARGS="--run ${{ steps.find-run.outputs.path }} --output report.md"
+          if [ -f eval/baseline.json ]; then
+            ARGS="$ARGS --baseline eval/baseline.json"
+          fi
+          python src/generate_report.py $ARGS
+
+      # Update existing bot comment rather than posting a new one each push.
+      - name: Post or update PR comment
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const report = fs.readFileSync('report.md', 'utf8');
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+            const existing = comments.find(c =>
+              c.user.login === 'github-actions[bot]' &&
+              c.body.startsWith('## Eval Suite Results')
+            );
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existing.id,
+                body: report,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body: report,
+              });
+            }
+
+      - name: Upload run artifact
+        if: steps.find-run.outputs.path != ''
+        uses: actions/upload-artifact@v4
+        with:
+          name: eval-run-${{ github.sha }}
+          path: ${{ steps.find-run.outputs.path }}
+          retention-days: 90
+
+      # Save this run as the new baseline only after a clean main-branch push.
+      - name: Save baseline
+        if: >
+          github.event_name == 'push' &&
+          github.ref == 'refs/heads/main' &&
+          steps.eval.outcome == 'success' &&
+          steps.find-run.outputs.path != ''
+        run: cp "${{ steps.find-run.outputs.path }}" eval/baseline.json
+
+      - name: Cache baseline
+        if: >
+          github.event_name == 'push' &&
+          github.ref == 'refs/heads/main' &&
+          steps.eval.outcome == 'success'
+        uses: actions/cache/save@v4
+        with:
+          path: eval/baseline.json
+          key: eval-baseline-main-${{ github.sha }}
+
+      # Final step: fail the job if eval gates were not met.
+      # Placed last so all reporting steps complete first.
+      - name: Enforce gate result
+        if: steps.eval.outcome == 'failure'
+        run: |
+          echo "Eval suite gate(s) failed. See report above for details."
+          exit 1

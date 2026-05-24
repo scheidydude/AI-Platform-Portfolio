@@ -47,6 +47,14 @@ Docs scaffold in place. Ready to begin Phase 1 implementation.
 
 **Next action:** Phase 4 — CI integration (`docs/design/ci-integration-design.md` → `.github/workflows/eval.yml`).
 
+### Phase 4 complete
+- [x] `docs/design/ci-integration-design.md` — triggers, baseline strategy (Actions cache), PR comment format, cost model (~$0.14/run), setup guide
+- [x] `src/generate_report.py` — markdown report generator; regression diff (baseline vs current); summary table + collapsed full results
+- [x] `.github/workflows/eval.yml` — triggers on prompt/dataset/src changes; cache-based baseline; in-place PR comment update; artifact upload (90d); gate enforcement as final step
+- [x] Smoke tested: `generate_report.py` on dry-run artifact → report renders correctly
+
+**Next action:** Phase 5 — Production monitoring design (`docs/design/monitoring-design.md`).
+
 ---
 
 ## Test Results
@@ -64,6 +72,7 @@ Docs scaffold in place. Ready to begin Phase 1 implementation.
 | 1 — Use case definition | 2026-05-23 | 2026-05-23 | 19 behaviors, 11 P0, 8 P1 |
 | 2 — Eval dataset | 2026-05-23 | 2026-05-23 | 30 cases, all behaviors covered |
 | 3 — Judge pipeline | 2026-05-23 | 2026-05-23 | SUT + judge + runner; smoke tested |
+| 4 — CI integration | 2026-05-23 | 2026-05-23 | workflow + report generator; smoke tested |
 | 3 — Judge pipeline | — | — | |
 | 4 — CI integration | — | — | |
 | 5 — Production monitoring | — | — | |

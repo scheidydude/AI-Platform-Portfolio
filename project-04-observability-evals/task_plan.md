@@ -4,7 +4,7 @@
 Build a production-grade eval framework for a Jira/Confluence AI help desk system. Prove the system works via LLM-as-judge pipeline wired into CI.
 
 ## Current Phase
-**Phase 4** — CI integration (GitHub Actions)
+**Phase 5** — Production monitoring design
 
 ## Phases
 
@@ -13,7 +13,7 @@ Build a production-grade eval framework for a Jira/Confluence AI help desk syste
 | 1 | Use case definition + behavior inventory | `complete` | 1–2 |
 | 2 | Eval dataset (30+ input/output/expected triples) | `complete` | 3–5 |
 | 3 | LLM-as-judge pipeline | `complete` | 6–8 |
-| 4 | CI integration (GitHub Actions) | `not_started` | 9–10 |
+| 4 | CI integration (GitHub Actions) | `complete` | 9–10 |
 | 5 | Production monitoring design | `not_started` | 11–12 |
 
 ## Deliverables Checklist
@@ -22,8 +22,8 @@ Build a production-grade eval framework for a Jira/Confluence AI help desk syste
 - [x] Eval dataset: 30+ curated input/output/expected triples (JSON)
 - [x] Judge prompt with structured scoring rubric
 - [x] Automated judge pipeline (runs locally)
-- [ ] CI workflow (GitHub Actions) — triggers on prompt/model change
-- [ ] Regression detection with configurable gates
+- [x] CI workflow (GitHub Actions) — triggers on prompt/model change
+- [x] Regression detection with configurable gates
 - [ ] Production monitoring design document
 - [ ] Datadog dashboard design
 
@@ -69,3 +69,6 @@ Update `docs/index.md` after every new artifact. Final rollup = complete index w
 | src/judge_pipeline.py | LLM-as-judge scorer (Sonnet 4.6) | 3 |
 | src/eval_runner.py | Orchestrator — full eval loop, gate check, run artifact | 3 |
 | requirements.txt | Python dependencies | 3 |
+| docs/design/ci-integration-design.md | CI workflow design, baseline strategy, cost model, setup guide | 4 |
+| src/generate_report.py | Markdown PR comment generator with regression diff | 4 |
+| .github/workflows/eval.yml | GitHub Actions workflow — triggers, baseline cache, PR comment, gate enforcement | 4 |
