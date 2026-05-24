@@ -61,8 +61,8 @@
 
 | Document | Description | Status |
 |----------|-------------|--------|
-| Guardrails Matrix | Threat → control → layer → implementation → compliance mapping | Pending |
-| System Prompt Template | Hardened system prompt | Pending |
+| [GUARDRAILS-MATRIX-001](docs/guardrails/GUARDRAILS-MATRIX-001.md) | 22 controls across 5 layers; threat→control cross-ref; full compliance coverage table | **Complete** |
+| [system_prompt_hardened.md](prompts/system_prompt_hardened.md) | Hardened system prompt with trust hierarchy, non-disclosure, role stability; 12 jailbreak test cases | **Complete** |
 
 ---
 
@@ -95,9 +95,9 @@
 - [x] SRS complete with acceptance criteria (FR-1 through FR-6)
 - [x] DESIGN-001 includes full system boundary diagram and attack path walkthroughs
 - [x] STRIDE threat model covers all 6 categories (THREAT-MODEL-001: 22 threats, 15 High/Critical pre-control, 3 residual Medium)
-- [ ] Guardrails matrix: every threat mapped to control + compliance ref
+- [x] Guardrails matrix complete (GUARDRAILS-MATRIX-001: 22 controls, all threats mapped, no compliance gaps)
 - [ ] Two working control implementations with passing tests
-- [ ] System prompt hardening template complete
+- [x] System prompt hardening template complete (12 jailbreak test cases defined)
 - [ ] Compliance mapping complete for all 3 frameworks
 - [ ] INDEX.md links all artifacts
 

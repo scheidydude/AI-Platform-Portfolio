@@ -4,7 +4,7 @@
 Produce a formal, portfolio-grade threat model for a Jira/Confluence AI assistant using STRIDE, with working control implementations and compliance mappings to SEC 17a-4, FINRA 4511, and SOC 2.
 
 ## Current Phase
-Phase 3
+Phase 4
 
 ## Phases
 
@@ -23,9 +23,10 @@ Phase 3
 - **Output:** [THREAT-MODEL-001](docs/threat-model/THREAT-MODEL-001.md) — 22 threats; 3 residual Medium risks formally accepted (S-02, I-01, E-03)
 
 ### Phase 3: Guardrails Matrix
-- [ ] Map every threat → control → layer → implementation → compliance ref
-- [ ] Verify no threat is unmapped
-- **Status:** pending
+- [x] Map every threat → control → layer → implementation → compliance ref
+- [x] Verify no threat is unmapped
+- **Status:** complete
+- **Output:** [GUARDRAILS-MATRIX-001](docs/guardrails/GUARDRAILS-MATRIX-001.md) — 22 controls, 22/22 threats mapped, 0 compliance gaps; [system_prompt_hardened.md](prompts/system_prompt_hardened.md) — 12 jailbreak test cases
 
 ### Phase 4: Guardrails Implementation
 - [ ] Implement content isolation (prompt injection defense)

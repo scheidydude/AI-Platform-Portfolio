@@ -46,11 +46,24 @@
   - progress.md (updated)
 
 ### Phase 3: Guardrails Matrix
-- **Status:** pending
+- **Status:** complete
+- **Started:** 2026-05-23
+- **Completed:** 2026-05-23
 - Actions taken:
-  -
+  - Defined 22 controls (CTRL-01 through CTRL-22) across 5 layers (Prompt, Application, Tool, Gateway, Infrastructure)
+  - Mapped all 22 threats from THREAT-MODEL-001 to at least one primary control — no gaps
+  - Wrote full implementation spec for each control (concrete enough to implement in Phase 4)
+  - Resolved DESIGN-001 open question: CTRL-21 specifies HMAC-SHA256 manifest signing via AWS Secrets Manager
+  - Built threat→control cross-reference table (22×22 coverage verified)
+  - Built compliance coverage matrix — no gaps across SOC 2, SEC 17a-4(f), FINRA 4511
+  - Identified P0 vs P1 implementation targets for Phase 4
+  - Wrote system prompt hardening template with 12 jailbreak test cases
 - Files created/modified:
-  -
+  - docs/guardrails/GUARDRAILS-MATRIX-001.md (created)
+  - prompts/system_prompt_hardened.md (created)
+  - INDEX.md (updated)
+  - task_plan.md (updated)
+  - progress.md (updated)
 
 ### Phase 4: Guardrails Implementation
 - **Status:** pending
@@ -81,11 +94,11 @@
 ## 5-Question Reboot Check
 | Question | Answer |
 |----------|--------|
-| Where am I? | Phase 3 — Guardrails Matrix |
-| Where am I going? | Phase 4 (Implementation), 5 (Compliance) |
+| Where am I? | Phase 4 — Guardrails Implementation |
+| Where am I going? | Phase 5 (Compliance mapping) |
 | What's the goal? | Portfolio-grade LLM threat model with STRIDE + working controls + compliance mapping |
-| What have I learned? | 22 STRIDE threats; 3 residual Medium risks accepted (S-02, I-01, E-03); all controls named — see THREAT-MODEL-001 |
-| What have I done? | Phase 1 + 2 complete: SYSTEM-DEF-001, THREAT-MODEL-001, SRS, DESIGN-001, ADR-001–005 |
+| What have I learned? | 22 controls defined; P0 targets: content_isolation.py, pii_scanner.py, system_prompt_hardened.md — see GUARDRAILS-MATRIX-001 §6 |
+| What have I done? | Phases 1–3 complete: SYSTEM-DEF-001, THREAT-MODEL-001, GUARDRAILS-MATRIX-001, system_prompt_hardened.md, SRS, DESIGN-001, ADR-001–005 |
 
 ---
 *Update after completing each phase or encountering errors*
