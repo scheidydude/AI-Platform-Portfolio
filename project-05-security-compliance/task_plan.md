@@ -4,7 +4,7 @@
 Produce a formal, portfolio-grade threat model for a Jira/Confluence AI assistant using STRIDE, with working control implementations and compliance mappings to SEC 17a-4, FINRA 4511, and SOC 2.
 
 ## Current Phase
-Phase 4
+Phase 5
 
 ## Phases
 
@@ -29,11 +29,12 @@ Phase 4
 - **Output:** [GUARDRAILS-MATRIX-001](docs/guardrails/GUARDRAILS-MATRIX-001.md) — 22 controls, 22/22 threats mapped, 0 compliance gaps; [system_prompt_hardened.md](prompts/system_prompt_hardened.md) — 12 jailbreak test cases
 
 ### Phase 4: Guardrails Implementation
-- [ ] Implement content isolation (prompt injection defense)
-- [ ] Implement output PII scanner (Presidio or regex)
-- [ ] Write system prompt hardening template
-- [ ] Verify both controls run and produce correct output
-- **Status:** pending
+- [x] Implement content isolation (prompt injection defense)
+- [x] Implement output PII scanner (Presidio + regex fallback)
+- [x] Write system prompt hardening template
+- [x] Verify both controls run and produce correct output
+- **Status:** complete
+- **Output:** `src/content_isolation.py`, `src/pii_scanner.py`; 55 tests, 55 passing (`uv venv .venv && uv pip install pytest && .venv/bin/pytest`)
 
 ### Phase 5: Compliance Mapping
 - [ ] Map controls to SEC 17a-4(f) requirements

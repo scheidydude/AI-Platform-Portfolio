@@ -66,11 +66,28 @@
   - progress.md (updated)
 
 ### Phase 4: Guardrails Implementation
-- **Status:** pending
+- **Status:** complete
+- **Started:** 2026-05-23
+- **Completed:** 2026-05-23
 - Actions taken:
-  -
+  - Implemented `src/content_isolation.py` (CTRL-01 + CTRL-07): preprocess_content, isolate_chunk, prepare_retrieved_context; stdlib only, no external deps
+  - Implemented `src/pii_scanner.py` (CTRL-06): Presidio lazy singleton, regex CUSIP/ISIN recognizers, PIIFinding/PIIScanResult dataclasses, block/warn/clean action logic, apply_scan_result
+  - Wrote 28 tests for content isolation (all passing)
+  - Wrote 27 tests for PII scanner (Presidio mocked via unittest.mock; all passing)
+  - Fixed 2 test logic bugs discovered during first run (HTML content vs tag stripping; pipe sanitization assertion)
+  - Set up uv venv + pytest; 55/55 tests green
+  - requirements.txt written with Presidio + pytest deps
 - Files created/modified:
-  -
+  - src/__init__.py (created)
+  - src/content_isolation.py (created)
+  - src/pii_scanner.py (created)
+  - tests/__init__.py (created)
+  - tests/test_content_isolation.py (created)
+  - tests/test_pii_scanner.py (created)
+  - requirements.txt (created)
+  - INDEX.md (updated)
+  - task_plan.md (updated)
+  - progress.md (updated)
 
 ### Phase 5: Compliance Mapping
 - **Status:** pending
@@ -94,11 +111,11 @@
 ## 5-Question Reboot Check
 | Question | Answer |
 |----------|--------|
-| Where am I? | Phase 4 — Guardrails Implementation |
-| Where am I going? | Phase 5 (Compliance mapping) |
+| Where am I? | Phase 5 — Compliance Mapping |
+| Where am I going? | Final rollup (INDEX.md checklist) |
 | What's the goal? | Portfolio-grade LLM threat model with STRIDE + working controls + compliance mapping |
-| What have I learned? | 22 controls defined; P0 targets: content_isolation.py, pii_scanner.py, system_prompt_hardened.md — see GUARDRAILS-MATRIX-001 §6 |
-| What have I done? | Phases 1–3 complete: SYSTEM-DEF-001, THREAT-MODEL-001, GUARDRAILS-MATRIX-001, system_prompt_hardened.md, SRS, DESIGN-001, ADR-001–005 |
+| What have I learned? | 55/55 tests pass; content_isolation + pii_scanner are runnable PoC; system prompt template has 12 jailbreak test cases |
+| What have I done? | Phases 1–4 complete: all docs + 2 working implementations |
 
 ---
 *Update after completing each phase or encountering errors*

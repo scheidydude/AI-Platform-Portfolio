@@ -70,11 +70,11 @@
 
 | Artifact | Description | Status |
 |----------|-------------|--------|
-| `src/content_isolation.py` | Prompt injection defense via trust markers | Pending |
-| `src/pii_scanner.py` | Output PII scanner (Presidio + regex) | Pending |
-| `tests/test_content_isolation.py` | Unit tests for content isolation | Pending |
-| `tests/test_pii_scanner.py` | Unit tests for PII scanner | Pending |
-| `prompts/system_prompt_hardened.md` | System prompt hardening template | Pending |
+| [`src/content_isolation.py`](src/content_isolation.py) | CTRL-01 + CTRL-07: isolation markers + preprocessing | **Complete** |
+| [`src/pii_scanner.py`](src/pii_scanner.py) | CTRL-06: Presidio NER + CUSIP/ISIN regex; block/warn/clean | **Complete** |
+| [`tests/test_content_isolation.py`](tests/test_content_isolation.py) | 28 tests — all passing | **Complete** |
+| [`tests/test_pii_scanner.py`](tests/test_pii_scanner.py) | 27 tests — all passing (Presidio mocked) | **Complete** |
+| [`prompts/system_prompt_hardened.md`](prompts/system_prompt_hardened.md) | CTRL-02/03/04; 12 jailbreak test cases | **Complete** |
 
 ---
 
@@ -96,7 +96,7 @@
 - [x] DESIGN-001 includes full system boundary diagram and attack path walkthroughs
 - [x] STRIDE threat model covers all 6 categories (THREAT-MODEL-001: 22 threats, 15 High/Critical pre-control, 3 residual Medium)
 - [x] Guardrails matrix complete (GUARDRAILS-MATRIX-001: 22 controls, all threats mapped, no compliance gaps)
-- [ ] Two working control implementations with passing tests
+- [x] Two working control implementations with passing tests (55/55, content_isolation + pii_scanner)
 - [x] System prompt hardening template complete (12 jailbreak test cases defined)
 - [ ] Compliance mapping complete for all 3 frameworks
 - [ ] INDEX.md links all artifacts
