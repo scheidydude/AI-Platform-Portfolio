@@ -90,11 +90,23 @@
   - progress.md (updated)
 
 ### Phase 5: Compliance Mapping
-- **Status:** pending
+- **Status:** complete
+- **Started:** 2026-05-23
+- **Completed:** 2026-05-23
 - Actions taken:
-  -
+  - Mapped 6 SEC 17a-4(f) requirements to CTRL-19 and supporting controls; 0 gaps
+  - Mapped 4 FINRA Rule 4511 requirements to CTRL-19, CTRL-11; 0 gaps
+  - Mapped 5 SOC 2 Trust Service Criteria (CC6.1, CC6.3, CC6.6, CC6.7, A1.2) to 20 controls; 0 gaps
+  - Wrote attestation readiness assessment for all 3 frameworks
+  - Identified 3 pre-production items: SEC examiner access procedure, FINRA WSP update, SOC 2 Type II audit period
+  - Created cross-framework control efficiency table (CTRL-19 satisfies entirety of SEC/FINRA)
+  - Closed INDEX.md rollup checklist: 10/10 items complete
+  - Updated INDEX.md status to Complete; SRS-001 and DESIGN-001 marked Complete
 - Files created/modified:
-  -
+  - docs/compliance/COMPLIANCE-MAP-001.md (created)
+  - INDEX.md (updated — all items checked, status Complete)
+  - task_plan.md (updated — Phase 5 complete, all phases done)
+  - progress.md (updated)
 
 ## Test Results
 | Test | Input | Expected | Actual | Status |
@@ -111,11 +123,11 @@
 ## 5-Question Reboot Check
 | Question | Answer |
 |----------|--------|
-| Where am I? | Phase 5 — Compliance Mapping |
-| Where am I going? | Final rollup (INDEX.md checklist) |
+| Where am I? | **Complete — all 5 phases done** |
+| Where am I going? | N/A |
 | What's the goal? | Portfolio-grade LLM threat model with STRIDE + working controls + compliance mapping |
-| What have I learned? | 55/55 tests pass; content_isolation + pii_scanner are runnable PoC; system prompt template has 12 jailbreak test cases |
-| What have I done? | Phases 1–4 complete: all docs + 2 working implementations |
+| What have I learned? | 0 compliance gaps across SEC 17a-4(f), FINRA 4511, SOC 2 Type II; SOC 2 Type I ready |
+| What have I done? | All 5 phases: SYSTEM-DEF-001, THREAT-MODEL-001, GUARDRAILS-MATRIX-001, 55 passing tests, COMPLIANCE-MAP-001 |
 
 ---
 *Update after completing each phase or encountering errors*

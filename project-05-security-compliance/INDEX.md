@@ -3,7 +3,7 @@
 **Project:** Formal threat model for an enterprise LLM deployment (Jira/Confluence AI assistant)  
 **Goal:** Portfolio-grade artifact + functional PoC  
 **Timeline:** 10 days  
-**Status:** In Progress
+**Status:** Complete
 
 ---
 
@@ -21,7 +21,7 @@
 
 | Document | Description | Status |
 |----------|-------------|--------|
-| [SRS-001](docs/srs/SRS-001.md) | Software Requirements Specification — AI Security System | Draft |
+| [SRS-001](docs/srs/SRS-001.md) | Software Requirements Specification — AI Security System | **Complete** |
 
 ---
 
@@ -29,7 +29,7 @@
 
 | Document | Description | Status |
 |----------|-------------|--------|
-| [DESIGN-001](docs/design/DESIGN-001.md) | System Architecture & Trust Boundary | Draft |
+| [DESIGN-001](docs/design/DESIGN-001.md) | System Architecture & Trust Boundary | **Complete** |
 
 ---
 
@@ -78,13 +78,11 @@
 
 ---
 
-## Compliance Mapping
+## Compliance Mapping (Phase 5)
 
-| Framework | Relevant Controls | Status |
-|-----------|-------------------|--------|
-| SEC Rule 17a-4(f) | Immutable audit log, access records | Pending |
-| FINRA Rule 4511 | Communication retention, 3–6 year policy | Pending |
-| SOC 2 Type II | CC6.1 access controls, CC6.6 untrusted parties, A1.2 availability | Pending |
+| Document | Description | Status |
+|----------|-------------|--------|
+| [COMPLIANCE-MAP-001](docs/compliance/COMPLIANCE-MAP-001.md) | 15 requirements across SEC 17a-4(f), FINRA 4511, SOC 2; 0 gaps; attestation readiness assessment | **Complete** |
 
 ---
 
@@ -98,9 +96,9 @@
 - [x] Guardrails matrix complete (GUARDRAILS-MATRIX-001: 22 controls, all threats mapped, no compliance gaps)
 - [x] Two working control implementations with passing tests (55/55, content_isolation + pii_scanner)
 - [x] System prompt hardening template complete (12 jailbreak test cases defined)
-- [ ] Compliance mapping complete for all 3 frameworks
-- [ ] INDEX.md links all artifacts
+- [x] Compliance mapping complete for all 3 frameworks (COMPLIANCE-MAP-001: 15 req, 0 gaps, SOC 2 Type I ready)
+- [x] INDEX.md links all artifacts
 
 ---
 
-*Last updated: 2026-05-23*
+*Last updated: 2026-05-23 — All phases complete.*

@@ -4,7 +4,7 @@
 Produce a formal, portfolio-grade threat model for a Jira/Confluence AI assistant using STRIDE, with working control implementations and compliance mappings to SEC 17a-4, FINRA 4511, and SOC 2.
 
 ## Current Phase
-Phase 5
+Complete — all 5 phases done
 
 ## Phases
 
@@ -37,11 +37,12 @@ Phase 5
 - **Output:** `src/content_isolation.py`, `src/pii_scanner.py`; 55 tests, 55 passing (`uv venv .venv && uv pip install pytest && .venv/bin/pytest`)
 
 ### Phase 5: Compliance Mapping
-- [ ] Map controls to SEC 17a-4(f) requirements
-- [ ] Map controls to FINRA Rule 4511
-- [ ] Map controls to SOC 2 Trust Service Criteria
-- [ ] Final deliverables checklist review
-- **Status:** pending
+- [x] Map controls to SEC 17a-4(f) requirements
+- [x] Map controls to FINRA Rule 4511
+- [x] Map controls to SOC 2 Trust Service Criteria
+- [x] Final deliverables checklist review
+- **Status:** complete
+- **Output:** [COMPLIANCE-MAP-001](docs/compliance/COMPLIANCE-MAP-001.md) — 15 requirements, 0 gaps, SOC 2 Type I ready; INDEX.md rollup checklist 10/10
 
 ## Documentation Artifacts (living — update INDEX.md when adding)
 
