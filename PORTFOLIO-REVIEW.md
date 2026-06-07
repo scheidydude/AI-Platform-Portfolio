@@ -21,13 +21,11 @@
 ---
 
 ### Project 02 — LLM Gateway / Cost Governance
-**Status: ~90% complete (all 5 phases done, gateway has been run)**
+**Status: 100% complete**
 
 **What was built:** Full working FastAPI gateway across 25+ Python modules. `gateway/routes/`: `chat.py` (`POST /v1/chat/completions`), `models.py` (`GET /v1/models`), `admin.py` (`GET /admin/usage`, `GET /admin/quota`, `POST /admin/reset`), `dashboard.py`. `gateway/backends/`: `LLMBackend` interface + `OpenAICompatBackend` adapter. `gateway/router.py`: all four routing strategies — static, cost-aware, fallback, shadow — fully implemented. `gateway/quota.py`: all three enforcement modes — hard block (HTTP 429), soft cap (allow + warn), downgrade (route to cheaper backend at threshold). `gateway/state/sqlite.py`: SQLite quota store with async init. `gateway/metrics.py`: Prometheus metrics output. `gateway/observability.py`: structured JSON logging. `gateway/middleware/auth.py`: API key auth. `gateway.yaml` config file present. `gateway.db` exists — the application has been initialized and run. All 5 phases marked complete in `task_plan.md`. All deliverables checked.
 
-**What remains:** Formal smoke test not yet recorded. `progress.md` Session 2 documents all implementation but includes an explicit TODO: run a `curl` request, exhaust quota for one team config, capture the HTTP 429 response, and add it to test results.
-
-**Documentation quality:** Strong research and design docs. `progress.md` now covers both sessions with a full file manifest; the previous gap between docs and working code is closed.
+**Documentation quality:** Strong research and design docs. `progress.md` covers both sessions with a full file manifest plus a recorded smoke test.
 
 **Strongest signal:** The router and quota modules are clean, well-separated implementations. Shadow routing is implemented (`RoutingDecision.shadow` field, dual-send logic in the chat route) — the feature the vendor comparison identified as missing from both Bifrost and LiteLLM. The Bifrost/LiteLLM comparison in `findings.md` now has a working custom build to point to.
 
@@ -120,7 +118,7 @@ This is not six random projects — it's a vertical slice of the AI Architect jo
 | Project | Completion | Phases Done | Key Gaps |
 |---|---|---|---|
 | P01 — RAG Architecture | **100%** | 5 of 5 | — |
-| P02 — LLM Gateway | ~90% | 5 of 5 | Smoke test (HTTP 429 on quota exhaustion) not formally recorded |
+| P02 — LLM Gateway | **100%** | 5 of 5 | — |
 | P03 — Agentic MCP | **100%** | 5 of 5 | — |
 | P04 — Observability & Evals | **100%** | 5 of 5 | — |
 | P05 — Security & Compliance | **100%** | 5 of 5 | — |
@@ -151,7 +149,5 @@ All five projects are substantively complete. The remaining work is integration 
 
 P06 is done. 53/53 tests passing. The deliverable — a test showing a prompt injection payload in MCP tool result content is labeled and bounded before the LLM sees it, with PII scanning active on every `ResearchFinding` before persistence — is shipped. `docs/integration-surface.md` and P05's `findings.md` carry the validation evidence.
 
-**Remaining work (one item):**
-
-- **P02 smoke test** — record an HTTP 429 on quota exhaustion (`curl POST /v1/chat/completions`, exhaust the per-team budget, capture the block response). 30 minutes of work. Closes the last gap in the portfolio.
+**All gaps closed.** P02 smoke test recorded 2026-06-06: HTTP 429 with `{"error":"quota_exceeded","team":"compliance","tokens_used":2000001,"tokens_budget":2000000}` — hard quota enforcement confirmed end-to-end. See `project-02-llm-gateway/progress.md`.
 

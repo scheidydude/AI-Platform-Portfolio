@@ -76,9 +76,27 @@
 | Date | Test | Result | Notes |
 |------|------|--------|-------|
 | 2026-05-23 | App startup | PASS | `gateway.db` created, backends initialized, structured startup log |
-| — | Hard quota enforcement (HTTP 429) | not formally recorded | Implementation verified by code review |
+| 2026-06-06 | Hard quota enforcement (HTTP 429) | **PASS** | `compliance` team, `enforcement_mode: hard`, `monthly_token_budget: 2_000_000`, `tokens_used: 2000001` — see response below |
 
-**TODO:** Run `curl` smoke test — send request, exhaust quota for one team config, verify HTTP 429 with `{"error": "quota_exceeded", ...}` body. Record result here.
+**Smoke test — 2026-06-06**
+
+Setup: pre-seeded `team_quota` row `(compliance, 2026-06, 2000001)` — one token over the 2M hard limit. Started gateway on port 8765. Command:
+
+```bash
+curl -s -w "\nHTTP_STATUS:%{http_code}" -X POST http://localhost:8765/v1/chat/completions \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer co-change-me" \
+  -d '{"model": "local", "messages": [{"role": "user", "content": "Hello"}]}'
+```
+
+Response:
+
+```
+{"detail":{"error":"quota_exceeded","team":"compliance","tokens_used":2000001,"tokens_budget":2000000}}
+HTTP_STATUS:429
+```
+
+Hard quota enforcement confirmed: request blocked at quota check (`used >= budget`), before any backend call. HTTP 429 with `error: quota_exceeded`, team name, used/budget values in response body.
 
 ---
 
