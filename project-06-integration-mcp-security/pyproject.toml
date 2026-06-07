@@ -1,0 +1,25 @@
+[project]
+name = "project-06-integration-mcp-security"
+version = "0.1.0"
+description = "Integration layer: P05 security controls wired into P03 agentic pipeline"
+requires-python = ">=3.11"
+# Runtime deps are installed directly — P06 is not itself a library.
+# See: scripts/install.sh for the recommended install sequence.
+# See ADR-001 for why P06 has no [build-system].
+dependencies = []
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.23.0",
+]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+
+# Path wiring for imports:
+#   P03 (src.*):          installed via: uv pip install -e ../project-03-agentic-mcp
+#   P05 (top-level):      sys.path injected by tests/conftest.py
+#   P06 src/:             sys.path injected by tests/conftest.py
+# See ADR-001 for rationale.
