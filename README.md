@@ -23,35 +23,35 @@ P05  →  How do you secure it in a regulated environment?   (STRIDE threat mode
 ## Projects
 
 ### [Project 01 — RAG Architecture](./project-01-rag-architecture/)
-**Skill area:** Retrieval-augmented generation · **Status:** Phase 1 complete (ingestion)
+**Skill area:** Retrieval-augmented generation · **Status:** Complete
 
-Builds a RAG pipeline over 9 real SEC 10-K filings from EDGAR. Focus is retrieval quality — not just ingestion. Compares three chunking strategies (fixed-size, semantic, hierarchical), implements pgvector with hybrid BM25+dense retrieval and RRF fusion, adds a cross-encoder re-ranker, and measures the improvement via LLM-as-judge scoring.
+Builds a RAG pipeline over 9 real SEC 10-K filings from EDGAR. Focus is retrieval quality — not just ingestion. Compares three chunking strategies (fixed-size, semantic, hierarchical), implements pgvector with hybrid BM25+dense retrieval and RRF fusion, adds a cross-encoder re-ranker, and proves the improvement with a 3-config LLM-as-judge ablation (dense-only R@1=0.533 → hybrid+reranker R@1=0.933).
 
-**Stack:** Python · pgvector (Docker) · `nomic-embed-text` (self-hosted) · `rank_bm25` · `cross-encoder/ms-marco-MiniLM-L-6-v2` · Claude API
+**Stack:** Python · pgvector (Docker) · `nomic-embed-text` (self-hosted) · `rank_bm25` · `cross-encoder/ms-marco-MiniLM-L-6-v2` · Qwen3-35B (self-hosted)
 
-**Key artifacts:** Chunking strategy decision writeup · 5 Architecture Decision Records · Eval dataset with ground truth chunk references
+**Key artifacts:** Chunking strategy decision writeup · hybrid retrieval design doc · 20-question eval dataset with ground truth · `eval/results/phase4_lm_judge_scores.json` (3-config ablation) · 5 ADRs · retrospective
 
 ---
 
 ### [Project 02 — LLM Gateway / Cost Governance](./project-02-llm-gateway/)
-**Skill area:** Cost governance · observability · multi-backend routing · **Status:** Design + research complete
+**Skill area:** Cost governance · observability · multi-backend routing · **Status:** Complete
 
-Designs and partially builds a Python gateway that sits in front of LLM backends (Bedrock, local llama.cpp, OpenAI-compatible), enforces per-team token budgets, logs usage, and exposes a cost dashboard. Includes a structured build-vs-buy comparison of Bifrost and LiteLLM.
+Builds a working Python gateway that sits in front of LLM backends (local llama.cpp, OpenAI-compatible), enforces per-team token budgets across three enforcement modes (hard block, soft cap, downgrade), logs structured JSON per request, emits Prometheus metrics, and exposes a cost dashboard. Includes all four routing strategies and a structured build-vs-buy comparison of Bifrost and LiteLLM — including the shadow routing gap that only the custom build closes.
 
-**Stack:** FastAPI · SQLite / Redis · `tiktoken` · YAML config · Datadog
+**Stack:** FastAPI · SQLite · `tiktoken` · YAML config · Prometheus
 
-**Key artifacts:** Architecture design doc · Bifrost vs LiteLLM comparison (with atomic quota enforcement analysis) · 4 ADRs · SRS
+**Key artifacts:** Working gateway (`gateway/`) with quota, routing, metrics, auth · `gateway.db` · Bifrost vs LiteLLM comparison · 4 ADRs · SRS
 
 ---
 
 ### [Project 03 — Agentic Systems & MCP](./project-03-agentic-mcp/)
-**Skill area:** Multi-agent systems · MCP protocol · tool use · **Status:** Phase 2 complete (Researcher agent)
+**Skill area:** Multi-agent systems · MCP protocol · tool use · **Status:** Complete
 
-Builds a 3-agent pipeline (Planner → Researcher → Synthesizer) wired to real MCP servers. Custom Python MCP servers for SearXNG web search and GitHub REST API. Implements typed handoff schemas, tool error handling for all 5 failure classes, loop prevention, and serializable pipeline state. Designed as a deliberate stress-test of multi-agent failure modes.
+Builds a full 3-agent pipeline (Planner → Researcher → Synthesizer) wired to real MCP servers. Custom Python MCP servers for SearXNG web search and GitHub REST API. Implements typed handoff schemas, tool error handling for all 5 failure classes, loop prevention, and resumable serialized pipeline state. Runs 5 deliberate failure-mode experiments — budget exhaustion, garbage tool output, ambiguous planner input, mid-run kill + resume, context overflow — each documented with root cause and production mitigation.
 
 **Stack:** Python · `mcp` SDK · `openai` AsyncClient → self-hosted Qwen3-35B · SearXNG · GitHub REST API · Pydantic
 
-**Key artifacts:** Working Researcher agent (end-to-end validated) · Custom MCP servers · `ToolResult` error wrapper · 6 ADRs · HANDOFF.md
+**Key artifacts:** Full pipeline (`planner.py`, `researcher.py`, `synthesizer.py`, `orchestrator.py`) · Custom MCP servers · `ToolResult` error wrapper · `experiments/` (5 failure scenarios) · `state/exp4_d7fa13.json` (resume evidence) · `docs/lessons_learned.md` · 6 ADRs · HANDOFF.md
 
 ---
 

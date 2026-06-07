@@ -140,8 +140,3 @@ The weakness in P05 is that `content_isolation.py` and `pii_scanner.py` are test
 
 **Deliverable that matters:** A test showing the injection attempt is neutralized by the content isolation wrapper. Connects the threat model to a working agent.
 
----
-
-### Priority 2 — Front door: root README and GitHub
-
-The documentation inside each project is excellent. It needs a front door. Push to GitHub if not already there; ensure the root `README.md` explains the five projects, the connective Jira/Confluence AI narrative, and links to each project's brief. Recruiters land on the root first.
