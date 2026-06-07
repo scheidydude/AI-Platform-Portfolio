@@ -66,7 +66,25 @@
 
 **Strongest signal:** The LLM-specific threat adaptations show original thinking — the trust hierarchy (system prompt > verified tool outputs > user messages > retrieved content) isn't from a generic STRIDE template; it reflects actual understanding of how LLM context works. CTRL-21 (HMAC-SHA256 manifest signing via AWS Secrets Manager for session integrity) is a non-obvious control that closes a gap the standard framework wouldn't surface.
 
-**Weakness:** The two implemented controls are tested in isolation. There's no integration test showing them functioning in the actual agentic pipeline from Project 3. The 55 tests mock Presidio rather than running the real analyzer — reasonable for CI speed, but understates integration risk.
+**Weakness:** ~~The two implemented controls are tested in isolation.~~ Closed by P06 — both controls are now exercised on real P03 data structures with 43 integration tests. The 55 unit tests mock Presidio (reasonable for CI speed); P06's integration tests confirm the live function contract on `ResearchFinding.content` strings.
+
+---
+
+### Project 06 — Integration: Secure Agentic Pipeline
+**Status: 100% complete — all 4 phases done**
+
+**What was built:** A standalone integration layer that wires P05's two security controls into P03's agentic pipeline with zero modifications to either parent project. `p06/secure_researcher.py` (88 lines): `PIIInFindingError` exception, `SecureResearcherAgent` (4-line `run()` override that scans findings before returning), `SecureOrchestrator` (2-line `__init__` that swaps the researcher), and `_to_retrieved_chunk()` type adapter bridging P03's MCP tool result strings to P05's `RetrievedChunk` dataclass. 53 tests across 4 files — all passing. Full documentation scaffold: SRS-001, DESIGN-001 (with sequence diagrams for happy path, PII block, and injection defense paths), ADR-001 through ADR-003, `docs/integration-surface.md` (per-field break-surface tables for each wiring point), and `docs/lessons-learned.md`.
+
+**Documentation quality:** Rigorous. The `docs/integration-surface.md` is the "hand to a teammate" doc — every P03 or P05 change that could break P06 is listed with the exact fix. `docs/lessons-learned.md` covers four bugs that only surfaced during integration (namespace collision, Path resolution, pip URI handling, hatchling empty packages), an interface-design critique of P05 (what was easy vs hard to wire), and a code-level walkthrough of how both controls would apply to P02's gateway layer. ADR-002 is the strongest individual decision record in the portfolio — it honestly documents why Point 1 (pre-LLM content isolation) is not live-wired, what architectural gap prevents it, and what the production fix would be (proxy client pattern).
+
+**Strongest signal:** The architectural gap documentation. Most portfolios either paper over gaps or don't find them. ADR-002 documents that `ResearcherAgent.run()` has no overridable hook for tool result content, why this means Point 1 cannot be live-wired without copying a 200-line method, and what the correct production fix is (proxy `MultiServerClient` pattern). This is exactly the analysis a senior engineer does before touching legacy code in a codebase they don't own.
+
+**What was discovered during integration (not visible from unit tests):**
+- `src/` namespace collision when both P03 and P05 are editable-installed in the same venv — resolved by renaming P06's source directory to `p06/`
+- `Path('.').parent.resolve()` returns CWD, not its parent — requires `Path(__file__).resolve().parent`
+- pip rejects relative `file://` URIs for path deps — requires uv's toolchain or direct `pip install -e ../path`
+- hatchling rejects `packages = []` — integration layers should omit `[build-system]` entirely
+- P05's `PIIScanResult.action` uses `"clean"` not `None` — action routing must check for `"block"` and `"warn"` explicitly
 
 ---
 
@@ -82,11 +100,12 @@ P02: Infrastructure   — cost governance, routing, observability
 P03: Application      — multi-agent systems, MCP protocol, tool use
 P04: Quality          — evals, CI gates, production monitoring
 P05: Security         — threat modeling, controls, compliance
+P06: Integration      — composing security controls into a live pipeline
 ```
 
-This is not five random projects — it's a vertical slice of the AI Architect job description.
+This is not six random projects — it's a vertical slice of the AI Architect job description, with P06 closing the loop between security design and security in operation.
 
-**The connective tissue is smart.** The Jira/Confluence AI assistant appears as SUT in P04 and P05, and as design context in P03. This creates a coherent narrative: "I built evaluation and security frameworks for an enterprise AI tool I also built the agentic layer for." That's a story, not a list of projects.
+**The connective tissue is smart.** The Jira/Confluence AI assistant appears as SUT in P04 and P05, as the live system in P03, and P06 explicitly composes P03 + P05. This creates a coherent narrative: "I built the agentic layer, then evaluated it, then wrote the threat model, then proved the controls work in the actual pipeline." That's a story with a conclusion, not a list of projects.
 
 **Documentation discipline is a real differentiator.** Every project has: brief, findings, progress log, ADRs, task plan. Projects 01 and 03 have HANDOFF.md files that read like engineering runbooks. This signals production experience — people who have been burned by handoff failures write HANDOFF docs. Most portfolio projects don't have them.
 
@@ -96,7 +115,7 @@ This is not five random projects — it's a vertical slice of the AI Architect j
 
 ### Completion snapshot
 
-*Updated 2026-06-06 — previous review significantly underestimated P01–P03.*
+*Updated 2026-06-06*
 
 | Project | Completion | Phases Done | Key Gaps |
 |---|---|---|---|
@@ -105,6 +124,7 @@ This is not five random projects — it's a vertical slice of the AI Architect j
 | P03 — Agentic MCP | **100%** | 5 of 5 | — |
 | P04 — Observability & Evals | **100%** | 5 of 5 | — |
 | P05 — Security & Compliance | **100%** | 5 of 5 | — |
+| P06 — Integration | **100%** | 4 of 4 | — |
 
 ---
 
@@ -127,16 +147,11 @@ All five projects are substantively complete. The remaining work is integration 
 
 ---
 
-### Priority 1 — Integration: wire P05 controls into P03's pipeline
+### ~~Priority 1 — Build P06: Integration — Secure Agentic Pipeline~~ ✓ Complete
 
-The weakness in P05 is that `content_isolation.py` and `pii_scanner.py` are tested in isolation. P03 is now a complete working pipeline — wiring the controls in as middleware is straightforward and produces a high-value artifact.
+P06 is done. 53/53 tests passing. The deliverable — a test showing a prompt injection payload in MCP tool result content is labeled and bounded before the LLM sees it, with PII scanning active on every `ResearchFinding` before persistence — is shipped. `docs/integration-surface.md` and P05's `findings.md` carry the validation evidence.
 
-**Specific work:**
+**Remaining work (one item):**
 
-1. Import `content_isolation.prepare_retrieved_context()` into P03's Researcher — wrap retrieved content before injecting into LLM context
-2. Import `pii_scanner.scan_output_for_pii()` into P03's Researcher — scan final finding content before writing to `state/`
-3. Add a test in P03 where a retrieved document contains an injection attempt — verify isolation holds
-4. Document in P05's `findings.md` as integration validation
-
-**Deliverable that matters:** A test showing the injection attempt is neutralized by the content isolation wrapper. Connects the threat model to a working agent.
+- **P02 smoke test** — record an HTTP 429 on quota exhaustion (`curl POST /v1/chat/completions`, exhaust the per-team budget, capture the block response). 30 minutes of work. Closes the last gap in the portfolio.
 

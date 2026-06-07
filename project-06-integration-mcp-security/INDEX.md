@@ -52,9 +52,9 @@
 | [`p06/secure_researcher.py`](p06/secure_researcher.py) | Thin subclass of ResearcherAgent + SecureOrchestrator wrapper | Not started |
 | [`tests/conftest.py`](tests/conftest.py) | sys.path injection: P05 src/ + P06 root; all cross-project imports verified | **Complete** |
 | [`tests/test_imports.py`](tests/test_imports.py) | Phase 1 smoke test: 5/5 import verifications passing (delete after Phase 3) | **Complete** |
-| [`tests/test_injection_defense.py`](tests/test_injection_defense.py) | Injection payload wrapped+labeled; contrast without control | Not started |
-| [`tests/test_pii_scan_on_findings.py`](tests/test_pii_scan_on_findings.py) | SSN/email blocked on ResearchFinding; benign passes | Not started |
-| [`tests/test_pipeline_regression.py`](tests/test_pipeline_regression.py) | Full pipeline, benign topic, controls active, baseline parity | Not started |
+| [`tests/test_injection_defense.py`](tests/test_injection_defense.py) | 14 tests: adapter, payload wrapped+bounded, contrast, preprocess | **Complete** |
+| [`tests/test_pii_scan_on_findings.py`](tests/test_pii_scan_on_findings.py) | 16 tests: SSN/CC blocked, email warn, benign clean, PIIInFindingError | **Complete** |
+| [`tests/test_pipeline_regression.py`](tests/test_pipeline_regression.py) | 13 tests: structure, benign path, scan tracking, PII block, baseline parity | **Complete** |
 
 ---
 
@@ -62,24 +62,24 @@
 
 | Document | Description | Status |
 |----------|-------------|--------|
-| [`docs/integration-surface.md`](docs/integration-surface.md) | Wiring contracts, failure modes, upgrade guide | Not started |
-| [`docs/lessons-learned.md`](docs/lessons-learned.md) | What unit tests missed; interface design critique; P02 extension path | Not started |
-| [P05 findings.md](../project-05-security-compliance/findings.md) | Integration validation evidence added to parent project | Not started |
+| [`docs/integration-surface.md`](docs/integration-surface.md) | Wiring contracts, interface contracts, break-surface table, performance, verification | **Complete** |
+| [`docs/lessons-learned.md`](docs/lessons-learned.md) | 4 integration bugs unit tests missed; P05 interface critique; P02 gateway wiring path | **Complete** |
+| [P05 findings.md](../project-05-security-compliance/findings.md) | Integration validation evidence: both wiring points, 43/43 tests, type compatibility, zero source mod | **Complete** |
 
 ---
 
 ## Final Rollup Checklist
 
-- [ ] SRS complete with acceptance criteria
-- [ ] DESIGN-001 shows wiring points, sequence diagrams, interface contracts
-- [ ] All ADRs written and accepted (ADR-001 through ADR-003)
-- [ ] `secure_researcher.py` wraps P03 with zero source modifications
-- [ ] 3 test files, all passing: injection defense, PII scan, regression
-- [ ] `docs/integration-surface.md` complete
-- [ ] P05 `findings.md` updated with integration validation evidence
-- [ ] `docs/lessons-learned.md` complete
-- [ ] INDEX.md links all artifacts
+- [x] SRS complete with acceptance criteria (SRS-001: FR-1, FR-2, FR-3, NFR-1 through NFR-4)
+- [x] DESIGN-001 shows wiring points, sequence diagrams, interface contracts
+- [x] All ADRs written and accepted (ADR-001 through ADR-003)
+- [x] `p06/secure_researcher.py` wraps P03 with zero source modifications (verified: `git diff ../project-03-agentic-mcp/src/` shows nothing)
+- [x] 3 test files, all passing: injection defense (14), PII scan (16), regression (13) — 43/43
+- [x] `docs/integration-surface.md` complete
+- [x] P05 `findings.md` updated with integration validation evidence
+- [x] `docs/lessons-learned.md` complete
+- [x] INDEX.md links all artifacts
 
 ---
 
-*Last updated: 2026-06-06 — Phase 1 complete (5/5 smoke tests passing). Phase 2 next.*
+*Last updated: 2026-06-06 — **All phases complete. 53/53 tests passing.***

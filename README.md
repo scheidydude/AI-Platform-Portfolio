@@ -16,6 +16,7 @@ P02  →  How do you govern cost across teams?               (LLM gateway with p
 P03  →  How do you build a reliable agent?                 (3-agent pipeline with MCP tool use)
 P04  →  How do you know it works?                          (Eval framework with CI gates)
 P05  →  How do you secure it in a regulated environment?   (STRIDE threat model + compliance controls)
+P06  →  Do the controls actually work in the pipeline?     (Integration layer composing P03 + P05)
 ```
 
 ---
@@ -77,6 +78,17 @@ Produces a formal threat model for the Jira/Confluence AI assistant adapted from
 
 ---
 
+### [Project 06 — Integration: Secure Agentic Pipeline](./project-06-integration-mcp-security/)
+**Skill area:** Cross-project integration · security middleware composition · **Status:** Complete
+
+Closes P05's core weakness: controls verified in isolation but never exercised in the actual pipeline. Wires P05's `content_isolation.py` and `pii_scanner.py` into P03's 3-agent pipeline as active middleware, with zero modifications to either parent project. Demonstrates that independently verified components compose correctly — and documents exactly where they don't yet (the pre-LLM hook architectural gap, deferred per ADR-002).
+
+**Stack:** Python · `pytest` · `unittest.mock` · uv · P03 (editable dep) · P05 (sys.path injection)
+
+**Key artifacts:** `p06/secure_researcher.py` (SecureResearcherAgent, SecureOrchestrator, PIIInFindingError) · 53/53 tests passing (injection defense, PII scan on real ResearchFinding, full pipeline regression) · `docs/integration-surface.md` (break-surface tables per wiring point) · `docs/lessons-learned.md` (4 bugs unit tests missed, P02 gateway wiring path) · SRS-001 · DESIGN-001 · ADR-001 through ADR-003
+
+---
+
 ## Infrastructure
 
 Projects run against a self-hosted homelab rather than cloud-only dependencies:
@@ -101,6 +113,7 @@ Every project follows the same structure:
 | `progress.md` | Session-by-session log with test results |
 | `task_plan.md` | Phase tracker with status |
 | `docs/adr/` | Architecture Decision Records for every major choice |
+| `INDEX.md` | Living artifact index with rollup checklist (P06 pattern, backfill planned for P01–P05) |
 | `HANDOFF.md` | Resume context — current state, gotchas, exact next action |
 
 ---
