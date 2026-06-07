@@ -25,9 +25,60 @@
 
 ---
 
+## Session 2 — 2026-05-23
+
+**Goal:** Implement gateway phases 1–5
+
+**Done:**
+
+**Phase 1 — Core Gateway:**
+- `gateway/main.py` — FastAPI app with async lifespan (config load, DB init, backend init, rate limiter, router)
+- `gateway/models.py` — Pydantic request/response models (`ChatCompletionRequest`, `ChatCompletionResponse`, `UsageInfo`)
+- `gateway/config.py` — `GatewayConfig` loader from `gateway.yaml`; team config with `monthly_token_budget`, `models_allowed`, `rate_limit_rpm`, `routing_strategy`, `enforcement_mode`
+- `gateway/tokens.py` — tiktoken-based prompt token estimator
+- `gateway/observability.py` — structured JSON logging (`log_request`), `generate_request_id`, `current_month`
+- `gateway/state/sqlite.py` — async SQLite quota store; `init()`, `get_usage()`, `increment()`, `log_request()`, `get_requests()`, `reset()`
+- `gateway/routes/chat.py` — `POST /v1/chat/completions`: rate check → quota check → routing → backend call → accounting → metrics. Streaming (`StreamingResponse`) and non-streaming paths. Fallback triggered on `httpx` error when `routing_strategy = "fallback"`. Shadow fire-and-forget via `asyncio.create_task`.
+- `gateway/routes/admin.py` — `GET /admin/usage`, `GET /admin/quota`, `POST /admin/reset`
+- `gateway/routes/models.py` — `GET /v1/models`
+- `gateway/routes/dashboard.py` — spend/trend/quota HTML dashboard
+- `gateway/middleware/auth.py` — API key → team config lookup
+
+**Phase 2 — Quota Enforcement:**
+- `gateway/quota.py` — all 3 enforcement modes:
+  - `hard`: `used >= budget` → `EnforcementAction.BLOCK` → HTTP 429
+  - `soft`: `used >= budget` → `EnforcementAction.WARN` → allow + structured log warning
+  - `downgrade`: `used >= threshold_pct` → `EnforcementAction.DOWNGRADE` → `backend_override` to cheaper backend
+- `gateway/ratelimit.py` — per-team sliding window RPM limiter
+
+**Phase 3 — Observability:**
+- `gateway/metrics.py` — Prometheus counter/histogram metrics; `record()` per request, `prometheus_output()` on `GET /metrics`
+- Structured JSON log on every request: `request_id`, `team`, `model`, `backend`, `routing_strategy`, `enforcement_action`, `prompt_tokens`, `completion_tokens`, `latency_ms`, `cost_usd`, `quota_used`, `quota_budget`
+
+**Phase 4 — Multi-Backend Routing:**
+- `gateway/backends/base.py` — `LLMBackend` abstract interface: `complete()`, `stream()`, `close()`
+- `gateway/backends/openai_compat.py` — `OpenAICompatBackend` via `httpx.AsyncClient`; streaming and non-streaming; reads `prompt_tokens`/`completion_tokens` from response usage
+- `gateway/router.py` — all 4 routing strategies:
+  - `static`: team config → backend name resolution
+  - `cost_aware`: picks cheapest backend by `cost_per_1k_prompt + cost_per_1k_completion`
+  - `fallback`: primary backend; fallback triggered at request time in chat route on error
+  - `shadow`: primary + fire-and-forget shadow backend; comparison logged
+
+**Phase 5 — Vendor Comparison:**
+- `findings.md` — Bifrost vs LiteLLM vs custom build comparison on quota enforcement, routing, observability, auth, shadow routing. Shadow routing confirmed as gap in both vendors; custom build is the only implementation with it.
+
+**App initialized:** `gateway.db` created on startup — SQLite schema applied, app has been run.
+
+---
+
 ## Test Results
 
-_None yet._
+| Date | Test | Result | Notes |
+|------|------|--------|-------|
+| 2026-05-23 | App startup | PASS | `gateway.db` created, backends initialized, structured startup log |
+| — | Hard quota enforcement (HTTP 429) | not formally recorded | Implementation verified by code review |
+
+**TODO:** Run `curl` smoke test — send request, exhaust quota for one team config, verify HTTP 429 with `{"error": "quota_exceeded", ...}` body. Record result here.
 
 ---
 
@@ -45,3 +96,26 @@ _None yet._
 | docs/adr/ADR-002-state-store.md | created | 1 |
 | docs/adr/ADR-003-token-counting.md | created | 1 |
 | docs/adr/ADR-004-team-config.md | created | 1 |
+| gateway/\_\_init\_\_.py | created | 2 |
+| gateway/main.py | created | 2 |
+| gateway/config.py | created | 2 |
+| gateway/models.py | created | 2 |
+| gateway/tokens.py | created | 2 |
+| gateway/observability.py | created | 2 |
+| gateway/quota.py | created | 2 |
+| gateway/ratelimit.py | created | 2 |
+| gateway/metrics.py | created | 2 |
+| gateway/router.py | created | 2 |
+| gateway/backends/base.py | created | 2 |
+| gateway/backends/openai_compat.py | created | 2 |
+| gateway/middleware/auth.py | created | 2 |
+| gateway/routes/chat.py | created | 2 |
+| gateway/routes/admin.py | created | 2 |
+| gateway/routes/models.py | created | 2 |
+| gateway/routes/dashboard.py | created | 2 |
+| gateway/state/base.py | created | 2 |
+| gateway/state/sqlite.py | created | 2 |
+| gateway.yaml | created | 2 |
+| gateway.yaml.example | created | 2 |
+| gateway.db | created (on startup) | 2 |
+| pyproject.toml | created | 2 |

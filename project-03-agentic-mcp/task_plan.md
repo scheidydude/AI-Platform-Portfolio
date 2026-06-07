@@ -123,11 +123,11 @@ Default `on_exceed`: `"return_partial"` — partial answer with gaps > silent fa
 
 ## Deliverables Checklist
 
-- [ ] Working 3-agent pipeline
-- [ ] GitHub MCP + web search MCP wired and tested
-- [ ] Typed handoff schemas
-- [ ] Tool error handling (all 5 failure classes)
-- [ ] Loop prevention + escape conditions
-- [ ] Resumable pipeline state
-- [ ] Failure mode experiment docs
-- [ ] `lessons_learned.md` for Orchid V3
+- [x] Working 3-agent pipeline
+- [x] GitHub MCP + web search MCP wired and tested
+- [x] Typed handoff schemas
+- [x] Tool error handling (all 5 failure classes)
+- [x] Loop prevention + escape conditions
+- [x] Resumable pipeline state
+- [x] Failure mode experiment docs
+- [x] `lessons_learned.md` for Orchid V3

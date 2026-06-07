@@ -39,14 +39,14 @@
 Ingest 10–15 SEC 10-K PDFs. Implement and compare 3 chunking strategies. Write chunking decision document.
 
 ### Tasks
-- [ ] Download 10–15 10-K PDFs from EDGAR
-- [ ] Set up Docker Compose: Postgres + pgvector
-- [ ] Implement fixed-size chunking (512 tokens, 64 overlap)
-- [ ] Implement semantic chunking (SemanticChunker / semantic-chunkers)
-- [ ] Implement hierarchical chunking (parent section + sub-chunks)
-- [ ] Manually inspect 20–30 chunks per strategy
-- [ ] Write chunking strategy decision doc → `docs/design/chunking-decision.md`
-- [ ] Fill ADR-002 (chunking strategy)
+- [x] Download 10–15 10-K PDFs from EDGAR
+- [x] Set up Docker Compose: Postgres + pgvector
+- [x] Implement fixed-size chunking (512 tokens, 64 overlap)
+- [x] Implement semantic chunking (SemanticChunker / semantic-chunkers)
+- [x] Implement hierarchical chunking (parent section + sub-chunks)
+- [x] Manually inspect 20–30 chunks per strategy
+- [x] Write chunking strategy decision doc → `docs/design/chunking-decision.md`
+- [x] Fill ADR-002 (chunking strategy)
 
 ### Key Decisions Pending
 - Embedding model: `text-embedding-3-small` (API) vs. local llama.cpp
@@ -83,13 +83,13 @@ Hybrid search (dense + BM25 + RRF fusion) + cross-encoder re-ranker + citation g
 20+ Q&A pairs with manual ground truth chunk references. Score manually.
 
 ### Tasks
-- [ ] Write 10 single-source questions
-- [ ] Write 5 multi-source questions
-- [ ] Write 5 out-of-scope questions
-- [ ] Manually identify correct source chunk(s) per question
-- [ ] Manually score: retrieval recall@K, faithfulness, answer relevance
-- [ ] Save to `eval/ground_truth.json`
-- [ ] Write eval methodology doc → `docs/design/eval-methodology.md`
+- [x] Write 10 single-source questions
+- [x] Write 5 multi-source questions
+- [x] Write 5 out-of-scope questions
+- [x] Manually identify correct source chunk(s) per question
+- [x] Manually score: retrieval recall@K, faithfulness, answer relevance
+- [x] Save to `eval/ground_truth.json`
+- [x] Write eval methodology doc → `docs/design/eval-methodology.md`
 
 ---
 
@@ -99,12 +99,12 @@ Hybrid search (dense + BM25 + RRF fusion) + cross-encoder re-ranker + citation g
 Automated eval pipeline. LLM judges faithfulness, completeness, citation accuracy.
 
 ### Tasks
-- [ ] Implement judge prompt (Claude API or local Qwen)
-- [ ] Wire eval set through judge pipeline
-- [ ] Run baseline scores
-- [ ] Run scores after each retrieval config change
-- [ ] Track score history in `eval/results/`
-- [ ] Document before/after improvement evidence
+- [x] Implement judge prompt (Claude API or local Qwen)
+- [x] Wire eval set through judge pipeline
+- [x] Run baseline scores
+- [x] Run scores after each retrieval config change
+- [x] Track score history in `eval/results/`
+- [x] Document before/after improvement evidence
 
 ---
 
@@ -114,22 +114,22 @@ Automated eval pipeline. LLM judges faithfulness, completeness, citation accurac
 All 5 ADRs complete. INDEX.md current. Career artifact set finalized.
 
 ### Tasks
-- [ ] Complete ADR-001 through ADR-005 with eval impact data
-- [ ] Final SRS review and completion
-- [ ] Update INDEX.md with all artifacts
-- [ ] Write project retrospective → `docs/retrospective.md`
-- [ ] Verify deliverables checklist from spec
+- [x] Complete ADR-001 through ADR-005 with eval impact data
+- [x] Final SRS review and completion
+- [x] Update INDEX.md with all artifacts
+- [x] Write project retrospective → `docs/retrospective.md`
+- [x] Verify deliverables checklist from spec
 
 ---
 
 ## Deliverables Checklist (from spec)
 
-- [ ] Working retrieval API on homelab
-- [ ] Chunking strategy writeup
-- [ ] Eval set: 20+ Q&A pairs with ground truth chunk refs
-- [ ] Automated eval pipeline with LLM-as-judge
-- [ ] ADRs for all major choices (5 required)
-- [ ] Before/after eval scores showing retrieval improvement
+- [x] Working retrieval API on homelab
+- [x] Chunking strategy writeup
+- [x] Eval set: 20+ Q&A pairs with ground truth chunk refs
+- [x] Automated eval pipeline with LLM-as-judge
+- [x] ADRs for all major choices (5 required)
+- [x] Before/after eval scores showing retrieval improvement
 
 ---
 
