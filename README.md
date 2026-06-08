@@ -1,4 +1,4 @@
-# AI Path Learning
+# AI Platform Portfolio
 
 A structured portfolio of five AI engineering projects built for professional development and career advancement toward a **Senior AI Engineer / AI Architect** role in regulated-industry environments (financial services, enterprise SaaS).
 
