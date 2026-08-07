@@ -3,7 +3,7 @@
 **Skill area:** Secure execution · container isolation · multi-tenant resource control
 **Format:** Infrastructure integration build
 **Estimated duration:** 1–2 weekends (Phases 1–4), +1 weekend for Phases 5–6
-**Status:** In progress — Phase 1 (see `task_plan.md`)
+**Status:** In progress — Phases 1–2 complete, starting Phase 3 (see `task_plan.md`)
 **Depends on:** None (sequenced before [Project 08](../project-08-firecracker-sandbox/))
 
 ---
@@ -43,8 +43,8 @@ Full design source: [`docs/design/DESIGN-001.md`](./docs/design/DESIGN-001.md). 
 
 | Phase | Status | Description |
 |---|---|---|
-| 1 — Runtime Setup | in progress | Install/configure `runsc` on NucBox as a secondary Docker runtime; verify syscall interception |
-| 2 — Hardened `ContainerRunner` | not started | Add `isolation.container_runtime`/`container_memory_mb`/`container_cpus` config; extend `WorkerResult` additively |
+| 1 — Runtime Setup | complete | Install/configure `runsc` on NucBox as a secondary Docker runtime; verify syscall interception |
+| 2 — Hardened `ContainerRunner` | complete | Add `isolation.container_runtime`/`container_memory_mb`/`container_cpus` config; extend `WorkerResult` additively |
 | 3 — Network Policy | not started | Default-deny egress; explicit domain allowlist via existing Traefik/proxy |
 | 4 — Verification Across Isolation Paths | not started | Confirm existing `WorkerResult` consumers unaffected; demo via `TesterAgent` |
 | 5 — Observability | not started | Per-execution syscall trace, associated with task ID, surfaced in ccview/PM Dashboard |

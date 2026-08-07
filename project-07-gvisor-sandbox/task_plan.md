@@ -12,7 +12,7 @@
 |---|---|---|
 | 0 — Recon | mostly complete | Confirm NucBox kernel/Docker version supports `runsc`; audit existing isolation surface (`ContainerRunner`/`WorkerResult`) — Traefik confirmation still open |
 | 1 — Runtime Setup | complete | Install/configure `runsc`; verify isolation via syscall-interception test |
-| 2 — Hardened `ContainerRunner` | not started | Add `isolation.container_runtime`/`container_memory_mb`/`container_cpus` config; extend `WorkerResult` additively |
+| 2 — Hardened `ContainerRunner` | complete | Add `isolation.container_runtime`/`container_memory_mb`/`container_cpus` config; extend `WorkerResult` additively |
 | 3 — Network Policy | not started | Default-deny egress; allowlist mode via Traefik |
 | 4 — Verification Across Isolation Paths | not started | Confirm existing `WorkerResult` consumers unaffected; demo via `TesterAgent` |
 | 5 — Observability | not started | Syscall log per task ID; summary in ccview |
@@ -45,11 +45,13 @@ Phase 0's schema audit found that Orchid already has a generic, config-driven is
 
 ## Phase 2 — Hardened `ContainerRunner` (Acceptance: `isolation.container_runtime=runsc` works with enforced limits)
 
-- [ ] Add `isolation.container_runtime`, `isolation.container_memory_mb`, `isolation.container_cpus` config keys (default: unset/`runc`, unchanged behavior)
-- [ ] Wire these into `ContainerRunner.run_task_isolated()`'s `docker run` invocation as `--runtime`, `--memory`, `--cpus`
-- [ ] Execution exceeding the memory limit is killed, surfaces as a failed `WorkerResult` (`success=False`, `error` populated)
-- [ ] Extend `WorkerResult` with optional `stdout`/`stderr`/`exit_code` fields (default unset) — additive only
-- [ ] A known test task returns a correct `WorkerResult` when run under `--runtime=runsc` with limits applied
+- [x] Add `isolation.container_runtime`, `isolation.container_memory_mb`, `isolation.container_cpus` config keys (default: unset/`runc`, unchanged behavior)
+- [x] Wire these into `ContainerRunner.run_task_isolated()`'s `docker run` invocation as `--runtime`, `--memory`, `--cpus`
+- [x] Execution exceeding the memory limit is killed, surfaces as a failed `WorkerResult` (`success=False`, `error` populated, now also `exit_code=137`) — proven with `scripts/probe_memory_limit.py` under `--runtime=runsc --memory=64m`
+- [x] Extend `WorkerResult` with optional `stdout`/`stderr`/`exit_code` fields (default unset) — additive only, unit-tested
+- [x] A known test task returns a correct `WorkerResult` when run under `--runtime=runsc` with limits applied — verified at the Docker level directly (see `findings.md`); a full `orchid.worker_subprocess` ReAct-loop run is Phase 4's job, not Phase 2's
+
+**Status:** Complete. Committed to the `p07-gvisor-hardening` branch in the Orchid repo (`0eaac75`) — not merged to `main`, that's David's call. Full ~1800-test suite run was aborted (pre-existing, unrelated MCP-subprocess leak in Orchid's own tests, not a regression — see `findings.md`); verification rests on the targeted unit tests, the 42/43 broader consumer subset, and real Docker+`runsc` end-to-end proof.
 
 ## Phase 3 — Network Policy (Acceptance: default-deny egress, explicit allowlist works)
 

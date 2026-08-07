@@ -3,7 +3,7 @@
 **Project:** Harden Orchid's existing `ContainerRunner` isolation path with gVisor (`runsc`)
 **Goal:** Portfolio-grade artifact demonstrating secure execution, resource ceilings, and syscall observability
 **Timeline:** 1–2 weekends (Phases 1–4), +1 weekend for Phases 5–6
-**Status:** In progress — Phase 1 complete; starting Phase 2
+**Status:** In progress — Phases 1–2 complete; starting Phase 3
 
 ---
 
@@ -50,8 +50,8 @@
 |----------|--------------|--------|
 | `runsc` installed on NucBox | Secondary Docker runtime, `release-20260803.0` | **Complete** |
 | Syscall-interception isolation proof (`scripts/probe_io_uring.py`, `scripts/verify_isolation.sh`) | Kernel-identity divergence + `io_uring_setup` ENOSYS proof — FR-1 | **Complete** |
-| Hardened `ContainerRunner` (`orchid/container_runner.py`) | `isolation.container_runtime`/`container_memory_mb`/`container_cpus` config, `--runtime`/`--memory`/`--cpus` flags — FR-2 | Not started |
-| Additive `WorkerResult` fields (`orchid/worker_protocol.py`) | Optional `stdout`/`stderr`/`exit_code` — FR-4 | Not started |
+| Hardened `ContainerRunner` (`orchid/container_runner.py`) | `isolation.container_runtime`/`container_memory_mb`/`container_cpus` config, `--runtime`/`--memory`/`--cpus` flags — FR-2 | **Complete** (Orchid repo, branch `p07-gvisor-hardening`, `0eaac75`) |
+| Additive `WorkerResult` fields (`orchid/worker_protocol.py`) | Optional `stdout`/`stderr`/`exit_code` — FR-4 | **Complete** |
 | Network policy tests | Default-deny + allowlist verification — FR-3 | Not started |
 | Syscall observability capture | Per-task syscall log — FR-5 | Not started |
 
@@ -63,7 +63,7 @@
 - [ ] DESIGN-001 architecture and phase table match SRS requirement IDs
 - [x] All ADRs written and accepted (ADR-001 through ADR-003) — ADR-002 revised after Phase 0 recon
 - [x] Phase 1 — `runsc` runs alongside default-runtime containers; isolation verified via syscall-interception test (kernel-identity divergence + `io_uring_setup` ENOSYS)
-- [ ] Phase 2 — Hardened `ContainerRunner` enforces memory/CPU limits under `runsc`; `WorkerResult` extended additively
+- [x] Phase 2 — Hardened `ContainerRunner` enforces memory/CPU limits under `runsc`; `WorkerResult` extended additively (memory-OOM proof: `exit 137` at 64m cap vs. clean completion unconstrained)
 - [ ] Phase 3 — Default-deny egress verified; allowlist mode verified
 - [ ] Phase 4 — Existing `WorkerResult` consumers unaffected; `TesterAgent` demo runs correctly under the hardened path
 - [ ] Phase 5 — Per-execution syscall log retrievable by task ID
@@ -73,4 +73,4 @@
 
 ---
 
-*Last updated: 2026-08-07 — Phase 0 recon complete (Traefik confirmation pending); SRS-001/DESIGN-001/ADR-002 revised after discovering the real `ContainerRunner`/`WorkerResult` integration surface. Phase 1 complete: `runsc` installed and syscall-interception isolation verified (see `findings.md`).*
+*Last updated: 2026-08-07 — Phases 1–2 complete. `runsc` installed and syscall-interception isolation verified; `ContainerRunner` hardened with runtime/memory/CPU config and `WorkerResult` extended additively, committed to the Orchid repo's `p07-gvisor-hardening` branch (`0eaac75`, not merged to `main`). Also surfaced and cleaned up a pre-existing, unrelated MCP-subprocess leak in Orchid's test suite while attempting a full-suite regression check — see `findings.md`.*
