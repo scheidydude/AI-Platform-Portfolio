@@ -12,7 +12,10 @@
       "Bash(python *)",
       "Bash(curl -s http://localhost:8080/health)",
       "Bash(git add *)",
-      "Bash(git commit *)"
+      "Bash(git commit *)",
+      "Bash(git -C /Users/david/Development/scheidydudes-github-repos/ai-path-learning add README.md PORTFOLIO-REVIEW.md)",
+      "Bash(git -C /Users/david/Development/scheidydudes-github-repos/ai-path-learning commit -m ' *)",
+      "Bash(git -C /Users/david/Development/scheidydudes-github-repos/ai-path-learning push)"
     ]
   }
 }
