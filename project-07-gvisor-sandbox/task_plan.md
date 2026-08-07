@@ -25,6 +25,11 @@
 - [ ] Confirm `runsc` install path/version compatible with NucBox host kernel
 - [ ] Audit Orchid `TesterAgent` current modes and task/result schema shape
 - [ ] Confirm Traefik config location for later allowlist wiring
+- [ ] Install `runsc` on NucBox — pin the exact version/build installed and record the install method (apt repo vs. binary release) in `findings.md`
+- [ ] Define supported `language` values for the execution API's request shape and the sandbox base image(s) required for each (e.g. `python`, `bash`) — document in `findings.md`, install any missing runtime/interpreter packages into the sandbox image as needed
+- [ ] Set default `timeout_s` and `memory_mb` values for the execution API (used when a request omits them) — document the chosen defaults and rationale in `findings.md`
+- [ ] Define a teardown/cleanup step for sandbox containers after each execution (stopped/removed, not left running) — verify no orphaned `runsc` containers accumulate across a demo session
+- [ ] Define a rollback plan for the `runsc` install (how to remove it / revert Docker daemon config) in case it destabilizes the existing default-runtime containers on the NucBox
 
 ## Phase 1 — Runtime Setup (Acceptance: `runsc` container runs and is verifiably isolated)
 
