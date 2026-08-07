@@ -14,7 +14,7 @@ Builds a Firecracker-backed microVM execution layer as an alternative isolation 
 
 Firecracker offers stronger isolation than container-based sandboxing plus native snapshot/restore of a running VM's full state. For Orchid, this maps to resuming a long-running agent task after a host failure, deploy, or restart — something Orchid's current FSM does not yet solve at the process/VM level.
 
-Full design source: [`docs/FIRECRACKER-SANDBOX-DESIGN-001.md`](./docs/FIRECRACKER-SANDBOX-DESIGN-001.md).
+Full design source: [`docs/design/DESIGN-001.md`](./docs/design/DESIGN-001.md). Requirements: [`docs/srs/SRS-001.md`](./docs/srs/SRS-001.md). Full artifact index: [`INDEX.md`](./INDEX.md).
 
 ---
 
@@ -46,7 +46,7 @@ Full design source: [`docs/FIRECRACKER-SANDBOX-DESIGN-001.md`](./docs/FIRECRACKE
 | 5 — Restore | not started | Kill original process, load snapshot into new process, verify correct resumption |
 | 6 — Orchid Integration | not started | Wire checkpoint/restore into Orchid's lifecycle FSM |
 
-See [`docs/FIRECRACKER-SANDBOX-DESIGN-001.md`](./docs/FIRECRACKER-SANDBOX-DESIGN-001.md) for full phase-by-phase acceptance criteria.
+See [`docs/design/DESIGN-001.md`](./docs/design/DESIGN-001.md) for full phase-by-phase acceptance criteria.
 
 ---
 

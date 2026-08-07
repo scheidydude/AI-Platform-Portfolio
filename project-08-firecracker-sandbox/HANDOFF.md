@@ -6,7 +6,7 @@
 
 **Sequencing:** Do not start before [Project 07 — gVisor Sandbox](../project-07-gvisor-sandbox/) has at least a finalized execution API contract (Phase 2 of P07). This project reuses that contract rather than designing a new one.
 
-**Exact next action:** Phase 0/1 — confirm KVM is available and enabled on the NucBox, confirm Firecracker compatibility with the host kernel alongside existing ROCm drivers, then build a stripped kernel + Alpine rootfs and measure cold boot. See `task_plan.md` Phase 1 and `docs/FIRECRACKER-SANDBOX-DESIGN-001.md` §6.
+**Exact next action:** Phase 0/1 — confirm KVM is available and enabled on the NucBox, confirm Firecracker compatibility with the host kernel alongside existing ROCm drivers, then build a stripped kernel + Alpine rootfs and measure cold boot. See `task_plan.md` Phase 1 and `docs/design/DESIGN-001.md` §3. Full document set indexed in `INDEX.md`.
 
 **Known risk area (from design doc, unverified):** Phases 4/5 (snapshot/restore) are flagged as highest-risk on this specific hardware — AMD host, ROCm drivers potentially interacting with KVM/Firecracker. Budget debugging time here and document any host-specific quirks; that friction is itself portfolio signal, don't hide it.
 

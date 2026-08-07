@@ -14,7 +14,7 @@ Integrates gVisor (`runsc`) as an opt-in sandboxed execution mode for untrusted 
 
 This closes a specific portfolio gap: container-level secure execution, resource ceilings, default-deny network egress, and syscall-level observability, which are named requirements in Staff+ infrastructure roles covering sandboxed compute and multi-tenant platforms.
 
-Full design source: [`docs/GVISOR-SANDBOX-DESIGN-001.md`](./docs/GVISOR-SANDBOX-DESIGN-001.md).
+Full design source: [`docs/design/DESIGN-001.md`](./docs/design/DESIGN-001.md). Requirements: [`docs/srs/SRS-001.md`](./docs/srs/SRS-001.md). Full artifact index: [`INDEX.md`](./INDEX.md).
 
 ---
 
@@ -46,7 +46,7 @@ Full design source: [`docs/GVISOR-SANDBOX-DESIGN-001.md`](./docs/GVISOR-SANDBOX-
 | 5 — Observability | not started | Per-execution syscall trace, associated with task ID, surfaced in ccview/PM Dashboard |
 | 6 — Multi-Tenant Quotas (stretch) | not started | cgroup-based per-tenant quotas, demonstrated with 2 concurrent tenants |
 
-See [`docs/GVISOR-SANDBOX-DESIGN-001.md`](./docs/GVISOR-SANDBOX-DESIGN-001.md) for full phase-by-phase acceptance criteria.
+See [`docs/design/DESIGN-001.md`](./docs/design/DESIGN-001.md) for full phase-by-phase acceptance criteria.
 
 ---
 

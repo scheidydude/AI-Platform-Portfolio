@@ -1,6 +1,6 @@
 # P08 Progress Log
 
-Scaffolded from `FIRECRACKER-SANDBOX-DESIGN-001.md` — no implementation sessions yet.
+Scaffolded from `docs/design/DESIGN-001.md` — no implementation sessions yet.
 
 Implementation is expected to run on the NucBox EVO X2 homelab host (Linux + KVM, AMD/ROCm), via a Claude Code CLI session with this repo cloned there, not from the portfolio author's macOS dev machine. Should start after [Project 07](../project-07-gvisor-sandbox/) reaches at least Phase 4, since this project reuses its execution API contract.
 

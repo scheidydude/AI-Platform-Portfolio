@@ -1,6 +1,6 @@
 # P07 Progress Log
 
-Scaffolded from `GVISOR-SANDBOX-DESIGN-001.md` — no implementation sessions yet.
+Scaffolded from `docs/design/DESIGN-001.md` — no implementation sessions yet.
 
 Implementation is expected to run on the NucBox EVO X2 homelab host (Linux + `runsc`), via a Claude Code CLI session with this repo cloned there, not from the portfolio author's macOS dev machine.
 
