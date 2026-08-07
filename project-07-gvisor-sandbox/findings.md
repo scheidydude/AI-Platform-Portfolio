@@ -90,3 +90,38 @@ Not `{stdout, stderr, exit_code}` as SRS-001/DESIGN-001 assumed. `TaskContext` (
 - [ ] Default `timeout_s` / `memory_mb` values — no `--memory` flag exists on the current `docker run` call at all; this is now a real gap to fill, not just a default to pick
 - [ ] Sandbox container teardown/cleanup step — current `ContainerRunner` already uses `--rm`, so containers self-clean on exit; still need to verify no orphans on timeout-kill path
 - [x] `runsc` rollback plan — documented above (untested)
+
+## 2026-08-07 — Phase 1: syscall-interception test (FR-1 acceptance criterion met)
+
+Two independent tests, both run via `scripts/verify_isolation.sh` (also runnable standalone; requires the invoking shell to have active `docker` group membership, e.g. via `sg docker -c ...`):
+
+**Test 1 — kernel identity divergence.** `uname -a` / `cat /proc/version` under `--runtime=runc` return the real host kernel; under `--runtime=runsc` they return a fabricated identity. This proves the `uname`/`utsname` syscall is answered by the gVisor sentry itself, not passed through to the host kernel.
+
+```
+### runc (default runtime) ###
+Linux b7a7ba1a18b9 6.19.0-061900rc8-generic #202602012244 SMP PREEMPT_DYNAMIC ... x86_64 GNU/Linux
+
+### runsc (gVisor) ###
+Linux 8e2217cc4bfc 4.19.0-gvisor #1 SMP Sun Jan 10 15:06:54 PST 2016 x86_64 GNU/Linux
+```
+
+**Test 2 — a syscall gVisor doesn't implement at all.** `io_uring_setup(2)` (syscall 425), called directly via `ctypes` in `scripts/probe_io_uring.py`. Three variants isolate exactly where each runtime intercepts:
+
+```
+### runc, Docker default seccomp ###
+io_uring_setup() -> ret=-1 errno=1 (Operation not permitted)
+# Docker's own seccomp profile blocks io_uring_setup here — not yet a kernel-level answer.
+
+### runc, seccomp unconfined (raw host kernel behavior) ###
+io_uring_setup() -> ret=3 errno=0 (none)
+# Real host kernel (6.19 RC) genuinely implements io_uring_setup and succeeds — fd 3 returned.
+
+### runsc (gVisor sentry) ###
+io_uring_setup() -> ret=-1 errno=38 (Function not implemented)
+# gVisor's sentry has no implementation of this syscall at all, regardless of seccomp policy —
+# this is the sentry's own syscall table, not a filter sitting in front of the real kernel.
+```
+
+**Conclusion:** with seccomp taken out of the picture, the host kernel supports `io_uring_setup`; gVisor's sentry does not implement it and answers `ENOSYS` unconditionally. Combined with the kernel-identity divergence in Test 1, this is documented, reproducible evidence that `runsc` intercepts and independently answers guest syscalls rather than passing them through to the host kernel — satisfies FR-1's syscall-interception acceptance criterion.
+
+**Artifacts:** `scripts/probe_io_uring.py`, `scripts/verify_isolation.sh` (both committed to the repo, re-runnable).

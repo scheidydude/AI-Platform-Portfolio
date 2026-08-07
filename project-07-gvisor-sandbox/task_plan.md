@@ -11,7 +11,7 @@
 | Phase | Status | Description |
 |---|---|---|
 | 0 — Recon | mostly complete | Confirm NucBox kernel/Docker version supports `runsc`; audit existing isolation surface (`ContainerRunner`/`WorkerResult`) — Traefik confirmation still open |
-| 1 — Runtime Setup | in progress | Install/configure `runsc`; verify isolation via syscall-interception test |
+| 1 — Runtime Setup | complete | Install/configure `runsc`; verify isolation via syscall-interception test |
 | 2 — Hardened `ContainerRunner` | not started | Add `isolation.container_runtime`/`container_memory_mb`/`container_cpus` config; extend `WorkerResult` additively |
 | 3 — Network Policy | not started | Default-deny egress; allowlist mode via Traefik |
 | 4 — Verification Across Isolation Paths | not started | Confirm existing `WorkerResult` consumers unaffected; demo via `TesterAgent` |
@@ -41,7 +41,7 @@ Phase 0's schema audit found that Orchid already has a generic, config-driven is
 
 - [x] Install and configure `runsc` on NucBox as a secondary Docker runtime — done in Phase 0, `release-20260803.0`
 - [x] `docker run --runtime=runsc` executes successfully alongside default runtime containers — verified with `hello-world`
-- [ ] Isolation verified via at least one syscall-interception test, documented with output
+- [x] Isolation verified via at least one syscall-interception test, documented with output — two tests (`uname`/`/proc/version` kernel-identity divergence, `io_uring_setup` ENOSYS under `runsc` vs. success on the raw host kernel), see `findings.md` and `scripts/verify_isolation.sh`
 
 ## Phase 2 — Hardened `ContainerRunner` (Acceptance: `isolation.container_runtime=runsc` works with enforced limits)
 
