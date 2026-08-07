@@ -22,5 +22,5 @@ Install `runsc` as a secondary Docker runtime (`--runtime=runsc`), invoked expli
 ## Consequences
 
 - Sandboxed execution is opt-in per container; callers must explicitly request `--runtime=runsc`.
-- The execution API (FR-2) is responsible for making that runtime selection — it is not a host-wide default.
+- `ContainerRunner`'s new `isolation.container_runtime` config key (FR-2) is responsible for making that runtime selection, defaulting to `runc` (unchanged behavior) — `runsc` is never a host-wide default.
 - Verifying isolation (FR-1) requires a test that specifically targets `runsc`-launched containers, not just "containers on this host."

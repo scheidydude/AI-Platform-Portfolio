@@ -1,9 +1,9 @@
 # Project 07 — Sandboxed Tool Execution (gVisor): Document Index
 
-**Project:** Opt-in gVisor (`runsc`) sandboxed execution mode for Orchid's `TesterAgent`
+**Project:** Harden Orchid's existing `ContainerRunner` isolation path with gVisor (`runsc`)
 **Goal:** Portfolio-grade artifact demonstrating secure execution, resource ceilings, and syscall observability
 **Timeline:** 1–2 weekends (Phases 1–4), +1 weekend for Phases 5–6
-**Status:** Scoped, not started
+**Status:** In progress — Phase 1 (runtime installed and verified; syscall-interception test pending)
 
 ---
 
@@ -22,7 +22,7 @@
 
 | Document | Description | Status |
 |----------|-------------|--------|
-| [SRS-001](docs/srs/SRS-001.md) | Software Requirements Specification — Sandboxed Tool Execution | **Draft** |
+| [SRS-001](docs/srs/SRS-001.md) | Software Requirements Specification — Sandboxed Tool Execution (v1.1, revised after Phase 0 recon) | **Draft** |
 
 ---
 
@@ -30,7 +30,7 @@
 
 | Document | Description | Status |
 |----------|-------------|--------|
-| [DESIGN-001](docs/design/DESIGN-001.md) | Sandbox execution architecture, phased implementation | **Draft** |
+| [DESIGN-001](docs/design/DESIGN-001.md) | Hardened `ContainerRunner` architecture, phased implementation (v1.1) | **Draft** |
 
 ---
 
@@ -39,8 +39,8 @@
 | ADR | Decision | Status |
 |-----|----------|--------|
 | [ADR-001](docs/adr/ADR-001-runsc-secondary-runtime.md) | `runsc` as a secondary Docker runtime, not a host-wide replacement | Accepted |
-| [ADR-002](docs/adr/ADR-002-additive-execution-mode.md) | `sandboxed_execution` is additive to `verify_syntax_only`; reuse Orchid's task/result schema | Accepted |
-| [ADR-003](docs/adr/ADR-003-host-local-no-auth-api.md) | Execution API is host-local, no auth/multi-user exposure in v1 | Accepted |
+| [ADR-002](docs/adr/ADR-002-additive-execution-mode.md) | Harden `ContainerRunner` + extend `WorkerResult` additively, not a new standalone execution service | Accepted (revised) |
+| [ADR-003](docs/adr/ADR-003-host-local-no-auth-api.md) | Sandboxed execution stays local via `ContainerRunner`, not exposed via `remote/worker_server.py`; no auth in v1 | Accepted |
 
 ---
 
@@ -48,8 +48,9 @@
 
 | Artifact | Description | Status |
 |----------|--------------|--------|
-| Sandbox execution API (`orchid/sandbox/`) | Bounded execution service — FR-2 | Not started |
-| `TesterAgent` `sandboxed_execution` mode | Orchid integration — FR-4 | Not started |
+| `runsc` installed on NucBox | Secondary Docker runtime, `release-20260803.0` | **Complete** |
+| Hardened `ContainerRunner` (`orchid/container_runner.py`) | `isolation.container_runtime`/`container_memory_mb`/`container_cpus` config, `--runtime`/`--memory`/`--cpus` flags — FR-2 | Not started |
+| Additive `WorkerResult` fields (`orchid/worker_protocol.py`) | Optional `stdout`/`stderr`/`exit_code` — FR-4 | Not started |
 | Syscall-interception isolation proof | Documented test output — FR-1 | Not started |
 | Network policy tests | Default-deny + allowlist verification — FR-3 | Not started |
 | Syscall observability capture | Per-task syscall log — FR-5 | Not started |
@@ -60,11 +61,11 @@
 
 - [ ] SRS complete with acceptance criteria (SRS-001: FR-1 through FR-6)
 - [ ] DESIGN-001 architecture and phase table match SRS requirement IDs
-- [ ] All ADRs written and accepted (ADR-001 through ADR-003)
-- [ ] Phase 1 — `runsc` runs alongside default-runtime containers; isolation verified via syscall-interception test
-- [ ] Phase 2 — Execution API enforces timeout and memory limits; correct results for a known test script
+- [x] All ADRs written and accepted (ADR-001 through ADR-003) — ADR-002 revised after Phase 0 recon
+- [ ] Phase 1 — `runsc` runs alongside default-runtime containers (done); isolation verified via syscall-interception test (pending)
+- [ ] Phase 2 — Hardened `ContainerRunner` enforces memory/CPU limits under `runsc`; `WorkerResult` extended additively
 - [ ] Phase 3 — Default-deny egress verified; allowlist mode verified
-- [ ] Phase 4 — `TesterAgent` `sandboxed_execution` mode wired into existing task/result schema, no schema break
+- [ ] Phase 4 — Existing `WorkerResult` consumers unaffected; `TesterAgent` demo runs correctly under the hardened path
 - [ ] Phase 5 — Per-execution syscall log retrievable by task ID
 - [ ] Phase 6 (stretch) — Two concurrent tenants with independently enforced quotas
 - [ ] Comparison write-up vs. Firecracker (P08) drafted
@@ -72,4 +73,4 @@
 
 ---
 
-*Last updated: 2026-08-07 — Scoped and scaffolded, documentation brought in line with portfolio standard. No implementation started.*
+*Last updated: 2026-08-07 — Phase 0 recon complete (Traefik confirmation pending); SRS-001/DESIGN-001/ADR-002 revised after discovering the real `ContainerRunner`/`WorkerResult` integration surface (see `findings.md`). `runsc` installed and verified on the NucBox.*
