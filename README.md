@@ -17,7 +17,11 @@ P03  →  How do you build a reliable agent?                 (3-agent pipeline w
 P04  →  How do you know it works?                          (Eval framework with CI gates)
 P05  →  How do you secure it in a regulated environment?   (STRIDE threat model + compliance controls)
 P06  →  Do the controls actually work in the pipeline?     (Integration layer composing P03 + P05)
+P07  →  How do you safely execute untrusted agent code?    (gVisor sandboxed tool execution)
+P08  →  How do you recover a long-running task mid-flight? (Firecracker microVM checkpoint/restore)
 ```
+
+P07 and P08 extend the thread into a second system, **Orchid** — a self-hosted agent orchestration platform — rather than the Jira/Confluence assistant used by P01–P06. They target Staff+ infrastructure competencies (sandboxing, multi-tenant isolation, durable execution) not covered by the first six projects.
 
 ---
 
@@ -86,6 +90,28 @@ Closes P05's core weakness: controls verified in isolation but never exercised i
 **Stack:** Python · `pytest` · `unittest.mock` · uv · P03 (editable dep) · P05 (sys.path injection)
 
 **Key artifacts:** `p06/secure_researcher.py` (SecureResearcherAgent, SecureOrchestrator, PIIInFindingError) · 53/53 tests passing (injection defense, PII scan on real ResearchFinding, full pipeline regression) · `docs/integration-surface.md` (break-surface tables per wiring point) · `docs/lessons-learned.md` (4 bugs unit tests missed, P02 gateway wiring path) · SRS-001 · DESIGN-001 · ADR-001 through ADR-003
+
+---
+
+### [Project 07 — Sandboxed Tool Execution (gVisor)](./project-07-gvisor-sandbox/)
+**Skill area:** Secure execution · container isolation · multi-tenant resource control · **Status:** Scoped, not started
+
+Integrates gVisor (`runsc`) as an opt-in sandboxed execution mode for untrusted agent-generated code and MCP tool calls in Orchid's `TesterAgent` lifecycle. Enforces resource ceilings, default-deny network egress with explicit allowlisting, and per-execution syscall observability. Not a from-scratch sandbox — an integration and hardening project on top of gVisor's existing runtime.
+
+**Stack:** `runsc` (gVisor) · Docker (alternate runtime) · cgroups · Traefik (egress allowlist) · NucBox EVO X2 homelab host
+
+**Key artifacts (planned):** Sandbox execution API · syscall-interception isolation proof · `TesterAgent` `sandboxed_execution` mode · comparison write-up vs. Firecracker (P08)
+
+---
+
+### [Project 08 — MicroVM Execution Backend with Checkpoint/Restore (Firecracker)](./project-08-firecracker-sandbox/)
+**Skill area:** MicroVM isolation · durable execution · state checkpoint/recovery · **Status:** Scoped, not started
+
+Builds a Firecracker-backed microVM execution layer as an alternative isolation backend to P07, with pre-warmed VM pooling and snapshot/restore of a running VM's full state. Demonstrates the harder capability: resuming a long-running Orchid agent task after a simulated host failure, not just isolating it. Depends on P07's execution API contract for interchangeability between backends.
+
+**Stack:** Firecracker · KVM · stripped Linux kernel + Alpine rootfs · NucBox EVO X2 (AMD/ROCm homelab host)
+
+**Key artifacts (planned):** VM pool manager · snapshot/restore end-to-end demo (task killed mid-execution, resumed with correct state) · cold-start/pool-latency numbers · comparison doc vs. gVisor backend (P07)
 
 ---
 
