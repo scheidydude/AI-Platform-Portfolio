@@ -139,7 +139,7 @@ Every project follows the same structure:
 | `progress.md` | Session-by-session log with test results |
 | `task_plan.md` | Phase tracker with status |
 | `docs/adr/` | Architecture Decision Records for every major choice |
-| `INDEX.md` | Living artifact index with rollup checklist (P06 pattern, backfill planned for P01–P05) |
+| `INDEX.md` | Living artifact index with rollup checklist (root `INDEX.md` for P01, P05–P08; `docs/index.md` for P02–P04) |
 | `HANDOFF.md` | Resume context — current state, gotchas, exact next action |
 
 ---
