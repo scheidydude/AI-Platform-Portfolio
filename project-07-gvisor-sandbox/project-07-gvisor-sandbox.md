@@ -3,7 +3,7 @@
 **Skill area:** Secure execution · container isolation · multi-tenant resource control
 **Format:** Infrastructure integration build
 **Estimated duration:** 1–2 weekends (Phases 1–4), +1 weekend for Phases 5–6
-**Status:** In progress — Phases 1–2 complete, starting Phase 3 (see `task_plan.md`)
+**Status:** In progress — Phases 1–3 complete, starting Phase 4 (see `task_plan.md`)
 **Depends on:** None (sequenced before [Project 08](../project-08-firecracker-sandbox/))
 
 ---
@@ -45,7 +45,7 @@ Full design source: [`docs/design/DESIGN-001.md`](./docs/design/DESIGN-001.md). 
 |---|---|---|
 | 1 — Runtime Setup | complete | Install/configure `runsc` on NucBox as a secondary Docker runtime; verify syscall interception |
 | 2 — Hardened `ContainerRunner` | complete | Add `isolation.container_runtime`/`container_memory_mb`/`container_cpus` config; extend `WorkerResult` additively |
-| 3 — Network Policy | not started | Default-deny egress; explicit domain allowlist via existing Traefik/proxy |
+| 3 — Network Policy | complete | Default-deny egress (`--network none`); explicit domain allowlist via a dedicated Squid forward-proxy sidecar |
 | 4 — Verification Across Isolation Paths | not started | Confirm existing `WorkerResult` consumers unaffected; demo via `TesterAgent` |
 | 5 — Observability | not started | Per-execution syscall trace, associated with task ID, surfaced in ccview/PM Dashboard |
 | 6 — Multi-Tenant Quotas (stretch) | not started | cgroup-based per-tenant quotas, demonstrated with 2 concurrent tenants |
@@ -61,16 +61,18 @@ Orchid Orchestrator (any agent — TesterAgent used for the PoC demo)
         │  isolation.container_enabled=true
         ▼
 ContainerRunner.run_task_isolated()                        [existing]
-        │  - --runtime={runc|runsc}, --memory, --cpus, --network none/allowlist
-        ▼
-gVisor (runsc) container: python:3.12-slim running orchid.worker_subprocess
-        │  - syscall logging via gVisor sentry (strace-equivalent)
-        ▼
+        │  - --runtime={runc|runsc}, --memory, --cpus
+        │  - --network none (default), or internal-net + proxy env vars
+        ▼                                                   ┌─────────────────┐
+gVisor (runsc) container: python:3.12-slim              (allowlisted) │ Squid sidecar   │
+running orchid.worker_subprocess          ── HTTP(S)_PROXY ──►│ dstdomain ACL   │── Internet
+        │  - syscall logging via gVisor sentry                └─────────────────┘  (allowlisted
+        ▼                                                                           domains only)
 WorkerResult{task_id, success, result, error, duration_s, cpu_seconds,
              + optional stdout, stderr, exit_code}
 ```
 
-**Host:** NucBox EVO X2, alongside existing Docker/Traefik stack.
+**Host:** NucBox EVO X2, alongside existing Docker/Traefik stack (Traefik is unrelated to sandbox egress — it's ingress-only on this host, see ADR-004).
 
 ---
 

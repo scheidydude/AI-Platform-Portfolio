@@ -98,9 +98,9 @@ Closes P05's core weakness: controls verified in isolation but never exercised i
 
 Hardens Orchid's existing `ContainerRunner` task-isolation path with gVisor (`runsc`) as the runtime, real resource ceilings, default-deny network egress with explicit allowlisting, and per-execution syscall observability. Not a from-scratch sandbox, and not a new service — an integration and hardening project on top of gVisor's existing runtime and Orchid's existing isolation infrastructure.
 
-**Stack:** `runsc` (gVisor) · Docker (alternate runtime) · cgroups · Traefik (egress allowlist) · NucBox EVO X2 homelab host
+**Stack:** `runsc` (gVisor) · Docker (alternate runtime) · Squid (egress-allowlist sidecar) · NucBox EVO X2 homelab host
 
-**Key artifacts (planned):** Hardened `ContainerRunner` (`--runtime`, `--memory`, `--cpus`, `--network` flags) · additive `WorkerResult` fields · syscall-interception isolation proof · comparison write-up vs. Firecracker (P08)
+**Key artifacts:** Hardened `ContainerRunner` (`--runtime`, `--memory`, `--cpus`, `--network` flags) · Squid egress-allowlist sidecar (`sandbox_egress.py`) · additive `WorkerResult` fields · syscall-interception isolation proof · comparison write-up vs. Firecracker (P08, planned)
 
 ---
 

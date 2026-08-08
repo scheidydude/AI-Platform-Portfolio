@@ -13,7 +13,7 @@
 | 0 — Recon | complete | Confirm NucBox kernel/Docker version supports `runsc`; audit existing isolation surface (`ContainerRunner`/`WorkerResult`); confirm egress mechanism |
 | 1 — Runtime Setup | complete | Install/configure `runsc`; verify isolation via syscall-interception test |
 | 2 — Hardened `ContainerRunner` | complete | Add `isolation.container_runtime`/`container_memory_mb`/`container_cpus` config; extend `WorkerResult` additively |
-| 3 — Network Policy | not started, needs a design decision | Default-deny egress (trivial, Docker-native); allowlist mode needs new infrastructure — Traefik doesn't apply, see below |
+| 3 — Network Policy | complete | Default-deny egress (`--network none`); allowlist via a new Squid forward-proxy sidecar (ADR-004) |
 | 4 — Verification Across Isolation Paths | not started | Confirm existing `WorkerResult` consumers unaffected; demo via `TesterAgent` |
 | 5 — Observability | not started | Syscall log per task ID; summary in ccview |
 | 6 — Multi-Tenant Quotas (stretch) | not started | Two concurrent tenants, independently enforced cgroup quotas |
@@ -55,15 +55,13 @@ Phase 0's schema audit found that Orchid already has a generic, config-driven is
 
 ## Phase 3 — Network Policy (Acceptance: default-deny egress, explicit allowlist works)
 
-### Blocking decision before Phase 3 implementation starts
+**Blocking decision (resolved 2026-08-07):** Traefik on this host is ingress-only, confirmed in Phase 0 — SRS-001 FR-3's "allowlist via Traefik" premise was wrong. David chose a dedicated Squid forward-proxy sidecar over DNS-filtering and iptables/nftables (ADR-004). Implemented and verified.
 
-Phase 0's Traefik-confirmation checklist item resolved to "Traefik doesn't do this at all" (see `findings.md`) — it's an ingress-only reverse proxy on this host, nothing to do with a container's outbound traffic. SRS-001 FR-3's "allowlist mode routes through the existing Traefik/proxy configuration" is wrong.
+- [x] Decide the allowlist mechanism — Squid sidecar (ADR-004); SRS-001/DESIGN-001 updated to v1.2
+- [x] Default execution runs with `--network none` — verified via real DNS-resolution failure inside the container (deliberate behavior change from the prior no-flag/default-bridge behavior)
+- [x] Allowlisted execution can reach only specified domain(s), confirmed via test — five live tests: default-deny, allowlisted HTTP (200), non-allowlisted HTTP (403), allowlisted/non-allowlisted HTTPS via CONNECT, and the full set again composed with `--runtime=runsc`
 
-**Needs a decision:** how to implement the allowlist half of FR-3, since it requires new infrastructure rather than hardening something that exists (unlike Phase 2). Candidates from `findings.md`: (a) a small forward-proxy container (`tinyproxy`/`squid` + ACL) that an allowlisted sandbox is pointed at; (b) a custom Docker bridge + `iptables`/`nftables` rules (fragile for domain-based allowlisting); (c) DNS-based filtering paired with egress IP restriction. Default-deny itself (`--network none`) needs no decision — it's already how `ContainerRunner._build_docker_command()` is structured to grow.
-
-- [ ] Decide the allowlist mechanism (see above), update SRS-001 FR-3 / DESIGN-001 accordingly
-- [ ] Default execution runs with `--network none` (verified via failed curl attempt inside container)
-- [ ] Allowlisted execution can reach only specified domain(s), confirmed via test
+**Status:** Complete. Committed to `p07-gvisor-hardening` (`f7e0dbf`). Found and fixed a real gVisor limitation along the way (can't resolve Docker's embedded DNS on a user-defined network under `runsc`; worked around with IP-based addressing) — see `findings.md`, directly useful for the gVisor-vs-Firecracker comparison deliverable.
 
 ## Phase 4 — Verification Across Isolation Paths (Acceptance: existing consumers unaffected, demo works)
 
