@@ -34,6 +34,14 @@
 
 ---
 
+## Comparison
+
+| Document | Description | Status |
+|----------|-------------|--------|
+| [COMPARISON-001](docs/comparison/COMPARISON-001-gvisor-vs-firecracker.md) | gVisor vs. Firecracker — architecture, what P07 proved, what gVisor doesn't solve, what Firecracker (P08) would add, decision framework | **Draft** — will be revised once P08 has real measurements |
+
+---
+
 ## Architecture Decision Records
 
 | ADR | Decision | Status |
@@ -62,8 +70,8 @@
 
 ## Final Rollup Checklist
 
-- [ ] SRS complete with acceptance criteria (SRS-001: FR-1 through FR-6)
-- [ ] DESIGN-001 architecture and phase table match SRS requirement IDs
+- [x] SRS complete with acceptance criteria — FR-1 through FR-5 all satisfied and verified live; FR-6 (multi-tenant quotas) is the explicit Phase 6 stretch goal, not required for core completion
+- [x] DESIGN-001 architecture and phase table match SRS requirement IDs
 - [x] All ADRs written and accepted (ADR-001 through ADR-004) — ADR-002 revised after Phase 0 recon; ADR-004 added when the Traefik-egress assumption also proved wrong
 - [x] Phase 1 — `runsc` runs alongside default-runtime containers; isolation verified via syscall-interception test (kernel-identity divergence + `io_uring_setup` ENOSYS)
 - [x] Phase 2 — Hardened `ContainerRunner` enforces memory/CPU limits under `runsc`; `WorkerResult` extended additively (memory-OOM proof: `exit 137` at 64m cap vs. clean completion unconstrained)
@@ -71,9 +79,9 @@
 - [x] Phase 4 — Existing `WorkerResult` consumers unaffected (verified per-file, zero regressions); real live `TesterAgent` demo succeeded end-to-end under the fully hardened path (found and fixed 3 pre-existing bugs that had made `ContainerRunner` non-functional for any task before this)
 - [x] Phase 5 — Per-execution syscall log retrievable by task ID (`~/.orchid/sandbox_syscall_logs/<task_id>/`); summary wired into `task_metrics.jsonl` (`ccview` doesn't exist; PM Dashboard's data source used instead, no dedicated UI column)
 - [ ] Phase 6 (stretch) — Two concurrent tenants with independently enforced quotas
-- [ ] Comparison write-up vs. Firecracker (P08) drafted
+- [x] Comparison write-up vs. Firecracker (P08) drafted — `COMPARISON-001`; includes a flagged action item for P08 (its docs still reference the superseded execution contract)
 - [ ] INDEX.md links all artifacts
 
 ---
 
-*Last updated: 2026-08-07 — Phases 1–5 complete (all core phases; only the Phase 6 stretch goal remains). `runsc` installed and syscall-interception isolation verified; `ContainerRunner` hardened with runtime/memory/CPU config; egress default-deny + Squid allowlist sidecar built and live-verified (including a real gVisor DNS-resolution limitation found and fixed along the way); a real, live end-to-end `TesterAgent` demo succeeded under the fully hardened path, after finding and fixing 3 pre-existing bugs that meant `isolation.container_enabled` had never worked for any task before this project touched it; per-execution gVisor syscall traces are captured and retrievable by task ID, with a summary flowing into the PM Dashboard's real data source (`ccview` turned out not to exist). All committed to the Orchid repo's `p07-gvisor-hardening` branch (`0eaac75`, `f7e0dbf`, `9beaea5`, `41fea7a`; not merged to `main`). Also surfaced and cleaned up a pre-existing, unrelated MCP-subprocess leak in Orchid's test suite while attempting a full-suite regression check — see `findings.md`.*
+*Last updated: 2026-08-07 — All core phases (1–5) and the Firecracker comparison write-up (`COMPARISON-001`) complete; only the Phase 6 stretch goal remains. `runsc` installed and syscall-interception isolation verified; `ContainerRunner` hardened with runtime/memory/CPU config; egress default-deny + Squid allowlist sidecar built and live-verified (including a real gVisor DNS-resolution limitation found and fixed along the way); a real, live end-to-end `TesterAgent` demo succeeded under the fully hardened path, after finding and fixing 3 pre-existing bugs that meant `isolation.container_enabled` had never worked for any task before this project touched it; per-execution gVisor syscall traces are captured and retrievable by task ID, with a summary flowing into the PM Dashboard's real data source (`ccview` turned out not to exist). All committed to the Orchid repo's `p07-gvisor-hardening` branch (`0eaac75`, `f7e0dbf`, `9beaea5`, `41fea7a`; not merged to `main`). Also surfaced and cleaned up a pre-existing, unrelated MCP-subprocess leak in Orchid's test suite while attempting a full-suite regression check — see `findings.md`.*

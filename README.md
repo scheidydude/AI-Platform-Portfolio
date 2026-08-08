@@ -100,7 +100,7 @@ Hardens Orchid's existing `ContainerRunner` task-isolation path with gVisor (`ru
 
 **Stack:** `runsc` (gVisor) · Docker (alternate runtime) · Squid (egress-allowlist sidecar) · NucBox EVO X2 homelab host
 
-**Key artifacts:** Hardened `ContainerRunner` (`--runtime`, `--memory`, `--cpus`, `--network` flags) · Squid egress-allowlist sidecar (`sandbox_egress.py`) · additive `WorkerResult` fields · syscall-interception isolation proof · per-execution syscall trace capture (`sandbox_syscall_log.py`) · live end-to-end `TesterAgent` demo under the fully hardened path · comparison write-up vs. Firecracker (P08, planned)
+**Key artifacts:** Hardened `ContainerRunner` (`--runtime`, `--memory`, `--cpus`, `--network` flags) · Squid egress-allowlist sidecar (`sandbox_egress.py`) · additive `WorkerResult` fields · syscall-interception isolation proof · per-execution syscall trace capture (`sandbox_syscall_log.py`) · live end-to-end `TesterAgent` demo under the fully hardened path · comparison write-up vs. Firecracker (P08, draft — to be revised with P08's own measurements)
 
 ---
 
