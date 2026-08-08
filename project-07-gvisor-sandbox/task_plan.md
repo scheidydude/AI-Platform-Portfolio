@@ -10,10 +10,10 @@
 
 | Phase | Status | Description |
 |---|---|---|
-| 0 — Recon | mostly complete | Confirm NucBox kernel/Docker version supports `runsc`; audit existing isolation surface (`ContainerRunner`/`WorkerResult`) — Traefik confirmation still open |
+| 0 — Recon | complete | Confirm NucBox kernel/Docker version supports `runsc`; audit existing isolation surface (`ContainerRunner`/`WorkerResult`); confirm egress mechanism |
 | 1 — Runtime Setup | complete | Install/configure `runsc`; verify isolation via syscall-interception test |
 | 2 — Hardened `ContainerRunner` | complete | Add `isolation.container_runtime`/`container_memory_mb`/`container_cpus` config; extend `WorkerResult` additively |
-| 3 — Network Policy | not started | Default-deny egress; allowlist mode via Traefik |
+| 3 — Network Policy | not started, needs a design decision | Default-deny egress (trivial, Docker-native); allowlist mode needs new infrastructure — Traefik doesn't apply, see below |
 | 4 — Verification Across Isolation Paths | not started | Confirm existing `WorkerResult` consumers unaffected; demo via `TesterAgent` |
 | 5 — Observability | not started | Syscall log per task ID; summary in ccview |
 | 6 — Multi-Tenant Quotas (stretch) | not started | Two concurrent tenants, independently enforced cgroup quotas |
@@ -24,7 +24,7 @@
 
 - [x] Confirm `runsc` install path/version compatible with NucBox host kernel — `release-20260803.0`, confirmed against kernel `6.19.0-061900rc8-generic` via a working `--runtime=runsc` run (see `findings.md`)
 - [x] Audit Orchid `TesterAgent` current modes and task/result schema shape — done; **found the real schema (`WorkerResult`/`TaskContext`) and integration surface (`ContainerRunner`) differ substantially from SRS-001/DESIGN-001/ADR-002's assumptions. See `findings.md` — blocks Phase 2/4 until resolved.**
-- [ ] Confirm Traefik config location for later allowlist wiring — narrowed to two candidates, not yet confirmed which governs sandbox egress (see `findings.md`)
+- [x] Confirm Traefik config location for later allowlist wiring — **resolved, and the premise was wrong**: Traefik on this host is ingress-only (external HTTPS → internal services), confirmed via `systemctl status traefik` + reading its static and dynamic configs directly. Neither candidate does egress. See `findings.md` — Phase 3's allowlist mechanism needs to be new infrastructure, not "wire into Traefik."
 - [x] Install `runsc` on NucBox — installed via gVisor apt repo, version `release-20260803.0`, pinned in `findings.md`
 - [ ] Define supported `language` values for the execution API's request shape and the sandbox base image(s) required for each — **superseded**: `ContainerRunner` runs one fixed image (`python:3.12-slim`) executing Orchid's own worker module, not user-selected-language snippets. Revisit after the Phase 2/4 architecture question below is resolved.
 - [ ] Set default `timeout_s` and `memory_mb` values for the execution API — real gap confirmed: `ContainerRunner`'s `docker run` call has no `--memory`/`--cpus` flags at all today
@@ -55,8 +55,15 @@ Phase 0's schema audit found that Orchid already has a generic, config-driven is
 
 ## Phase 3 — Network Policy (Acceptance: default-deny egress, explicit allowlist works)
 
+### Blocking decision before Phase 3 implementation starts
+
+Phase 0's Traefik-confirmation checklist item resolved to "Traefik doesn't do this at all" (see `findings.md`) — it's an ingress-only reverse proxy on this host, nothing to do with a container's outbound traffic. SRS-001 FR-3's "allowlist mode routes through the existing Traefik/proxy configuration" is wrong.
+
+**Needs a decision:** how to implement the allowlist half of FR-3, since it requires new infrastructure rather than hardening something that exists (unlike Phase 2). Candidates from `findings.md`: (a) a small forward-proxy container (`tinyproxy`/`squid` + ACL) that an allowlisted sandbox is pointed at; (b) a custom Docker bridge + `iptables`/`nftables` rules (fragile for domain-based allowlisting); (c) DNS-based filtering paired with egress IP restriction. Default-deny itself (`--network none`) needs no decision — it's already how `ContainerRunner._build_docker_command()` is structured to grow.
+
+- [ ] Decide the allowlist mechanism (see above), update SRS-001 FR-3 / DESIGN-001 accordingly
 - [ ] Default execution runs with `--network none` (verified via failed curl attempt inside container)
-- [ ] Allowlisted execution can reach only specified domain(s), confirmed via test, routed through the confirmed Traefik config
+- [ ] Allowlisted execution can reach only specified domain(s), confirmed via test
 
 ## Phase 4 — Verification Across Isolation Paths (Acceptance: existing consumers unaffected, demo works)
 
