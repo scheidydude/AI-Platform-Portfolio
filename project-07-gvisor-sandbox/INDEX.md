@@ -3,7 +3,7 @@
 **Project:** Harden Orchid's existing `ContainerRunner` isolation path with gVisor (`runsc`)
 **Goal:** Portfolio-grade artifact demonstrating secure execution, resource ceilings, and syscall observability
 **Timeline:** 1–2 weekends (Phases 1–4), +1 weekend for Phases 5–6
-**Status:** In progress — Phases 1–3 complete; starting Phase 4
+**Status:** In progress — Phases 1–4 complete; starting Phase 5
 
 ---
 
@@ -54,6 +54,8 @@
 | Hardened `ContainerRunner` (`orchid/container_runner.py`) | `isolation.container_runtime`/`container_memory_mb`/`container_cpus` config, `--runtime`/`--memory`/`--cpus` flags — FR-2 | **Complete** (Orchid repo, branch `p07-gvisor-hardening`, `0eaac75`) |
 | Additive `WorkerResult` fields (`orchid/worker_protocol.py`) | Optional `stdout`/`stderr`/`exit_code` — FR-4 | **Complete** |
 | Squid egress-allowlist sidecar (`orchid/sandbox_egress.py`) | Default-deny (`--network none`) + `dstdomain`-ACL allowlist — FR-3, ADR-004 | **Complete** (Orchid repo, branch `p07-gvisor-hardening`, `f7e0dbf`) |
+| `ContainerRunner` made actually functional (mounts, `container_env`) | Fixed 3 pre-existing bugs that meant it never worked for any task — FR-4 | **Complete** (Orchid repo, branch `p07-gvisor-hardening`, `9beaea5`) |
+| Live end-to-end `TesterAgent` demo | Real LLM call + pytest run under `runsc` + memory cap + egress allowlist — FR-4 | **Complete** |
 | Syscall observability capture | Per-task syscall log — FR-5 | Not started |
 
 ---
@@ -66,7 +68,7 @@
 - [x] Phase 1 — `runsc` runs alongside default-runtime containers; isolation verified via syscall-interception test (kernel-identity divergence + `io_uring_setup` ENOSYS)
 - [x] Phase 2 — Hardened `ContainerRunner` enforces memory/CPU limits under `runsc`; `WorkerResult` extended additively (memory-OOM proof: `exit 137` at 64m cap vs. clean completion unconstrained)
 - [x] Phase 3 — Default-deny egress verified (DNS resolution fails under `--network none`); allowlist verified live over HTTP and HTTPS, under both `runc` and `runsc`, including a non-allowlisted-domain 403 rejection
-- [ ] Phase 4 — Existing `WorkerResult` consumers unaffected; `TesterAgent` demo runs correctly under the hardened path
+- [x] Phase 4 — Existing `WorkerResult` consumers unaffected (verified per-file, zero regressions); real live `TesterAgent` demo succeeded end-to-end under the fully hardened path (found and fixed 3 pre-existing bugs that had made `ContainerRunner` non-functional for any task before this)
 - [ ] Phase 5 — Per-execution syscall log retrievable by task ID
 - [ ] Phase 6 (stretch) — Two concurrent tenants with independently enforced quotas
 - [ ] Comparison write-up vs. Firecracker (P08) drafted
@@ -74,4 +76,4 @@
 
 ---
 
-*Last updated: 2026-08-07 — Phases 1–3 complete. `runsc` installed and syscall-interception isolation verified; `ContainerRunner` hardened with runtime/memory/CPU config; egress default-deny + Squid allowlist sidecar built and live-verified over HTTP/HTTPS under both `runc` and `runsc` (including a real gVisor DNS-resolution limitation found and fixed along the way). All committed to the Orchid repo's `p07-gvisor-hardening` branch (`0eaac75`, `f7e0dbf`; not merged to `main`). Also surfaced and cleaned up a pre-existing, unrelated MCP-subprocess leak in Orchid's test suite while attempting a full-suite regression check — see `findings.md`.*
+*Last updated: 2026-08-07 — Phases 1–4 complete. `runsc` installed and syscall-interception isolation verified; `ContainerRunner` hardened with runtime/memory/CPU config; egress default-deny + Squid allowlist sidecar built and live-verified (including a real gVisor DNS-resolution limitation found and fixed along the way); a real, live end-to-end `TesterAgent` demo succeeded under the fully hardened path, after finding and fixing 3 pre-existing bugs that meant `isolation.container_enabled` had never worked for any task before this project touched it. All committed to the Orchid repo's `p07-gvisor-hardening` branch (`0eaac75`, `f7e0dbf`, `9beaea5`; not merged to `main`). Also surfaced and cleaned up a pre-existing, unrelated MCP-subprocess leak in Orchid's test suite while attempting a full-suite regression check — see `findings.md`.*

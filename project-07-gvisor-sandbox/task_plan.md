@@ -14,7 +14,7 @@
 | 1 — Runtime Setup | complete | Install/configure `runsc`; verify isolation via syscall-interception test |
 | 2 — Hardened `ContainerRunner` | complete | Add `isolation.container_runtime`/`container_memory_mb`/`container_cpus` config; extend `WorkerResult` additively |
 | 3 — Network Policy | complete | Default-deny egress (`--network none`); allowlist via a new Squid forward-proxy sidecar (ADR-004) |
-| 4 — Verification Across Isolation Paths | not started | Confirm existing `WorkerResult` consumers unaffected; demo via `TesterAgent` |
+| 4 — Verification Across Isolation Paths | complete | Confirm existing `WorkerResult` consumers unaffected; demo via `TesterAgent` — found & fixed ContainerRunner was never functional |
 | 5 — Observability | not started | Syscall log per task ID; summary in ccview |
 | 6 — Multi-Tenant Quotas (stretch) | not started | Two concurrent tenants, independently enforced cgroup quotas |
 
@@ -65,8 +65,10 @@ Phase 0's schema audit found that Orchid already has a generic, config-driven is
 
 ## Phase 4 — Verification Across Isolation Paths (Acceptance: existing consumers unaffected, demo works)
 
-- [ ] Existing `WorkerResult` consumers (`orchestrator.py`, `remote/worker_server.py`, `remote/dispatcher.py`, `worker_subprocess.py`) pass Orchid's existing test suite unmodified
-- [ ] `TesterAgent` task run via `isolation.container_enabled` + `isolation.container_runtime: runsc` completes correctly, demonstrating the hardened path end-to-end
+- [x] Existing `WorkerResult` consumers (`orchestrator.py`, `remote/worker_server.py`, `remote/dispatcher.py`, `worker_subprocess.py`) pass Orchid's existing test suite unmodified — checked every relevant test file individually (avoiding the leaky full suite); 8 pre-existing failures across 3 files, all confirmed identical on `main`, zero regressions
+- [x] `TesterAgent` task run via `isolation.container_enabled` + `isolation.container_runtime: runsc` completes correctly, demonstrating the hardened path end-to-end — real live demo: `success=True`, real LLM call, real pytest run, under `runsc` + 512MB memory cap + network locked to one allowlisted domain
+
+**Status:** Complete. Committed to `p07-gvisor-hardening` (`9beaea5`). Found and fixed three pre-existing bugs that meant `ContainerRunner` had never actually worked for any task before this — see `findings.md`. Not scope creep: fixing them was required to satisfy this phase's own acceptance criterion.
 
 ## Phase 5 — Observability (Acceptance: syscall trace available per execution)
 

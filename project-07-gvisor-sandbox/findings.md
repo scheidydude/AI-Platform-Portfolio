@@ -182,3 +182,47 @@ David chose the forward-proxy sidecar (option (a) above), over DNS-filtering and
 **Real finding, not a bug: gVisor can't resolve Docker's embedded DNS on a user-defined network.** First attempt at test 5 used the proxy's *container name* (as under `runc`, which worked fine) and failed under `--runtime=runsc` with the same `[Errno -3] Temporary failure in name resolution` — but this time for the proxy's own hostname, on a network path that otherwise worked. Isolated by testing the identical lookup under `runc` (works) vs. `runsc` (fails), then confirming raw-IP addressing works under both. Conclusion: gVisor's netstack does not properly resolve names via Docker's embedded DNS server (127.0.0.11) on a custom bridge network — a real, documented gVisor limitation, not a bug in this code. **Fix:** `sandbox_egress.ensure_egress_proxy()` now returns `http://<proxy-IP>:3128` (looked up via `docker inspect`) rather than `http://<container-name>:3128`, sidestepping the DNS path entirely. This is exactly the kind of "what gVisor doesn't solve" material DESIGN-001's deliverables ask for — goes directly into the gVisor-vs-Firecracker comparison write-up.
 
 **Committed** to `p07-gvisor-hardening` in the Orchid repo (not merged to `main`, David's call, consistent with the Phase 2 branch decision).
+
+## 2026-08-07 — Phase 4: consumer regression check + real live end-to-end demo
+
+### Consumer regression check (FR-4, first half)
+
+Ran every test file touching `orchestrator.py`, `remote/worker_server.py`, `remote/dispatcher.py`, or `worker_subprocess.py` individually (not the full leaky suite — see the earlier MCP-leak entry): `test_integration.py`, `test_tester_agent.py`, `test_multi.py`, `test_metrics.py`, `test_providers.py`, `test_routing.py`, `test_trace.py`, `test_rollup.py`, `test_remote_dispatcher.py`. Result: 8 failures across 3 files (`test_metrics.py` ×2, `test_providers.py` ×6, `test_rollup.py` ×1) — every one confirmed **identical on `main`** (checked out `main`, re-ran each failing file, same failures, same error messages: the `MCPTool.server_name` `AttributeError` and unrelated provider-routing assertion mismatches). Zero regressions from any P07 work. `test_integration.py`/`test_metrics.py`/`test_trace.py` also showed order-dependent pollution when run *together* (matches the pattern already documented for `test_trace.py` alone) — all pass individually.
+
+### Real live demo (FR-4, second half) — and three more pre-existing bugs found along the way
+
+Set out to run a real `TesterAgent` task through `ContainerRunner.run_task_isolated()` under `isolation.container_runtime: runsc`, per Phase 4's acceptance criterion. Hit three genuine, pre-existing bugs — none related to gVisor, none introduced by P07 — that meant `isolation.container_enabled=true` had **never actually worked, for any task, ever**:
+
+1. **`_prepare_project` read `ctx.project_path`, a field that doesn't exist on `TaskContext`** (the real field is `project_dir`). This alone would `AttributeError` on the very first call, before Docker even runs.
+2. **`_prepare_project` used `shutil.copytree` unconditionally on every top-level item** in the project directory — crashes with `NotADirectoryError` on any top-level *file* (i.e. almost every real project: `README.md`, `pyproject.toml`, anything not a directory).
+3. **No volume mounts at all.** `docker run ... {image} {sys.executable} -m orchid.worker_subprocess` referenced `sys.executable` — correctly, that's the host's own `.venv` interpreter path (e.g. `/home/dave/LocalAI/orchid/.venv/bin/python3`) — but nothing ever mounted that path, the `orchid` package, or the target project into the container. Confirmed directly: `docker run --rm python:3.12-slim python3 -m orchid.worker_subprocess` → `ModuleNotFoundError: No module named 'orchid'`.
+
+**Fixes**, all in `orchid/container_runner.py`:
+- `ctx.project_dir` (not `project_path`) in `_prepare_project`.
+- File-vs-directory branch in `_prepare_project`'s copy loop (`shutil.copy2` for files, `shutil.copytree` for directories).
+- `_build_docker_command(project_dir)` now takes the prepared project dir and mounts it at `WORKDIR`, plus mounts `ContainerRunner.ORCHID_ROOT` (computed dynamically, read-only) so the container can import `orchid` via the exact same editable install the host uses. Also added `_venv_extra_mount_dirs()`: `sys.executable` on this host resolves through a **uv-managed standalone Python toolchain** living outside the repo (`~/.local/share/uv/...`, itself several layers of symlinks — `pyvenv.cfg`'s `home` field points at yet another alias directory, so a narrowly-scoped mount of just the final resolved path wasn't sufficient; mounting the whole `~/.local/share/uv` cache read-only was the robust fix). This only activates when the interpreter actually lives outside `ORCHID_ROOT` — a plain system-Python venv wouldn't need it.
+
+**Verified the fix directly** (not through the full agent loop yet): `docker run --rm -v /home/dave/LocalAI/orchid:/home/dave/LocalAI/orchid:ro -v <uv-toolchain>:<uv-toolchain>:ro ... /home/dave/LocalAI/orchid/.venv/bin/python3 -c 'from orchid.orchestrator import _get_registry; print(_get_registry().keys())'` → succeeds, lists all agent types including `tester`.
+
+**Fourth gap, found running the actual demo:** the container gets zero host environment variables by default (by design, to avoid leaking secrets) — but that also means `LLAMA_BASE_URL` never reaches the agent, so *any* LLM call fails inside a fully isolated task, including `TesterAgent`'s own ReAct loop (the whole agent run, LLM calls included, executes inside the container in this architecture — not just tool/code execution). Added `isolation.container_env` (default `{}`): an explicit, opt-in dict of env vars forwarded into the container, deliberately narrow rather than a blanket host-environment passthrough — consistent with the project's "explicit allowlist over implicit access" theme (same spirit as FR-3's domain allowlist).
+
+**Fifth gap:** Squid's `Safe_ports` ACL only allowed 80/443 — denied the LAN LLM endpoint's port (8082) before the domain allowlist was ever checked. Added `acl Safe_ports port 8081-8082` (the two local LLM/embedding ports used on this homelab) to `sandbox_egress_squid.conf.template`.
+
+**Full live demo, all fixes applied together:**
+```python
+c = cfg.get_config()
+c["isolation"]["container_runtime"] = "runsc"
+c["isolation"]["container_memory_mb"] = 512
+c["isolation"]["container_egress_allowlist"] = ["ai.scheidy.com"]
+c["isolation"]["container_env"] = {"LLAMA_BASE_URL": "http://ai.scheidy.com:8082/v1"}
+
+ctx = TaskContext(agent_type="tester", task_description="Run the test suite...", ...)
+result = ContainerRunner().run_task_isolated(ctx, timeout_s=120)
+```
+Result: `success=True`, `exit_code=0`, `duration_s=54.08` (real 35B-model inference time), `result={"passed": true, "tests_run": 1, "failures": [], "files_checked": ["test_trivial.py"]}` — a genuine, live, end-to-end `TesterAgent` run: real LLM calls, real ReAct loop, real pytest execution, under `runsc`, under a 512MB memory cap, with network locked to exactly one allowlisted LAN domain. No orphaned containers afterward (`docker ps -a` shows only the long-running Squid sidecar).
+
+**Unit tests:** added `test_build_docker_command_mounts_project_and_orchid_root` and `test_prepare_project_uses_project_dir_field` (regression test for bug #1/#2) to `test_container_runner.py`; updated the three existing `_build_docker_command()` call sites for its new `project_dir` parameter. Full P07 test set: 18/18. Broader regression set (8 files covering all four `WorkerResult` consumers plus P07's own tests): 86/86 passing.
+
+**Reflection:** this is the clearest example in the whole project of why the recon-first, verify-live approach mattered — `isolation.container_enabled` looked like existing, working infrastructure to harden (that was the whole premise of the Phase 0 pivot), but it had never actually been exercised end-to-end. Hardening a mechanism and *making that mechanism real* turned out to be the same piece of work here. Worth stating plainly in the portfolio write-up rather than implying `ContainerRunner` was already solid before P07 touched it.
+
+**Committed** to `p07-gvisor-hardening` in the Orchid repo (not merged to `main`, consistent with prior phases).
