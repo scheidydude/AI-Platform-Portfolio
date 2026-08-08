@@ -226,3 +226,62 @@ Result: `success=True`, `exit_code=0`, `duration_s=54.08` (real 35B-model infere
 **Reflection:** this is the clearest example in the whole project of why the recon-first, verify-live approach mattered — `isolation.container_enabled` looked like existing, working infrastructure to harden (that was the whole premise of the Phase 0 pivot), but it had never actually been exercised end-to-end. Hardening a mechanism and *making that mechanism real* turned out to be the same piece of work here. Worth stating plainly in the portfolio write-up rather than implying `ContainerRunner` was already solid before P07 touched it.
 
 **Committed** to `p07-gvisor-hardening` in the Orchid repo (not merged to `main`, consistent with prior phases).
+
+## 2026-08-07 — Phase 5 recon: syscall capture mechanism, blocked on a daemon.json change
+
+`runsc` has two candidate mechanisms for FR-5. Chose the older, simpler one:
+
+- `-strace` + `-debug-log`: global `runsc` flags. `-debug-log` accepts a directory (trailing `/`) and writes a per-run log there with default naming; supports `%TIMESTAMP%`/`%COMMAND%` template variables (no `%ID%`, so task-ID association has to be done by us afterward — plan: give each task its own `-debug-log` directory named by task ID, so there's no need to parse/rename anything).
+- `runsc trace` (newer trace-points/sinks system): more powerful but heavier to wire up (session create/delete lifecycle, sink configuration) for what FR-5 actually asks for (a retrievable log, not live streaming). Not used.
+
+**Per-container control needs a Docker daemon change.** `docker run --annotation dev.gvisor.flag.strace=true --annotation dev.gvisor.flag.debug-log=<dir>/` is gVisor's documented mechanism for setting runsc flags per-container via OCI annotations — tested directly, and it's real — but it's rejected by default:
+```
+OCI runtime create failed: Failed to apply OCI spec annotations to runsc config:
+error setting flag debug-log="...": flag override disabled, use --allow-flag-override to enable it
+```
+This is a runtime-level security control (stops arbitrary containers from overriding runsc's own flags) — makes sense as a default-deny, but needs explicit opt-in for FR-5 to work at all. **Needs a `/etc/docker/daemon.json` change + Docker restart (sudo, handed to David).**
+
+**Correction (2026-08-07):** David's first attempt used `sudo runsc install` directly, the more natural command — but `runsc install` regenerates the whole runsc runtime entry from scratch (`-clobber` defaults to `true`), silently wiping any hand-edited `runtimeArgs`. Confirmed: `/etc/docker/daemon.json` afterward was back to the bare `{"path": "/usr/bin/runsc"}`. `runsc install` supports passing extra runtime args directly, which is the right command instead of hand-editing the JSON:
+
+```bash
+sudo runsc install -- --allow-flag-override
+sudo systemctl restart docker
+```
+
+Verify (from a shell where `docker` group membership is active — same new-shell/`newgrp docker` caveat as Phase 0):
+```bash
+mkdir -p /tmp/p07-strace-test
+docker run --rm --runtime=runsc --annotation dev.gvisor.flag.strace=true --annotation dev.gvisor.flag.debug-log=/tmp/p07-strace-test/ python:3.12-slim python3 -c "print(1+1)"
+ls /tmp/p07-strace-test/   # should show a log file now, not be empty
+```
+
+**Rollback:** `sudo runsc install` (no extra args) reinstalls the plain entry, undoing `--allow-flag-override`. `--allow-flag-override` only affects containers that explicitly set `dev.gvisor.flag.*` annotations, so it shouldn't change behavior for anything else on the host.
+
+Continuing with the `ContainerRunner` wiring (annotations, per-task log directory, retrieval helper) while this is pending — that part doesn't need the daemon change to write and unit-test, only to verify live.
+
+## 2026-08-07 — Phase 5 complete: syscall trace capture, retrievable by task ID
+
+**`ccview` doesn't exist.** Grepped the Orchid repo and the wider filesystem — no trace of it anywhere. It was speculative language in the original design doc's acceptance criterion ("summary view visible in ccview or the PM Dashboard"), never a real, accessible integration point. **PM Dashboard is real**, though: `orchid/interfaces/web_server.py` (2475 lines, FastAPI), with an existing `/get_metrics` endpoint reading `.orchid/task_metrics.jsonl` per project — the same file `orchestrator.py._write_task_metrics()` already writes for every task, `cpu_seconds` included. That's the real, existing integration point.
+
+**Implementation:**
+- `WorkerResult.syscall_log_path` (additive) — set by `ContainerRunner` when a log directory ends up populated after a run.
+- `ContainerRunner._build_docker_command()`: when `isolation.syscall_trace_enabled` **and** `isolation.container_runtime == "runsc"` (tracing is gVisor-specific — meaningless, untested, and not wired for `runc`), adds `--annotation dev.gvisor.flag.strace=true` and `--annotation dev.gvisor.flag.debug-log=<dir>/`, where `<dir>` is `~/.orchid/sandbox_syscall_logs/<task_id>/` — directly retrievable by task ID with no separate lookup/index needed.
+- `orchid/sandbox_syscall_log.py` (new): `summarize(log_dir, top_n=5)` — parses gVisor's real strace line format (see below), returns e.g. `"567 syscalls, top: clock_gettime(247), rt_sigaction(66), ..."`.
+- `orchestrator.py`: `self._last_syscall_log_path` follows the exact existing `_last_subprocess_cpu_s` pattern (reset per-task, set right after `SubprocessRunner.run_task_isolated()` returns, threaded through both `_write_task_metrics()` call sites). When present, `task_metrics.jsonl` gains `syscall_log_path` and (if the log parsed to something non-empty) `syscall_summary` fields — flowing straight into the PM Dashboard's existing data source.
+- **Honest scope limit:** did not touch `web_server.py`'s frontend rendering to add a dedicated syscall-summary column/view. The data is present in the exact file/endpoint the dashboard already serves (satisfies "at least a summary view is visible" in substance — the JSON response includes it), but there's no special UI treatment yet. 2475 lines of unfamiliar dashboard code for a UI column is disproportionate scope for this phase; flagging as a clean, well-defined follow-up rather than quietly doing a large unreviewed frontend change.
+
+**Real gVisor strace format (verified against an actual log, not guessed):**
+```
+I0807 19:49:37.861314   1 strace.go:599] [   1:   1] python3 X brk(0x0) = 94889911021568 (0x564d47707000) (3.95µs)
+```
+Each syscall logs **twice** — an Enter ("E") line when it starts, an eXit ("X") line when it returns. `sandbox_syscall_log.py` counts only "X" lines; counting both would double every syscall. Five files get written per container run (`*.boot.txt`, `*.create.txt`, `*.gofer.txt`, `*.start.txt`, `*.delete.txt`) — the actual syscall trace lives almost entirely in `boot.txt` (215KB vs. a few KB for the others in a trivial test run).
+
+**Daemon config correction:** David's first attempt used `sudo runsc install` directly (the natural command) rather than hand-editing `/etc/docker/daemon.json` as I'd originally written up — but `runsc install` regenerates the whole runsc entry from scratch by default (`-clobber` defaults `true`), silently wiping the hand-edited `runtimeArgs`. Confirmed by re-checking the file afterward. Corrected instructions to use `runsc install`'s own supported syntax instead: `sudo runsc install -- --allow-flag-override`. Verified working — `docker run --runtime=runsc --annotation dev.gvisor.flag.strace=true ...` succeeded and produced real log files with `"Overriding flag from flag annotation: --strace=\"true\""` lines confirming the override took effect.
+
+**Live verification, two levels:**
+1. Raw `docker run` with the annotations (David ran this per the corrected instructions) — produced real syscall logs, inspected directly, confirmed the format above.
+2. Full `ContainerRunner.run_task_isolated()` (the actual code path, not a manual command) — `syscall_log_path` came back as `~/.orchid/sandbox_syscall_logs/P07-PHASE5-DEMO` (exactly the task ID used), and `summarize()` on it produced `"8309 syscalls, top: stat(2107), read(1225), fstat(1219), lseek(1125), openat(782)"` — a sensible profile for a Python-import-heavy container boot.
+
+**Tests:** `test_sandbox_syscall_log.py` (5 tests, using the real verified line format, not a guessed one — the first draft used a plausible-looking but wrong format and had to be rewritten once real data was available). `test_container_runner.py` gained a test verifying the annotations are added only when both `syscall_trace_enabled` and `runtime=runsc` are set, and that the per-task log directory is created eagerly. Full P07 suite: 24/24. Regression check across all `WorkerResult` consumers (re-run after the `orchestrator.py` edit): identical 17 pre-existing failures to the Phase 4 baseline, zero new ones.
+
+**Committed** to `p07-gvisor-hardening` (`41fea7a`).

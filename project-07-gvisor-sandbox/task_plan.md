@@ -15,7 +15,7 @@
 | 2 — Hardened `ContainerRunner` | complete | Add `isolation.container_runtime`/`container_memory_mb`/`container_cpus` config; extend `WorkerResult` additively |
 | 3 — Network Policy | complete | Default-deny egress (`--network none`); allowlist via a new Squid forward-proxy sidecar (ADR-004) |
 | 4 — Verification Across Isolation Paths | complete | Confirm existing `WorkerResult` consumers unaffected; demo via `TesterAgent` — found & fixed ContainerRunner was never functional |
-| 5 — Observability | not started | Syscall log per task ID; summary in ccview |
+| 5 — Observability | complete | Syscall log per task ID; summary flows into PM Dashboard's data source (`ccview` doesn't exist) |
 | 6 — Multi-Tenant Quotas (stretch) | not started | Two concurrent tenants, independently enforced cgroup quotas |
 
 ---
@@ -72,8 +72,10 @@ Phase 0's schema audit found that Orchid already has a generic, config-driven is
 
 ## Phase 5 — Observability (Acceptance: syscall trace available per execution)
 
-- [ ] Each sandboxed execution has an associated syscall log retrievable by task ID
-- [ ] At least a summary view visible in ccview or equivalent
+- [x] Each sandboxed execution has an associated syscall log retrievable by task ID — `~/.orchid/sandbox_syscall_logs/<task_id>/`, verified live through the real `ContainerRunner` code path
+- [x] At least a summary view visible in ccview or equivalent — `ccview` doesn't exist in this codebase (checked); wired `syscall_summary` into `task_metrics.jsonl` instead, the real file the PM Dashboard's existing `/get_metrics` endpoint already serves. No dedicated dashboard UI column added — out of scope for this phase, flagged as a follow-up
+
+**Status:** Complete. Committed to `p07-gvisor-hardening` (`41fea7a`). Needed a Docker daemon config correction along the way (`sudo runsc install -- --allow-flag-override`, not a hand-edited `daemon.json` — see `findings.md`) and a full parser rewrite once the real gVisor strace log format was available to verify against (first draft guessed wrong).
 
 ## Phase 6 — Multi-Tenant Quotas (stretch)
 

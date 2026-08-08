@@ -3,7 +3,7 @@
 **Skill area:** Secure execution · container isolation · multi-tenant resource control
 **Format:** Infrastructure integration build
 **Estimated duration:** 1–2 weekends (Phases 1–4), +1 weekend for Phases 5–6
-**Status:** In progress — Phases 1–4 complete, starting Phase 5 (see `task_plan.md`)
+**Status:** All core phases (1–5) complete; Phase 6 is stretch-only (see `task_plan.md`)
 **Depends on:** None (sequenced before [Project 08](../project-08-firecracker-sandbox/))
 
 ---
@@ -47,7 +47,7 @@ Full design source: [`docs/design/DESIGN-001.md`](./docs/design/DESIGN-001.md). 
 | 2 — Hardened `ContainerRunner` | complete | Add `isolation.container_runtime`/`container_memory_mb`/`container_cpus` config; extend `WorkerResult` additively |
 | 3 — Network Policy | complete | Default-deny egress (`--network none`); explicit domain allowlist via a dedicated Squid forward-proxy sidecar |
 | 4 — Verification Across Isolation Paths | complete | Confirm existing `WorkerResult` consumers unaffected; real live demo via `TesterAgent` (found & fixed `ContainerRunner` was never functional) |
-| 5 — Observability | not started | Per-execution syscall trace, associated with task ID, surfaced in ccview/PM Dashboard |
+| 5 — Observability | complete | Per-execution syscall trace, retrievable by task ID; summary flows into PM Dashboard's data source (`ccview` doesn't exist) |
 | 6 — Multi-Tenant Quotas (stretch) | not started | cgroup-based per-tenant quotas, demonstrated with 2 concurrent tenants |
 
 See [`docs/design/DESIGN-001.md`](./docs/design/DESIGN-001.md) for full phase-by-phase acceptance criteria.

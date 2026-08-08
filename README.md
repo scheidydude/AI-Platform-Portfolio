@@ -94,13 +94,13 @@ Closes P05's core weakness: controls verified in isolation but never exercised i
 ---
 
 ### [Project 07 — Sandboxed Tool Execution (gVisor)](./project-07-gvisor-sandbox/)
-**Skill area:** Secure execution · container isolation · multi-tenant resource control · **Status:** In progress · [Doc index](./project-07-gvisor-sandbox/INDEX.md)
+**Skill area:** Secure execution · container isolation · multi-tenant resource control · **Status:** Core phases complete · [Doc index](./project-07-gvisor-sandbox/INDEX.md)
 
 Hardens Orchid's existing `ContainerRunner` task-isolation path with gVisor (`runsc`) as the runtime, real resource ceilings, default-deny network egress with explicit allowlisting, and per-execution syscall observability. Not a from-scratch sandbox, and not a new service — an integration and hardening project on top of gVisor's existing runtime and Orchid's existing isolation infrastructure.
 
 **Stack:** `runsc` (gVisor) · Docker (alternate runtime) · Squid (egress-allowlist sidecar) · NucBox EVO X2 homelab host
 
-**Key artifacts:** Hardened `ContainerRunner` (`--runtime`, `--memory`, `--cpus`, `--network` flags) · Squid egress-allowlist sidecar (`sandbox_egress.py`) · additive `WorkerResult` fields · syscall-interception isolation proof · live end-to-end `TesterAgent` demo under the fully hardened path · comparison write-up vs. Firecracker (P08, planned)
+**Key artifacts:** Hardened `ContainerRunner` (`--runtime`, `--memory`, `--cpus`, `--network` flags) · Squid egress-allowlist sidecar (`sandbox_egress.py`) · additive `WorkerResult` fields · syscall-interception isolation proof · per-execution syscall trace capture (`sandbox_syscall_log.py`) · live end-to-end `TesterAgent` demo under the fully hardened path · comparison write-up vs. Firecracker (P08, planned)
 
 ---
 

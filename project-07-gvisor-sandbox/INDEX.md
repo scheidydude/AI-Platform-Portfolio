@@ -3,7 +3,7 @@
 **Project:** Harden Orchid's existing `ContainerRunner` isolation path with gVisor (`runsc`)
 **Goal:** Portfolio-grade artifact demonstrating secure execution, resource ceilings, and syscall observability
 **Timeline:** 1–2 weekends (Phases 1–4), +1 weekend for Phases 5–6
-**Status:** In progress — Phases 1–4 complete; starting Phase 5
+**Status:** In progress — Phases 1–5 complete; Phase 6 is stretch-only
 
 ---
 
@@ -56,7 +56,7 @@
 | Squid egress-allowlist sidecar (`orchid/sandbox_egress.py`) | Default-deny (`--network none`) + `dstdomain`-ACL allowlist — FR-3, ADR-004 | **Complete** (Orchid repo, branch `p07-gvisor-hardening`, `f7e0dbf`) |
 | `ContainerRunner` made actually functional (mounts, `container_env`) | Fixed 3 pre-existing bugs that meant it never worked for any task — FR-4 | **Complete** (Orchid repo, branch `p07-gvisor-hardening`, `9beaea5`) |
 | Live end-to-end `TesterAgent` demo | Real LLM call + pytest run under `runsc` + memory cap + egress allowlist — FR-4 | **Complete** |
-| Syscall observability capture | Per-task syscall log — FR-5 | Not started |
+| Syscall observability capture (`orchid/sandbox_syscall_log.py`) | Per-task gVisor strace log + summary, wired into `task_metrics.jsonl` — FR-5 | **Complete** (Orchid repo, branch `p07-gvisor-hardening`, `41fea7a`) |
 
 ---
 
@@ -69,11 +69,11 @@
 - [x] Phase 2 — Hardened `ContainerRunner` enforces memory/CPU limits under `runsc`; `WorkerResult` extended additively (memory-OOM proof: `exit 137` at 64m cap vs. clean completion unconstrained)
 - [x] Phase 3 — Default-deny egress verified (DNS resolution fails under `--network none`); allowlist verified live over HTTP and HTTPS, under both `runc` and `runsc`, including a non-allowlisted-domain 403 rejection
 - [x] Phase 4 — Existing `WorkerResult` consumers unaffected (verified per-file, zero regressions); real live `TesterAgent` demo succeeded end-to-end under the fully hardened path (found and fixed 3 pre-existing bugs that had made `ContainerRunner` non-functional for any task before this)
-- [ ] Phase 5 — Per-execution syscall log retrievable by task ID
+- [x] Phase 5 — Per-execution syscall log retrievable by task ID (`~/.orchid/sandbox_syscall_logs/<task_id>/`); summary wired into `task_metrics.jsonl` (`ccview` doesn't exist; PM Dashboard's data source used instead, no dedicated UI column)
 - [ ] Phase 6 (stretch) — Two concurrent tenants with independently enforced quotas
 - [ ] Comparison write-up vs. Firecracker (P08) drafted
 - [ ] INDEX.md links all artifacts
 
 ---
 
-*Last updated: 2026-08-07 — Phases 1–4 complete. `runsc` installed and syscall-interception isolation verified; `ContainerRunner` hardened with runtime/memory/CPU config; egress default-deny + Squid allowlist sidecar built and live-verified (including a real gVisor DNS-resolution limitation found and fixed along the way); a real, live end-to-end `TesterAgent` demo succeeded under the fully hardened path, after finding and fixing 3 pre-existing bugs that meant `isolation.container_enabled` had never worked for any task before this project touched it. All committed to the Orchid repo's `p07-gvisor-hardening` branch (`0eaac75`, `f7e0dbf`, `9beaea5`; not merged to `main`). Also surfaced and cleaned up a pre-existing, unrelated MCP-subprocess leak in Orchid's test suite while attempting a full-suite regression check — see `findings.md`.*
+*Last updated: 2026-08-07 — Phases 1–5 complete (all core phases; only the Phase 6 stretch goal remains). `runsc` installed and syscall-interception isolation verified; `ContainerRunner` hardened with runtime/memory/CPU config; egress default-deny + Squid allowlist sidecar built and live-verified (including a real gVisor DNS-resolution limitation found and fixed along the way); a real, live end-to-end `TesterAgent` demo succeeded under the fully hardened path, after finding and fixing 3 pre-existing bugs that meant `isolation.container_enabled` had never worked for any task before this project touched it; per-execution gVisor syscall traces are captured and retrievable by task ID, with a summary flowing into the PM Dashboard's real data source (`ccview` turned out not to exist). All committed to the Orchid repo's `p07-gvisor-hardening` branch (`0eaac75`, `f7e0dbf`, `9beaea5`, `41fea7a`; not merged to `main`). Also surfaced and cleaned up a pre-existing, unrelated MCP-subprocess leak in Orchid's test suite while attempting a full-suite regression check — see `findings.md`.*
